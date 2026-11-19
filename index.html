@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subastas AW | Catálogo</title>
+</head>
+<body>
+
+  <!-- ENCABEZADO: logo y menú. Se repite igual en todas las páginas -->
+  <header>
+    <a href="index.html"><strong>Subastas AW</strong></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Catálogo</a></li>
+        <li><a href="publicar.html">Publicar</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+        <li><a href="registro.html">Registrarse</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Subastas activas</h1>
+
+    <!-- BÚSQUEDA Y FILTRO (en la Sección 8 les daremos funcionalidad con JS) -->
+    <form id="form-busqueda" role="search">
+      <label for="buscar">Buscar producto</label>
+      <input type="search" id="buscar" name="buscar" placeholder="Ej. bicicleta, celular...">
+
+      <label for="categoria">Categoría</label>
+      <select id="categoria" name="categoria">
+        <option value="">Todas</option>
+        <option value="electronica">Electrónica</option>
+        <option value="hogar">Hogar</option>
+        <option value="ropa">Ropa</option>
+        <option value="deportes">Deportes</option>
+        <option value="otros">Otros</option>
+      </select>
+
+      <button type="submit">Buscar</button>
+    </form>
+
+    <!-- LISTA DE SUBASTAS: por ahora una tarjeta de ejemplo escrita a mano.
+         En la Sección 3 JavaScript generará estas tarjetas a partir de los datos. -->
+    <section id="lista-subastas" aria-label="Lista de subastas">
+
+      <article class="tarjeta-subasta">
+        <img src="https://placehold.co/300x200?text=Producto" alt="Foto de bicicleta de montaña">
+        <h2>Bicicleta de montaña</h2>
+        <p>Categoría: Deportes</p>
+        <p>Precio actual: <strong>$1,500.00</strong></p>
+        <p>Tiempo restante: 00:04:59</p>
+        <p>Lugares ocupados: 3 / 5</p>
+        <a href="subasta.html">Ver subasta</a>
+      </article>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>Subastas AW · Proyecto final de Aplicaciones Web · UABC FIAD 2026</p>
+  </footer>
+
+</body>
+</html>

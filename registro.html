@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subastas AW | Crear cuenta</title>
+</head>
+<body>
+
+  <header>
+    <a href="index.html"><strong>Subastas AW</strong></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Catálogo</a></li>
+        <li><a href="publicar.html">Publicar</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+        <li><a href="registro.html">Registrarse</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Crear cuenta</h1>
+
+    <form id="form-registro">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" maxlength="50" autocomplete="name" required>
+
+      <label for="correo">Correo electrónico</label>
+      <input type="email" id="correo" name="correo" autocomplete="email" required>
+
+      <label for="contrasena">Contraseña (mínimo 6 caracteres)</label>
+      <input type="password" id="contrasena" name="contrasena" minlength="6" autocomplete="new-password" required>
+
+      <!-- El rol define qué puede hacer el usuario. El administrador NO se elige aquí:
+           se crea aparte para que nadie pueda registrarse como admin. -->
+      <fieldset>
+        <legend>¿Qué quieres hacer?</legend>
+        <input type="radio" id="rol-comprador" name="rol" value="comprador" checked>
+        <label for="rol-comprador">Comprar</label>
+
+        <input type="radio" id="rol-vendedor" name="rol" value="vendedor">
+        <label for="rol-vendedor">Vender</label>
+      </fieldset>
+
+      <button type="submit">Crear cuenta</button>
+    </form>
+
+    <p id="mensaje-registro" role="alert"></p>
+
+    <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+  </main>
+
+  <footer>
+    <p>Subastas AW · Proyecto final de Aplicaciones Web · UABC FIAD 2026</p>
+  </footer>
+
+</body>
+</html>
