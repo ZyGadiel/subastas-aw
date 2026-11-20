@@ -23,11 +23,22 @@ Plataforma de subastas en línea donde los vendedores publican productos y los c
 ## Tecnologías
 
 - HTML, CSS y JavaScript (sin frameworks)
-- `localStorage` para guardar los datos en el navegador
+- [Supabase](https://supabase.com): base de datos PostgreSQL en la nube, inicio de sesión y actualizaciones en tiempo real
+
+## Base de datos
+
+El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`](supabase/schema.sql).
+
+| Tabla | Guarda |
+|---|---|
+| `perfiles` | Nombre, rol y si el usuario está suspendido (el correo y la contraseña los guarda Supabase Auth) |
+| `subastas` | Los productos publicados, sus precios, duración y estado |
+| `participantes` | Quién ocupa cada uno de los 5 lugares de una subasta |
+| `pujas` | El historial de ofertas |
 
 ## Cómo correrlo
 
-Abrir `index.html` en el navegador (o usar la extensión *Live Server* de VS Code).
+Abrir `index.html` con la extensión *Live Server* de VS Code.
 
 ## Documentación del proceso
 

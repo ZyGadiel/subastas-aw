@@ -4,7 +4,26 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
-## 18 nov 2026 — Sin backend: datos en `localStorage`
+## 19 nov 2026 — Base de datos: Supabase (reemplaza la decisión de `localStorage`)
+
+**Decisión:** guardar los datos en Supabase, una base de datos PostgreSQL en la nube.
+
+**Por qué:**
+- El proyecto requiere base de datos, y la primera propuesta (`localStorage`) no la tenía.
+- En una subasta, todos los usuarios deben ver las mismas pujas al mismo tiempo; con `localStorage` cada navegador tenía sus propios datos.
+- Ya conozco SQL por MySQL, y PostgreSQL se escribe casi igual.
+- No tengo que programar un servidor: JavaScript se conecta directo, como con la PokeAPI en los laboratorios.
+- Incluye inicio de sesión y tiempo real, y la página se puede publicar gratis en GitHub Pages.
+
+**Alternativa que descarté:** Node + Express + MySQL. La conozco más (MySQL), pero tendría que aprender a hacer un servidor y no podría desplegarla fácilmente en 4 días.
+
+**Reglas importantes en la base de datos (no solo en JavaScript):**
+- El cupo de 5 se garantiza con `check (numero between 1 and 5)` + `unique (subasta_id, numero)`: aunque dos personas den clic al mismo tiempo, la base de datos rechaza al segundo.
+- Row Level Security (RLS): como el navegador habla directo con la base de datos, cada tabla dice quién puede leer o escribir.
+
+---
+
+## 18 nov 2026 — ~~Sin backend: datos en `localStorage`~~ (reemplazada el 19 nov)
 
 **Decisión:** no usar servidor ni base de datos; guardar usuarios, subastas y pujas en el `localStorage` del navegador.
 

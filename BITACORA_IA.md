@@ -39,3 +39,21 @@ Trabajar en una rama (`seccion-1-html`) y luego unirla a `main`.
 **Qué acepté:** acepte que dividiera las secciones en sub-ramas para evitar afectar la rama principal
 
 **Qué rechacé o cambié:** de momento nada.
+
+---
+
+## 19 nov 2026 — Sección 2: Base de datos
+
+**Qué le pedí:** cambiar el plan para usar una base de datos, porque el proyecto la requiere.
+
+**Qué me propuso:**
+- Usar Supabase (PostgreSQL) en lugar de Node + Express + MySQL.
+- 4 tablas: `perfiles`, `subastas`, `participantes` y `pujas` (archivo `supabase/schema.sql`).
+- Hacer cumplir el cupo de 5 con reglas de la base de datos (`check` + `unique`), no solo con JavaScript.
+- Activar Row Level Security y, por ahora, permitir solo lectura.
+
+**Qué acepté:** _(llénalo tú)_
+
+**Qué rechacé o cambié:** _(llénalo tú)_
+
+**Errores de la IA que detecté:** _(llénalo tú)_
