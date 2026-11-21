@@ -4,6 +4,22 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 20 nov 2026 — Nombres claros y en español en todo el código
+
+**Decisión:** todos los nombres que invento (variables, funciones, ids, clases, variables de CSS, columnas de la base de datos y archivos) son descriptivos, completos y en español. Sin abreviaturas ni letras sueltas: `baseDeDatos` en lugar de `db`, `fecha_de_finalizacion` en lugar de `termina_en`, `iniciar-sesion.html` en lugar de `login.html`.
+
+**Por qué:** en la presentación tengo que ubicar y explicar cada parte del proyecto. Si el nombre dice exactamente qué es, lo encuentro y lo explico más rápido. También facilita que la IA entienda el código en el cambio en vivo.
+
+**Excepciones (inglés obligatorio):**
+- Lo que es del lenguaje o de una librería: `document.createElement`, `textContent`, `select`, `count`, `createClient`.
+- `index.html`: los servidores y GitHub Pages buscan exactamente ese nombre.
+- `id` en las tablas: es el nombre estándar de la llave primaria y Supabase lo usa así en sus usuarios.
+- `anon` y `authenticated`: son los nombres de los roles que define Supabase.
+
+**Cómo se aplicó:** la base de datos se reinició con `supabase/borrar-tablas.sql` y se volvió a crear con el `schema.sql` corregido, porque solo tenía datos de prueba.
+
+---
+
 ## 19 nov 2026 — Base de datos: Supabase (reemplaza la decisión de `localStorage`)
 
 **Decisión:** guardar los datos en Supabase, una base de datos PostgreSQL en la nube.
@@ -18,7 +34,7 @@ Las decisiones importantes del proyecto y por qué las tomé.
 **Alternativa que descarté:** Node + Express + MySQL. La conozco más (MySQL), pero tendría que aprender a hacer un servidor y no podría desplegarla fácilmente en 4 días.
 
 **Reglas importantes en la base de datos (no solo en JavaScript):**
-- El cupo de 5 se garantiza con `check (numero between 1 and 5)` + `unique (subasta_id, numero)`: aunque dos personas den clic al mismo tiempo, la base de datos rechaza al segundo.
+- El cupo de 5 se garantiza con las reglas `lugar_entre_uno_y_cinco` (`check (numero_de_lugar between 1 and 5)`) y `lugar_no_repetido` (`unique (id_de_la_subasta, numero_de_lugar)`): aunque dos personas den clic al mismo tiempo, la base de datos rechaza al segundo.
 - Row Level Security (RLS): como el navegador habla directo con la base de datos, cada tabla dice quién puede leer o escribir.
 
 ---

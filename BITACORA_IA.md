@@ -77,3 +77,21 @@ Un estilo para botones deshabilitados (`button:disabled`), que usaremos para evi
 **Qué acepté:** el cambio para redimensionar la pagina y no se modificara mal al usar otro dispositivo
 
 **Qué rechacé o cambié:** nada de momento.
+
+---
+
+## 20 nov 2026 — Sección 4: Catálogo desde la base de datos
+
+**Qué le pedí:** conectar el JavaScript con Supabase y que el catálogo muestre las subastas reales.
+
+**Qué me propuso:**
+Cargar la librería de Supabase desde un CDN con versión fija (`@2.49.4`) y crear la conexión en `js/supabase.js`.
+Poner en el código solo la URL y la *publishable key* (nunca la *secret key*), porque RLS protege los datos.
+`js/utilidades.js` con funciones reutilizables: formato de dinero, tiempo restante y mensajes.
+`js/catalogo.js`: consulta las subastas activas, crea las tarjetas con `createElement` y `textContent` (no `innerHTML`, para evitar XSS) y actualiza los relojes cada segundo con `setInterval`.
+Manejar los casos límite: mensaje de "Cargando...", mensaje si no hay subastas, mensaje si falla la conexión y foto por defecto si la imagen no carga.
+Un archivo `supabase/datos-prueba.sql` para llenar la base con 4 subastas de ejemplo.
+
+**Qué acepté:** la creacion de los js donde se maneja la base de datos.
+
+**Qué rechacé o cambié:** los nombres de las varibles y funciones. a nombres claros y entendibles.

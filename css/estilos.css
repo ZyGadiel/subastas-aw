@@ -1,31 +1,33 @@
 /* =====================================================================
    SUBASTAS AW · Hoja de estilos
    Orden: 1) variables  2) base  3) encabezado  4) formularios
-          5) catálogo  6) detalle de subasta  7) mensajes  8) responsive
-   Enfoque "mobile first": los estilos base son para celular y
-   las media queries (al final) ajustan para pantallas más grandes.
+          5) catálogo  6) detalle de subasta  7) mensajes  8) diseño adaptable
+   Enfoque "primero celular" (mobile first): los estilos base son para
+   celular y las media queries (al final) ajustan para pantallas más grandes.
    ===================================================================== */
 
 
 /* ---------------------------------------------------------------------
    1. VARIABLES (custom properties)
-   Si quiero cambiar un color en todo el sitio, lo cambio solo aquí.
+   Si quiero cambiar un color o una medida en todo el sitio, la cambio solo aquí.
    --------------------------------------------------------------------- */
 :root {
-  --color-primario: #4f46e5;        /* botones y enlaces */
-  --color-primario-oscuro: #3730a3; /* botones al pasar el mouse */
-  --color-fondo: #f5f5f7;
-  --color-superficie: #ffffff;      /* tarjetas y formularios */
-  --color-texto: #1f2937;
-  --color-texto-suave: #6b7280;
-  --color-borde: #e5e7eb;
-  --color-exito: #15803d;
-  --color-error: #b91c1c;
-  --color-aviso: #b45309;
+  --color-principal: #4f46e5;                /* botones y enlaces */
+  --color-principal-oscuro: #3730a3;         /* botones al pasar el mouse */
+  --color-de-fondo: #f5f5f7;
+  --color-de-superficie: #ffffff;            /* tarjetas, cajas y formularios */
+  --color-del-texto: #1f2937;
+  --color-del-texto-secundario: #6b7280;
+  --color-de-los-bordes: #e5e7eb;
+  --color-de-exito: #15803d;
+  --color-de-error: #b91c1c;
+  --color-de-aviso: #b45309;
 
-  --radio: 10px;                    /* esquinas redondeadas */
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --ancho-maximo: 1100px;
+  --radio-de-las-esquinas: 10px;             /* cajas y tarjetas */
+  --radio-de-las-esquinas-pequenas: 6px;     /* botones y campos */
+  --sombra-de-las-cajas: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --ancho-maximo-del-contenido: 1100px;
+  --espacio-entre-tarjetas: 1.25rem;
 }
 
 
@@ -42,10 +44,10 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.5;
-  color: var(--color-texto);
-  background-color: var(--color-fondo);
+  color: var(--color-del-texto);
+  background-color: var(--color-de-fondo);
 
-  /* Flexbox en columna: el footer siempre queda abajo aunque haya poco contenido */
+  /* Flexbox en columna: el pie de página siempre queda abajo aunque haya poco contenido */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -54,7 +56,7 @@ body {
 main {
   flex: 1; /* main ocupa todo el espacio sobrante */
   width: 100%;
-  max-width: var(--ancho-maximo);
+  max-width: var(--ancho-maximo-del-contenido);
   margin: 0 auto;
   padding: 1.5rem 1rem;
 }
@@ -65,7 +67,7 @@ img {
 }
 
 a {
-  color: var(--color-primario);
+  color: var(--color-principal);
 }
 
 h1 {
@@ -75,23 +77,23 @@ h1 {
 
 
 /* ---------------------------------------------------------------------
-   3. ENCABEZADO Y PIE
+   3. ENCABEZADO Y PIE DE PÁGINA
    --------------------------------------------------------------------- */
 header {
-  background-color: var(--color-superficie);
-  border-bottom: 1px solid var(--color-borde);
+  background-color: var(--color-de-superficie);
+  border-bottom: 1px solid var(--color-de-los-bordes);
   padding: 0.75rem 1rem;
 
   display: flex;
   flex-wrap: wrap;                /* en celular el menú baja a otra línea */
-  justify-content: space-between; /* logo a la izquierda, menú a la derecha */
+  justify-content: space-between; /* logotipo a la izquierda, menú a la derecha */
   align-items: center;
   gap: 0.5rem;
 }
 
-header > a {
+.logotipo {
   font-size: 1.25rem;
-  color: var(--color-texto);
+  color: var(--color-del-texto);
   text-decoration: none;
 }
 
@@ -116,9 +118,9 @@ nav a:hover {
 footer {
   text-align: center;
   padding: 1rem;
-  color: var(--color-texto-suave);
+  color: var(--color-del-texto-secundario);
   font-size: 0.875rem;
-  border-top: 1px solid var(--color-borde);
+  border-top: 1px solid var(--color-de-los-bordes);
 }
 
 
@@ -126,10 +128,10 @@ footer {
    4. FORMULARIOS Y BOTONES
    --------------------------------------------------------------------- */
 form {
-  background-color: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
+  background-color: var(--color-de-superficie);
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: var(--radio-de-las-esquinas);
+  box-shadow: var(--sombra-de-las-cajas);
   padding: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -146,19 +148,19 @@ textarea {
   width: 100%;
   padding: 0.6rem 0.75rem;
   font: inherit;
-  border: 1px solid var(--color-borde);
-  border-radius: 6px;
-  background-color: #fff;
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+  background-color: var(--color-de-superficie);
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid var(--color-primario);
+  outline: 2px solid var(--color-principal);
   outline-offset: 1px;
 }
 
-/* Los radio buttons no deben ocupar todo el ancho */
+/* Los botones de opción (radio) no deben ocupar todo el ancho */
 input[type="radio"] {
   width: auto;
   margin-right: 0.25rem;
@@ -171,8 +173,8 @@ input[type="radio"] + label {
 }
 
 fieldset {
-  border: 1px solid var(--color-borde);
-  border-radius: 6px;
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: var(--radio-de-las-esquinas-pequenas);
   margin: 0 0 1rem;
   padding: 0.5rem 1rem 1rem;
 }
@@ -187,26 +189,26 @@ button {
   padding: 0.65rem 1.25rem;
   font: inherit;
   font-weight: 600;
-  color: #fff;
-  background-color: var(--color-primario);
+  color: #ffffff;
+  background-color: var(--color-principal);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
   cursor: pointer;
 }
 
 button:hover {
-  background-color: var(--color-primario-oscuro);
+  background-color: var(--color-principal-oscuro);
 }
 
 /* Botón deshabilitado: lo usaremos para evitar el doble clic (caso límite) */
 button:disabled {
-  background-color: var(--color-texto-suave);
+  background-color: var(--color-del-texto-secundario);
   cursor: not-allowed;
 }
 
-/* Login y registro: formulario angosto y centrado */
-#form-login,
-#form-registro {
+/* Inicio de sesión y registro: formulario angosto */
+#formulario-de-inicio-de-sesion,
+#formulario-de-registro {
   max-width: 420px;
 }
 
@@ -216,117 +218,117 @@ button:disabled {
    --------------------------------------------------------------------- */
 
 /* Barra de búsqueda: en celular cada campo ocupa toda la fila */
-#form-busqueda {
+#formulario-de-busqueda {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   gap: 0 1rem;
 }
 
-#form-busqueda label {
+#formulario-de-busqueda label {
   width: 100%;
 }
 
-#form-busqueda input,
-#form-busqueda select {
+#formulario-de-busqueda input,
+#formulario-de-busqueda select {
   flex: 1 1 200px; /* crecen, se encogen y miden mínimo ~200px */
 }
 
 /* Lista de tarjetas: Flexbox con wrap → se acomodan solas según el ancho */
-#lista-subastas {
+#lista-de-subastas {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: var(--espacio-entre-tarjetas);
 }
 
-.tarjeta-subasta {
+.tarjeta-de-subasta {
   flex: 1 1 100%; /* en celular: una tarjeta por fila (en pantallas grandes cambia, ver sección 8) */
-  background-color: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
+  background-color: var(--color-de-superficie);
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: var(--radio-de-las-esquinas);
+  box-shadow: var(--sombra-de-las-cajas);
   overflow: hidden; /* para que la imagen respete las esquinas redondeadas */
   display: flex;
   flex-direction: column;
 }
 
-.tarjeta-subasta img {
+.tarjeta-de-subasta img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover; /* recorta la foto sin deformarla */
 }
 
-.tarjeta-subasta h2 {
+.tarjeta-de-subasta h2 {
   font-size: 1.15rem;
   margin: 0.75rem 1rem 0.25rem;
 }
 
-.tarjeta-subasta p {
+.tarjeta-de-subasta p {
   margin: 0.15rem 1rem;
-  color: var(--color-texto-suave);
+  color: var(--color-del-texto-secundario);
 }
 
-.tarjeta-subasta p strong {
-  color: var(--color-texto);
+.tarjeta-de-subasta p strong {
+  color: var(--color-del-texto);
   font-size: 1.1rem;
 }
 
-.tarjeta-subasta p:last-of-type {
+.tarjeta-de-subasta p:last-of-type {
   margin-bottom: 1rem; /* espacio entre el último dato y el botón */
 }
 
 /* El enlace "Ver subasta" se ve como botón y siempre queda al fondo de la tarjeta */
-.tarjeta-subasta a {
+.tarjeta-de-subasta a {
   margin: auto 1rem 1rem; /* margin-top: auto lo empuja hasta abajo */
   display: block;
   text-align: center;
   padding: 0.6rem;
-  background-color: var(--color-primario);
-  color: #fff;
+  background-color: var(--color-principal);
+  color: #ffffff;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
   font-weight: 600;
 }
 
-.tarjeta-subasta a:hover {
-  background-color: var(--color-primario-oscuro);
+.tarjeta-de-subasta a:hover {
+  background-color: var(--color-principal-oscuro);
 }
 
 
 /* ---------------------------------------------------------------------
    6. DETALLE DE SUBASTA (subasta.html)
    --------------------------------------------------------------------- */
-#detalle-producto,
-#estado-subasta,
-#acciones-subasta,
-#historial-pujas {
-  background-color: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
+#detalle-del-producto,
+#estado-de-la-subasta,
+#participar-en-la-subasta,
+#historial-de-pujas {
+  background-color: var(--color-de-superficie);
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: var(--radio-de-las-esquinas);
+  box-shadow: var(--sombra-de-las-cajas);
   padding: 1.25rem;
   margin: 1rem 0;
 }
 
-#detalle-producto img {
-  border-radius: 6px;
+#detalle-del-producto img {
+  border-radius: var(--radio-de-las-esquinas-pequenas);
   margin-bottom: 1rem;
 }
 
-#estado-subasta strong {
+#estado-de-la-subasta strong {
   font-size: 1.5rem;
-  color: var(--color-exito);
+  color: var(--color-de-exito);
 }
 
 /* El formulario de puja ya está dentro de una caja: le quitamos su propio marco */
-#form-puja {
+#formulario-de-puja {
   border: none;
   box-shadow: none;
   padding: 0;
   margin: 0;
 }
 
-/* Tabla del historial */
+/* Tabla del historial de pujas */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -336,36 +338,36 @@ th,
 td {
   text-align: left;
   padding: 0.5rem;
-  border-bottom: 1px solid var(--color-borde);
+  border-bottom: 1px solid var(--color-de-los-bordes);
 }
 
 th {
-  color: var(--color-texto-suave);
+  color: var(--color-del-texto-secundario);
   font-weight: 600;
 }
 
 
 /* ---------------------------------------------------------------------
-   7. MENSAJES (errores y avisos que mostrará JavaScript)
+   7. MENSAJES (errores y avisos que muestra JavaScript con mostrarMensaje)
    --------------------------------------------------------------------- */
-.mensaje-error {
-  color: var(--color-error);
+.mensaje-de-error {
+  color: var(--color-de-error);
   font-weight: 500;
 }
 
-.mensaje-exito {
-  color: var(--color-exito);
+.mensaje-de-exito {
+  color: var(--color-de-exito);
   font-weight: 500;
 }
 
-.mensaje-aviso {
-  color: var(--color-aviso);
+.mensaje-de-aviso {
+  color: var(--color-de-aviso);
   font-weight: 500;
 }
 
 
 /* ---------------------------------------------------------------------
-   8. RESPONSIVE: pantallas medianas y grandes (tablet y computadora)
+   8. DISEÑO ADAPTABLE (responsive): tablet y computadora
    --------------------------------------------------------------------- */
 @media (min-width: 768px) {
   header {
@@ -376,31 +378,31 @@ th {
     padding: 2rem;
   }
 
-  /* En pantalla grande, búsqueda en una sola fila */
-  #form-busqueda label {
+  /* En pantalla grande, la búsqueda va en una sola fila */
+  #formulario-de-busqueda label {
     width: auto;
   }
 
-  /* Tablet: 2 tarjetas por fila. El cálculo resta el espacio (gap) entre ellas */
-  .tarjeta-subasta {
-    flex: 0 1 calc((100% - 1.25rem) / 2);
+  /* Tablet: 2 tarjetas por fila. Al 100 % le restamos el espacio que hay entre ellas */
+  .tarjeta-de-subasta {
+    flex: 0 1 calc((100% - var(--espacio-entre-tarjetas)) / 2);
   }
 
-  /* Detalle de subasta en 2 columnas: producto a la izquierda, estado y acciones a la derecha */
-  .detalle-columnas {
+  /* Detalle de subasta en 2 columnas: producto a la izquierda, estado y participación a la derecha */
+  .detalle-en-dos-columnas {
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
   }
 
-  .detalle-columnas > * {
+  .detalle-en-dos-columnas > * {
     flex: 1;
   }
 }
 
 @media (min-width: 1024px) {
-  /* Computadora: 3 tarjetas por fila (2 espacios de 1.25rem entre ellas) */
-  .tarjeta-subasta {
-    flex: 0 1 calc((100% - 2.5rem) / 3);
+  /* Computadora: 3 tarjetas por fila (hay 2 espacios entre ellas) */
+  .tarjeta-de-subasta {
+    flex: 0 1 calc((100% - 2 * var(--espacio-entre-tarjetas)) / 3);
   }
 }

@@ -9,12 +9,12 @@
 <body>
 
   <header>
-    <a href="index.html"><strong>Subastas AW</strong></a>
+    <a href="index.html" class="logotipo"><strong>Subastas AW</strong></a>
     <nav>
       <ul>
         <li><a href="index.html">Catálogo</a></li>
         <li><a href="publicar.html">Publicar</a></li>
-        <li><a href="login.html">Iniciar sesión</a></li>
+        <li><a href="iniciar-sesion.html">Iniciar sesión</a></li>
         <li><a href="registro.html">Registrarse</a></li>
       </ul>
     </nav>
@@ -25,8 +25,9 @@
 
     <!-- FORMULARIO DEL VENDEDOR. Los atributos required, min y maxlength
          son la primera barrera contra casos límite (campos vacíos, negativos, textos enormes).
-         En la Sección 5 agregaremos validación con JavaScript. -->
-    <form id="form-publicar">
+         En la Sección 6 agregaremos validación con JavaScript.
+         Cada "name" es igual al nombre de su columna en la tabla "subastas". -->
+    <form id="formulario-de-publicacion">
 
       <fieldset>
         <legend>Información del producto</legend>
@@ -47,21 +48,21 @@
           <option value="otros">Otros</option>
         </select>
 
-        <label for="foto">URL de la foto</label>
-        <input type="url" id="foto" name="foto" placeholder="https://...">
+        <label for="url-de-la-foto">Dirección (URL) de la foto</label>
+        <input type="url" id="url-de-la-foto" name="url_de_la_foto" placeholder="https://...">
       </fieldset>
 
       <fieldset>
         <legend>Reglas de la subasta</legend>
 
         <label for="precio-inicial">Precio inicial ($)</label>
-        <input type="number" id="precio-inicial" name="precioInicial" min="1" step="0.01" required>
+        <input type="number" id="precio-inicial" name="precio_inicial" min="1" step="0.01" required>
 
-        <label for="incremento">Incremento mínimo por puja ($)</label>
-        <input type="number" id="incremento" name="incremento" min="1" step="0.01" required>
+        <label for="incremento-minimo">Incremento mínimo por puja ($)</label>
+        <input type="number" id="incremento-minimo" name="incremento_minimo" min="1" step="0.01" required>
 
-        <label for="duracion">Duración</label>
-        <select id="duracion" name="duracion" required>
+        <label for="duracion-en-minutos">Duración</label>
+        <select id="duracion-en-minutos" name="duracion_en_minutos" required>
           <option value="2">2 minutos (para probar)</option>
           <option value="5">5 minutos</option>
           <option value="60">1 hora</option>
