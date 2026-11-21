@@ -47,13 +47,33 @@ Trabajar en una rama (`seccion-1-html`) y luego unirla a `main`.
 **Qué le pedí:** cambiar el plan para usar una base de datos, porque el proyecto la requiere.
 
 **Qué me propuso:**
-- Usar Supabase (PostgreSQL) en lugar de Node + Express + MySQL.
-- 4 tablas: `perfiles`, `subastas`, `participantes` y `pujas` (archivo `supabase/schema.sql`).
-- Hacer cumplir el cupo de 5 con reglas de la base de datos (`check` + `unique`), no solo con JavaScript.
-- Activar Row Level Security y, por ahora, permitir solo lectura.
+ Usar Supabase (PostgreSQL) en lugar de Node + Express + MySQL.
+ 4 tablas: `perfiles`, `subastas`, `participantes` y `pujas` (archivo `supabase/schema.sql`).
+ Hacer cumplir el cupo de 5 con reglas de la base de datos (`check` + `unique`), no solo con JavaScript.
+  Activar Row Level Security y, por ahora, permitir solo lectura.
 
-**Qué acepté:** _(llénalo tú)_
+**Qué acepté:** decidi solo darle el permiso de select (minimo privilegio)
 
-**Qué rechacé o cambié:** _(llénalo tú)_
+**Qué rechacé o cambié:** darle todos los permisos completos en supabase (mi base de datos)
 
-**Errores de la IA que detecté:** _(llénalo tú)_
+**Errores de la IA que detecté:** niguno de momento
+
+---
+
+## 20 nov 2026 — Sección 3: Estilos (CSS)
+
+**Qué le pedí:** darle diseño al sitio con lo que vimos en clase (hojas de estilo, Flexbox y responsive).
+
+**Qué me propuso:**
+Un solo archivo `css/estilos.css` enlazado en las 5 páginas, ordenado en 8 secciones.
+Variables CSS (`:root`) para los colores, así se cambian en un solo lugar.
+Enfoque *mobile first*: estilos base para celular y `@media (min-width: 768px)` / `(min-width: 1024px)` para tablet y computadora.
+Tarjetas del catálogo con Flexbox: 1 por fila en celular, 2 en tablet y 3 en computadora.
+Detalle de subasta en 2 columnas en pantallas grandes.
+Un estilo para botones deshabilitados (`button:disabled`), que usaremos para evitar el doble clic.
+
+**Error de la IA que se corrigió:** en la primera versión, la única tarjeta del catálogo se estiraba a todo el ancho de la pantalla (`flex: 1 1 260px` la dejaba crecer). Se cambió a un ancho fijo por columnas con `calc()`.
+
+**Qué acepté:** el cambio para redimensionar la pagina y no se modificara mal al usar otro dispositivo
+
+**Qué rechacé o cambié:** nada de momento.

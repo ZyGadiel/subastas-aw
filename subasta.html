@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subastas AW | Detalle de subasta</title>
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
 
@@ -22,6 +23,9 @@
   <main>
     <a href="index.html">&larr; Volver al catálogo</a>
 
+    <!-- En pantallas grandes: producto a la izquierda y estado/acciones a la derecha -->
+    <div class="detalle-columnas">
+
     <!-- INFORMACIÓN DEL PRODUCTO -->
     <article id="detalle-producto">
       <img src="https://placehold.co/600x400?text=Producto" alt="Foto de bicicleta de montaña">
@@ -31,7 +35,8 @@
       <p>Vendedor: Usuario #12</p>
     </article>
 
-    <!-- ESTADO DE LA SUBASTA (en la Sección 6 se actualizará en tiempo real) -->
+    <div>
+    <!-- ESTADO DE LA SUBASTA (en la Sección 7 se actualizará en tiempo real) -->
     <section id="estado-subasta" aria-label="Estado de la subasta">
       <h2>Estado de la subasta</h2>
       <p>Precio inicial: $1,000.00</p>
@@ -52,6 +57,9 @@
         <button type="submit">Pujar</button>
       </form>
     </section>
+    </div>
+
+    </div> <!-- fin de .detalle-columnas -->
 
     <!-- HISTORIAL: los participantes se muestran como "Participante 1, 2..." para no revelar sus datos -->
     <section id="historial-pujas" aria-label="Historial de pujas">
