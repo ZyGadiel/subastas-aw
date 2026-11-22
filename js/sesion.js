@@ -49,9 +49,12 @@ const promesaDelPerfilDelUsuarioActual = obtenerPerfilDelUsuarioActual();
 function actualizarMenuSegunElUsuario(perfil) {
   const hayUsuario = perfil !== null;
   const esVendedor = hayUsuario && perfil.rol === 'vendedor';
+  const esAdministrador = hayUsuario && perfil.rol === 'administrador';
 
   document.getElementById('opcion-publicar').hidden = !esVendedor;
-  document.getElementById('opcion-mis-subastas').hidden = !hayUsuario;
+  // El administrador no publica ni puja: en lugar de "Mis subastas" ve "Administrar"
+  document.getElementById('opcion-mis-subastas').hidden = !hayUsuario || esAdministrador;
+  document.getElementById('opcion-administrar').hidden = !esAdministrador;
   document.getElementById('opcion-iniciar-sesion').hidden = hayUsuario;
   document.getElementById('opcion-registrarse').hidden = hayUsuario;
   document.getElementById('opcion-saludo').hidden = !hayUsuario;

@@ -46,6 +46,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | 4 | [`supabase/seccion-7-puja.sql`](supabase/seccion-7-puja.sql) | Funciones `entrar_a_la_subasta` y `pujar`, y tiempo real |
 | 5 | [`supabase/seccion-8-cierre.sql`](supabase/seccion-8-cierre.sql) | Función `cerrar_subastas_vencidas` (elige al ganador) y tarea de pg_cron que la llama cada minuto |
 | 6 | [`supabase/seccion-9-busqueda.sql`](supabase/seccion-9-busqueda.sql) | Columna `titulo_para_buscar` (sin acentos) para que "lampara" encuentre "Lámpara" |
+| 7 | [`supabase/seccion-10-administrador.sql`](supabase/seccion-10-administrador.sql) | Convierte `admin@subastas.com` en administrador y crea sus funciones (usuarios, suspender, eliminar, estadísticas) |
 | — | [`supabase/datos-prueba.sql`](supabase/datos-prueba.sql) | Opcional: 4 subastas de ejemplo |
 | — | [`supabase/borrar-tablas.sql`](supabase/borrar-tablas.sql) | ⚠️ Borra todo para empezar de cero |
 
@@ -61,6 +62,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/registro.js` | Crear cuenta (`registro.html`) |
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
 | `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |
+| `js/administrador.js` | Panel del administrador: estadísticas, suspender usuarios y eliminar publicaciones (`administrador.html`) |
 | `js/mis-subastas.js` | Mis subastas: lo que publicó el vendedor o donde participa el comprador (`mis-subastas.html`) |
 | `js/subasta.js` | Detalle de una subasta: entrar, pujar, posiciones, historial, tiempo real y resultado final (`subasta.html?id=…`) |
 | `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas (los colores claros y oscuros están en la 1) |

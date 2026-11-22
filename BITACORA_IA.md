@@ -238,3 +238,20 @@ Casos límite: puros espacios, texto enorme (se recorta a 80), categoría invent
 **Qué acepté:** la implementacion de busqueda y filtro
 
 **Qué rechacé o cambié:** nada en esta parte
+
+---
+
+## 21 nov 2026 — Sección 10: Administrador
+
+**Qué le pedí:** el panel del administrador: suspender usuarios, eliminar publicaciones y ver estadísticas.
+
+**Qué me propuso:**
+La cuenta de administrador se crea normal en la página (como comprador) y se convierte en administrador con un `update` desde el SQL Editor de Supabase. La página nunca deja registrarse como administrador.
+`supabase/seccion-10-administrador.sql`: funciones `security definer` que primero revisan `es_administrador()`: `listar_usuarios` (incluye el correo, que está en `auth.users`), `cambiar_suspension_del_usuario`, `eliminar_subasta` y `obtener_estadisticas` (un JSON con usuarios por rol, subastas por estado, pujas, total vendido y la ganancia del 3 %).
+Suspender y eliminar **no borran** nada: `suspendido = true` y `estado = 'eliminada'`. Así se conserva el historial (lo que descubrimos cuando Supabase no dejó borrar una cuenta con pujas).
+`administrador.html` + `js/administrador.js`: tarjetas de estadísticas, tabla de usuarios con "Suspender / Reactivar" y tabla de publicaciones con "Eliminar", con confirmación antes de cada acción.
+Casos límite: un comprador o vendedor abre `administrador.html` a mano, el administrador intenta suspenderse a sí mismo o a otro administrador, doble clic, eliminar algo ya eliminado, tablas anchas en celular (se desplazan dentro de su caja).
+
+**Qué acepté:** el panel de administrador con las funciones de suspender eliminar y reactivar
+
+**Qué rechacé o cambié:** nada de momento

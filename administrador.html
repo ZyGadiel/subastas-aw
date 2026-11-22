@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subastas AW | Panel del administrador</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <!-- El tema (claro u oscuro) se decide aquí, ANTES de dibujar la página,
+       para que no se vea blanca un instante y luego oscura -->
+  <script src="js/tema.js"></script>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logotipo"><strong>Subastas AW</strong></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Catálogo</a></li>
+        <!-- js/sesion.js muestra u oculta estas opciones según el usuario (atributo hidden) -->
+        <li id="opcion-publicar" hidden><a href="publicar.html">Publicar</a></li>
+        <li id="opcion-mis-subastas" hidden><a href="mis-subastas.html">Mis subastas</a></li>
+        <li id="opcion-administrar" hidden><a href="administrador.html">Administrar</a></li>
+        <li id="opcion-iniciar-sesion"><a href="iniciar-sesion.html">Iniciar sesión</a></li>
+        <li id="opcion-registrarse"><a href="registro.html">Registrarse</a></li>
+        <li id="opcion-saludo" hidden><span id="saludo-al-usuario"></span></li>
+        <li id="opcion-cerrar-sesion" hidden>
+          <button type="button" id="boton-cerrar-sesion" class="boton-con-aspecto-de-enlace">Cerrar sesión</button>
+        </li>
+        <!-- js/tema.js le pone el ícono (🌙 o ☀️) y su función -->
+        <li>
+          <button type="button" id="boton-de-modo-oscuro" class="boton-con-aspecto-de-enlace" aria-label="Cambiar de tema">🌙</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Panel del administrador</h1>
+
+    <!-- "Revisando tu cuenta...", "Solo el administrador...", errores de conexión -->
+    <p id="mensaje-del-administrador" role="status" class="mensaje-de-aviso">Revisando tu cuenta...</p>
+
+    <!-- Empieza oculto: js/administrador.js lo muestra solo a un administrador.
+         (Aunque alguien lo muestre a la fuerza, las funciones de la base de
+         datos revisan otra vez que sea administrador.) -->
+    <div id="contenido-del-administrador" hidden>
+
+      <!-- ESTADÍSTICAS: una tarjeta pequeña por cada número -->
+      <section id="estadisticas-de-la-pagina" aria-label="Estadísticas">
+        <h2>Estadísticas</h2>
+        <div id="tarjetas-de-estadisticas"></div>
+      </section>
+
+      <!-- USUARIOS: suspender o reactivar -->
+      <section id="administrar-usuarios" aria-label="Usuarios">
+        <h2>Usuarios</h2>
+        <p id="mensaje-de-usuarios" role="alert"></p>
+        <!-- En celular la tabla se desplaza de lado dentro de su caja,
+             sin que toda la página se salga de la pantalla -->
+        <div class="tabla-con-desplazamiento">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="filas-de-usuarios"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PUBLICACIONES: eliminar las que no deben estar -->
+      <section id="administrar-publicaciones" aria-label="Publicaciones">
+        <h2>Publicaciones</h2>
+        <p id="mensaje-de-publicaciones" role="alert"></p>
+        <div class="tabla-con-desplazamiento">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Vendedor</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Precio actual</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="filas-de-publicaciones"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>Subastas AW · Proyecto final de Aplicaciones Web · UABC FIAD 2026</p>
+  </footer>
+
+  <!-- SCRIPTS. El orden importa:
+       1) la librería de Supabase (desde un CDN, con versión fija)
+       2) nuestra conexión (usa la librería)
+       3) utilidades y 4) la sesión (usan la conexión)
+       5) la lógica de esta página -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+  <script src="js/conexion-a-supabase.js"></script>
+  <script src="js/utilidades.js"></script>
+  <script src="js/sesion.js"></script>
+  <script src="js/administrador.js"></script>
+
+</body>
+</html>

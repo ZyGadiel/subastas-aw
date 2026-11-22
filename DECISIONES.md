@@ -4,6 +4,21 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Administrador: suspender y ocultar, nunca borrar
+
+**Decisión:** el administrador **suspende** usuarios (`suspendido = true`) y **elimina** publicaciones marcándolas como `estado = 'eliminada'`. No se borra ninguna fila.
+
+**Por qué:**
+- Las pujas, los lugares y las ventas apuntan al usuario (llaves foráneas). Si se borrara, el historial de las subastas quedaría con huecos. Lo comprobé cuando Supabase no me dejó borrar una cuenta de prueba que ya había pujado.
+- Un error se puede corregir: "Reactivar" devuelve la cuenta tal como estaba.
+- Lo que hace la suspensión ya estaba programado desde antes: la política de publicar (Sección 6) y las funciones de entrar y pujar (Sección 7) revisan `suspendido`.
+
+**¿Quién es administrador?** La cuenta `admin@subastas.com`, convertida con un `update` desde el SQL Editor. El registro de la página nunca permite elegir ese rol.
+
+**Seguridad:** todo pasa por funciones `security definer` cuya primera línea revisa `es_administrador()`. Ocultar el panel con JavaScript es solo para la vista; la base de datos rechaza a quien no sea administrador aunque llame a las funciones desde la consola.
+
+---
+
 ## 21 nov 2026 — Búsqueda: en la dirección y sin acentos
 
 **Decisión 1: la búsqueda viaja en la dirección** (`index.html?texto_a_buscar=bici&categoria=deportes`). El formulario usa `method="get"`, que es lo que el navegador hace por defecto, y `js/catalogo.js` lee los parámetros.
