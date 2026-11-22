@@ -41,41 +41,61 @@
   <main>
     <h1>Subastas activas</h1>
 
-    <!-- BÚSQUEDA Y FILTRO (Sección 9).
-         Este formulario NO necesita JavaScript para enviarse: con method="get" el
-         navegador vuelve a abrir index.html con los datos en la dirección:
-           index.html?texto_a_buscar=bici&categoria=deportes
-         Después js/catalogo.js lee esa dirección y filtra. Ventajas: el botón
-         "Atrás" regresa a la búsqueda anterior y el enlace se puede compartir. -->
-    <form id="formulario-de-busqueda" role="search" action="index.html" method="get">
-      <label for="texto-a-buscar">Buscar producto</label>
-      <input type="search" id="texto-a-buscar" name="texto_a_buscar" maxlength="80" placeholder="Ej. bicicleta, celular...">
+    <!-- Dos columnas en computadora (Sección 14): la mini lista de las últimas
+         subastas terminadas a la IZQUIERDA y el catálogo a la derecha.
+         En el HTML el catálogo va PRIMERO: en celular se ve primero (es lo
+         importante) y la mini lista queda abajo. El CSS la pasa a la izquierda
+         en pantallas grandes (sección 8 de css/estilos.css). -->
+    <div class="catalogo-con-barra-lateral">
+      <div class="contenido-del-catalogo">
 
-      <label for="filtro-de-categoria">Categoría</label>
-      <select id="filtro-de-categoria" name="categoria">
-        <option value="">Todas</option>
-        <option value="electronica">Electrónica</option>
-        <option value="hogar">Hogar</option>
-        <option value="ropa">Ropa</option>
-        <option value="deportes">Deportes</option>
-        <option value="otros">Otros</option>
-      </select>
+        <!-- BÚSQUEDA Y FILTRO (Sección 9).
+             Este formulario NO necesita JavaScript para enviarse: con method="get" el
+             navegador vuelve a abrir index.html con los datos en la dirección:
+               index.html?texto_a_buscar=bici&categoria=deportes
+             Después js/catalogo.js lee esa dirección y filtra. Ventajas: el botón
+             "Atrás" regresa a la búsqueda anterior y el enlace se puede compartir. -->
+        <form id="formulario-de-busqueda" role="search" action="index.html" method="get">
+          <label for="texto-a-buscar">Buscar producto</label>
+          <input type="search" id="texto-a-buscar" name="texto_a_buscar" maxlength="80" placeholder="Ej. bicicleta, celular...">
 
-      <button type="submit">Buscar</button>
-    </form>
+          <label for="filtro-de-categoria">Categoría</label>
+          <select id="filtro-de-categoria" name="categoria">
+            <option value="">Todas</option>
+            <option value="electronica">Electrónica</option>
+            <option value="hogar">Hogar</option>
+            <option value="ropa">Ropa</option>
+            <option value="deportes">Deportes</option>
+            <option value="otros">Otros</option>
+          </select>
 
-    <!-- Qué se está buscando: "3 resultados para «bici» en Deportes · Quitar filtros" -->
-    <p id="resumen-de-la-busqueda" hidden>
-      <span id="texto-del-resumen-de-la-busqueda"></span>
-      · <a href="index.html">Quitar filtros</a>
-    </p>
+          <button type="submit">Buscar</button>
+        </form>
 
-    <!-- Mensajes para el usuario: "Cargando...", "No hay subastas", errores -->
-    <p id="mensaje-del-catalogo" role="status"></p>
+        <!-- Qué se está buscando: "3 resultados para «bici» en Deportes · Quitar filtros" -->
+        <p id="resumen-de-la-busqueda" hidden>
+          <span id="texto-del-resumen-de-la-busqueda"></span>
+          · <a href="index.html">Quitar filtros</a>
+        </p>
 
-    <!-- LISTA DE SUBASTAS: js/catalogo.js crea aquí una tarjeta por cada subasta
-         que viene de la base de datos -->
-    <section id="lista-de-subastas" aria-label="Lista de subastas"></section>
+        <!-- Mensajes para el usuario: "Cargando...", "No hay subastas", errores -->
+        <p id="mensaje-del-catalogo" role="status"></p>
+
+        <!-- LISTA DE SUBASTAS: js/catalogo.js crea aquí una tarjeta por cada subasta
+             que viene de la base de datos -->
+        <section id="lista-de-subastas" aria-label="Lista de subastas"></section>
+
+      </div> <!-- fin de .contenido-del-catalogo -->
+
+      <!-- ÚLTIMAS SUBASTAS TERMINADAS (Sección 14): js/catalogo.js crea aquí un
+           renglón por cada una. Por privacidad no se dice quién ganó. -->
+      <aside id="ultimas-subastas" aria-labelledby="titulo-de-ultimas-subastas">
+        <h2 id="titulo-de-ultimas-subastas">Últimas subastas terminadas</h2>
+        <p id="mensaje-de-ultimas-subastas" role="status"></p>
+        <ul id="lista-de-ultimas-subastas"></ul>
+      </aside>
+
+    </div> <!-- fin de .catalogo-con-barra-lateral -->
   </main>
 
   <footer>

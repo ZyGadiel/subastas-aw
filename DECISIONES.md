@@ -4,6 +4,23 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — Mini lista de las últimas subastas terminadas
+
+**Decisión:** el catálogo muestra a la izquierda las 5 subastas que terminaron más recientemente: si se vendieron y en cuánto, o si terminaron sin pujas. No dice quién ganó.
+
+**Por qué:**
+- Cuando no hay subastas activas, la página de inicio se veía vacía. La mini lista demuestra que la página se usa y deja ver los precios en que se venden las cosas.
+- Por privacidad se cuida lo mismo que en el historial: nunca se muestra el nombre del ganador.
+
+**Cómo se acomoda:**
+- En el HTML el catálogo va primero y la mini lista después. En celular, lo importante (las subastas activas) se ve primero; en computadora, el CSS la pasa a la izquierda con `order: -1`. Así el orden del HTML sigue siendo el de importancia (es el que leen los lectores de pantalla).
+- Ancho fijo de 250px y `position: sticky`: se queda a la vista al bajar por el catálogo.
+- Junto a ella caben 2 tarjetas por fila: `main` mide máximo 1100px y con 3 quedarían muy angostas.
+
+**No hizo falta tocar la base de datos:** la política RLS de lectura ya deja ver las subastas no eliminadas, también a los visitantes.
+
+---
+
 ## 22 nov 2026 — Botón para ver la contraseña
 
 **Decisión:** en el registro y el inicio de sesión hay un botón "Mostrar / Ocultar" junto a la contraseña. Empieza oculta y se vuelve a ocultar al enviar el formulario.

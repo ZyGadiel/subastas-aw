@@ -305,3 +305,22 @@ Se probó en el navegador, en las dos páginas, en modo claro y oscuro y en pant
 **Qué acepté:** la implementacion de visualizar la contrasena
 
 **Qué rechacé o cambié:** no hubo cambios.
+
+---
+
+## 22 nov 2026 — Sección 14: Últimas subastas terminadas en el catálogo
+
+**Qué le pedí:** una mini lista en la parte izquierda de la pantalla de inicio con las últimas subastas realizadas.
+
+**Qué me propuso:**
+Entendió "realizadas" como las que ya **terminaron**. La mini lista muestra las 5 más recientes: el título (enlace al detalle), "Vendida en $X" en verde o "Terminó sin pujas", y hace cuánto terminó ("Hace 5 min", "Hace 3 h", "Hace 2 días"). Por privacidad no dice quién ganó.
+`js/catalogo.js`: `cargarUltimasSubastasTerminadas` pide `subastas` con `estado = 'finalizada'`, ordenadas por `fecha_de_finalizacion` de la más nueva a la más vieja, con `limit(5)`. No hizo falta SQL nuevo: la política RLS de `schema.sql` ya deja ver las subastas no eliminadas. La lista no depende de la búsqueda y se carga al mismo tiempo que el catálogo.
+`index.html`: un `<aside>` dentro de un contenedor de dos columnas. En el HTML el catálogo va **primero**, para que en celular se vea primero y la mini lista quede abajo; en computadora (desde 1024px) el CSS la pasa a la izquierda con `order: -1`, con ancho fijo de 250px y `position: sticky` para que no se pierda al bajar. Junto a ella caben 2 tarjetas por fila.
+Casos límite: todavía no termina ninguna subasta (aviso), error de conexión (aviso solo en la mini lista, el catálogo sigue funcionando), terminó sin pujas, y el reloj de la computadora atrasado ("Hace un momento" en lugar de un tiempo negativo). Títulos con `textContent` (evita XSS).
+Se probó en el navegador con los datos reales (5 subastas, vendidas y sin pujas): en computadora la lista queda a la izquierda y se queda a la vista al bajar; en celular queda debajo del catálogo sin salirse de la pantalla. Los enlaces llevan a `subasta.html?id=...` y no hay errores en la consola.
+
+**Error de la IA que se corrigió:** primero propuso 3 tarjetas por fila en pantallas de más de 1280px, pero `main` mide como máximo 1100px, así que el espacio no crece y las tarjetas solo quedaban más angostas. Se quitó esa regla y se dejaron 2 por fila.
+
+**Qué acepté:** implementacion enlistada de subastas finalizadas
+
+**Qué rechacé o cambié:** 

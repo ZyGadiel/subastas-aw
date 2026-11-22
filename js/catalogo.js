@@ -4,6 +4,7 @@
 //  2. Pide a Supabase las subastas activas que coinciden.
 //  3. Crea una tarjeta por cada una.
 //  4. Cada segundo actualiza el tiempo restante de todas las tarjetas.
+//  5. Muestra la mini lista de las últimas subastas terminadas (Sección 14).
 // =====================================================================
 
 const contenedorDeSubastas = document.getElementById('lista-de-subastas');
@@ -226,9 +227,105 @@ function crearTarjetaDeSubasta(subasta) {
 }
 
 
+// ---------------------------------------------------------------------
+// 5. ÚLTIMAS SUBASTAS TERMINADAS (Sección 14): la mini lista de la izquierda.
+//    No depende de la búsqueda: siempre muestra las últimas que cerraron.
+//    Por privacidad no se dice quién ganó, solo si se vendió y en cuánto.
+// ---------------------------------------------------------------------
+const listaDeUltimasSubastas = document.getElementById('lista-de-ultimas-subastas');
+const mensajeDeUltimasSubastas = document.getElementById('mensaje-de-ultimas-subastas');
+
+const CANTIDAD_DE_ULTIMAS_SUBASTAS = 5;
+const MILISEGUNDOS_POR_MINUTO = 60 * 1000;
+
+// "Hace 5 min", "Hace 3 h", "Hace 2 días": cuánto pasó desde que terminó
+function describirHaceCuantoTermino(fechaDeFinalizacion) {
+  const minutosQuePasaron = Math.floor((new Date() - new Date(fechaDeFinalizacion)) / MILISEGUNDOS_POR_MINUTO);
+
+  // CASO LÍMITE: acaba de terminar (o el reloj de la computadora va atrasado
+  // y la resta da negativa) → "Hace un momento"
+  if (minutosQuePasaron < 1) {
+    return 'Hace un momento';
+  }
+  if (minutosQuePasaron < 60) {
+    return `Hace ${minutosQuePasaron} min`;
+  }
+  const horasQuePasaron = Math.floor(minutosQuePasaron / 60);
+  if (horasQuePasaron < 24) {
+    return `Hace ${horasQuePasaron} h`;
+  }
+  const diasQuePasaron = Math.floor(horasQuePasaron / 24);
+  return diasQuePasaron === 1 ? 'Hace 1 día' : `Hace ${diasQuePasaron} días`;
+}
+
+// Es como este SQL:
+//   SELECT id, titulo, precio_actual, fecha_de_finalizacion, id_del_ganador
+//   FROM subastas
+//   WHERE estado = 'finalizada'
+//   ORDER BY fecha_de_finalizacion DESC   ← la que terminó más recientemente, arriba
+//   LIMIT 5;
+// (Las eliminadas no salen: la política RLS las oculta.)
+async function cargarUltimasSubastasTerminadas() {
+  mostrarMensaje(mensajeDeUltimasSubastas, 'Cargando...', 'aviso');
+
+  const { data: ultimasSubastas, error: errorDeLaConsulta } = await baseDeDatos
+    .from('subastas')
+    .select('id, titulo, precio_actual, fecha_de_finalizacion, id_del_ganador')
+    .eq('estado', 'finalizada')
+    .order('fecha_de_finalizacion', { ascending: false })
+    .limit(CANTIDAD_DE_ULTIMAS_SUBASTAS);
+
+  // CASO LÍMITE: falla la conexión. Solo se avisa en la mini lista;
+  // el catálogo de la derecha sigue funcionando.
+  if (errorDeLaConsulta) {
+    console.error('Error al cargar las últimas subastas:', errorDeLaConsulta);
+    mostrarMensaje(mensajeDeUltimasSubastas, 'No pudimos cargar esta lista.', 'error');
+    return;
+  }
+
+  // CASO LÍMITE: todavía no ha terminado ninguna subasta
+  if (ultimasSubastas.length === 0) {
+    mostrarMensaje(mensajeDeUltimasSubastas, 'Todavía no ha terminado ninguna subasta.', 'aviso');
+    return;
+  }
+
+  borrarMensaje(mensajeDeUltimasSubastas);
+  listaDeUltimasSubastas.replaceChildren(...ultimasSubastas.map(crearRenglonDeSubastaTerminada));
+}
+
+// Un renglón <li>:   Bicicleta de montaña          ← enlace al detalle
+//                    Vendida en $1,310.00          ← o "Terminó sin pujas"
+//                    Hace 5 min
+// Como en las tarjetas: textContent, nunca innerHTML (evita XSS)
+function crearRenglonDeSubastaTerminada(subasta) {
+  const enlaceALaSubasta = document.createElement('a');
+  enlaceALaSubasta.href = `subasta.html?id=${subasta.id}`;
+  enlaceALaSubasta.textContent = subasta.titulo;
+
+  // CASO LÍMITE: terminó sin pujas → no hubo venta
+  const resultadoDeLaSubasta = document.createElement('span');
+  resultadoDeLaSubasta.className = 'detalle-de-la-subasta-terminada';
+  if (subasta.id_del_ganador) {
+    resultadoDeLaSubasta.classList.add('subasta-terminada-vendida');
+    resultadoDeLaSubasta.textContent = `Vendida en ${formatearDinero(subasta.precio_actual)}`;
+  } else {
+    resultadoDeLaSubasta.textContent = 'Terminó sin pujas';
+  }
+
+  const haceCuantoTermino = document.createElement('span');
+  haceCuantoTermino.className = 'detalle-de-la-subasta-terminada';
+  haceCuantoTermino.textContent = describirHaceCuantoTermino(subasta.fecha_de_finalizacion);
+
+  const renglon = document.createElement('li');
+  renglon.append(enlaceALaSubasta, resultadoDeLaSubasta, haceCuantoTermino);
+  return renglon;
+}
+
+
 // Al abrir la página: leer los filtros, cargar las subastas y arrancar el reloj
 // (actualizarTiemposRestantes está en js/utilidades.js)
 const filtrosDeLaBusqueda = leerFiltrosDeLaDireccion();
 mostrarFiltrosEnElFormulario(filtrosDeLaBusqueda);
 cargarSubastasActivas(filtrosDeLaBusqueda);
+cargarUltimasSubastasTerminadas(); // las dos cargas van al mismo tiempo
 setInterval(actualizarTiemposRestantes, 1000);

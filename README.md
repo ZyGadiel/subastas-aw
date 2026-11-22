@@ -139,7 +139,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/conexion-a-supabase.js` | Crea la conexión `baseDeDatos` (se carga en todas las páginas) |
 | `js/utilidades.js` | Formato de dinero y tiempo, mensajes para el usuario, traducción de errores y botón para ver la contraseña |
 | `js/sesion.js` | Sabe quién inició sesión, ajusta el menú y cierra sesión |
-| `js/catalogo.js` | Lista de subastas activas, búsqueda y filtro por categoría (`index.html`) |
+| `js/catalogo.js` | Lista de subastas activas, búsqueda, filtro por categoría y mini lista de las últimas subastas terminadas (`index.html`) |
 | `js/registro.js` | Crear cuenta (`registro.html`) |
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
 | `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |

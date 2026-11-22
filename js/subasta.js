@@ -53,6 +53,7 @@ let numeroDeLaUltimaCarga = 0;         // ver el CASO LÍMITE dentro de cargarSu
 let laSubastaYaTerminoEnPantalla = false;
 let elProductoYaSeMostro = false;      // la foto, el título y la descripción no cambian
 let cierreEnCurso = false;             // ¿ya le pedimos a la base de datos cerrar la subasta?
+let conexionEnTiempoRealActiva = false; // ¿Supabase Realtime está conectado? (ver el punto 6)
 
 
 // ---------------------------------------------------------------------
@@ -203,6 +204,7 @@ function mostrarSubasta() {
     elProductoYaSeMostro = true;
   }
   mostrarEstadoDeLaSubasta();
+  actualizarIndicadorEnVivo();
   mostrarResultadoDeLaSubasta();
   mostrarOpcionesDeParticipacion();
   mostrarPosiciones();
@@ -592,15 +594,24 @@ function escucharCambiosEnTiempoReal() {
       cargarSubasta
     )
     .subscribe((estadoDeLaConexion) => {
-      const conexionActiva = estadoDeLaConexion === 'SUBSCRIBED';
-      indicadorEnVivo.hidden = !conexionActiva;
+      conexionEnTiempoRealActiva = estadoDeLaConexion === 'SUBSCRIBED';
+      actualizarIndicadorEnVivo();
 
       // CASO LÍMITE: se fue el internet un rato y volvió. Mientras no hubo
       // conexión pudimos perdernos pujas, así que recargamos todo.
-      if (conexionActiva) {
+      if (conexionEnTiempoRealActiva) {
         cargarSubasta();
       }
     });
+}
+
+// La etiqueta "En vivo" (con el punto que late) necesita DOS cosas:
+//   1. que la conexión en tiempo real esté activa, y
+//   2. que la subasta siga en curso.
+// CASO LÍMITE: una subasta terminada no debe decir "En vivo" aunque la
+// conexión funcione (Sección 14.1: antes solo se revisaba la conexión).
+function actualizarIndicadorEnVivo() {
+  indicadorEnVivo.hidden = !conexionEnTiempoRealActiva || subastaTerminada();
 }
 
 
@@ -615,6 +626,7 @@ function actualizarReloj() {
   const terminoAhora = subastaTerminada();
   if (terminoAhora && !laSubastaYaTerminoEnPantalla) {
     mostrarOpcionesDeParticipacion();
+    actualizarIndicadorEnVivo(); // en ese mismo segundo deja de decir "En vivo"
   }
   laSubastaYaTerminoEnPantalla = terminoAhora;
 
@@ -673,7 +685,13 @@ async function iniciarPagina() {
   if (!subastaActual) {
     return;
   }
-  escucharCambiosEnTiempoReal();
+  // CASO LÍMITE: la subasta ya está finalizada en la base de datos. Ya no
+  // va a cambiar, así que no hace falta abrir la conexión en tiempo real.
+  // (Si solo se le acabó el tiempo pero sigue "activa", SÍ se escucha:
+  // así llega el aviso cuando el servidor la cierra y elige al ganador.)
+  if (subastaActual.estado !== 'finalizada') {
+    escucharCambiosEnTiempoReal();
+  }
   setInterval(actualizarReloj, 1000);
 }
 
