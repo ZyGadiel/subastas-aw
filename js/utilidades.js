@@ -58,3 +58,50 @@ function borrarMensaje(elementoDelMensaje) {
   elementoDelMensaje.textContent = '';
   elementoDelMensaje.className = '';
 }
+
+
+// ---------------------------------------------------------------------
+// Traduce los errores de la base de datos a mensajes claros en español.
+// Cuando una regla (constraint) se rompe, el mensaje de PostgreSQL trae
+// su nombre, por ejemplo: violates check constraint "precio_inicial_positivo".
+// Por eso les pusimos nombres claros en supabase/schema.sql.
+// ---------------------------------------------------------------------
+const MENSAJES_DE_LAS_REGLAS_DE_LA_BASE_DE_DATOS = {
+  precio_inicial_positivo: 'El precio inicial debe ser mayor que cero.',
+  incremento_minimo_positivo: 'El incremento mínimo debe ser mayor que cero.',
+  categoria_valida: 'Elige una categoría de la lista.',
+  finaliza_despues_de_iniciar: 'La subasta debe terminar después de empezar.',
+  duracion_maxima_de_siete_dias: 'Una subasta puede durar como máximo 7 días.',
+  lugar_entre_uno_y_cinco: 'La subasta ya tiene sus 5 lugares ocupados.',
+  lugar_no_repetido: 'Ese lugar se acaba de ocupar. Inténtalo de nuevo.',
+  un_lugar_por_usuario: 'Ya estás participando en esta subasta.',
+  monto_positivo: 'El monto de la puja debe ser mayor que cero.',
+};
+
+// Códigos de error de PostgreSQL que nos interesan
+const CODIGO_DE_PERMISO_DENEGADO = '42501';   // la política RLS no lo permitió
+const CODIGO_DE_NUMERO_DEMASIADO_GRANDE = '22003';
+
+function traducirErrorDeLaBaseDeDatos(errorDeLaBaseDeDatos) {
+  console.error('Error de la base de datos:', errorDeLaBaseDeDatos);
+  const textoDelError = errorDeLaBaseDeDatos.message ?? '';
+
+  // ¿El error menciona alguna de nuestras reglas con nombre?
+  for (const [nombreDeLaRegla, mensaje] of Object.entries(MENSAJES_DE_LAS_REGLAS_DE_LA_BASE_DE_DATOS)) {
+    if (textoDelError.includes(nombreDeLaRegla)) {
+      return mensaje;
+    }
+  }
+
+  if (errorDeLaBaseDeDatos.code === CODIGO_DE_PERMISO_DENEGADO) {
+    return 'No tienes permiso para hacer esto. ¿Iniciaste sesión con la cuenta correcta?';
+  }
+  if (errorDeLaBaseDeDatos.code === CODIGO_DE_NUMERO_DEMASIADO_GRANDE) {
+    return 'El número es demasiado grande.';
+  }
+  // CASO LÍMITE: sin internet, el navegador responde "Failed to fetch"
+  if (textoDelError.includes('Failed to fetch')) {
+    return 'No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.';
+  }
+  return 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+}

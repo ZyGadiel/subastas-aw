@@ -4,6 +4,24 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Publicar: tres capas de validación
+
+**Decisión:** cada subasta nueva se revisa en tres lugares:
+1. **HTML** (`required`, `min`, `max`, `maxlength`): el navegador avisa antes de enviar.
+2. **JavaScript** (`validarDatosDeLaSubasta` en `js/publicar.js`): mensajes claros para lo que el HTML no detecta (textos de puros espacios, incremento mayor que el precio).
+3. **Base de datos** (reglas con nombre, trigger `antes_de_publicar_preparar_subasta` y política RLS): la única capa que no se puede saltar, porque cualquiera puede modificar el JavaScript desde su navegador.
+
+**Datos que no vienen del navegador:** el trigger pone el vendedor (`auth.uid()`), la fecha de inicio (reloj del servidor), el precio actual y el estado. Así nadie puede publicar a nombre de otro ni empezar una subasta con un precio inflado.
+
+**Reglas del negocio que elegí:**
+- Duraciones: 2 min (para la demo), 5 min, 1 hora o 1 día. La base de datos permite máximo 7 días.
+- El precio inicial va de $1 a $10,000,000.
+- El incremento mínimo no puede ser mayor que el precio inicial.
+
+**Mensajes de error:** `traducirErrorDeLaBaseDeDatos` (en `js/utilidades.js`) busca el nombre de la regla rota en el error de PostgreSQL y muestra su mensaje en español.
+
+---
+
 ## 21 nov 2026 — Usuarios: Supabase Auth + trigger que crea el perfil
 
 **Decisión:** el registro y el inicio de sesión los hace Supabase Auth. El perfil (nombre y rol) lo crea la base de datos con un trigger (`al_registrarse_crear_perfil`), no JavaScript.

@@ -42,6 +42,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 |---|---|---|
 | 1 | [`supabase/schema.sql`](supabase/schema.sql) | Crea las 4 tablas, sus reglas y los permisos de lectura |
 | 2 | [`supabase/seccion-5-usuarios.sql`](supabase/seccion-5-usuarios.sql) | Trigger que crea el perfil al registrarse |
+| 3 | [`supabase/seccion-6-publicar.sql`](supabase/seccion-6-publicar.sql) | Permiso para que los vendedores publiquen, trigger que prepara la subasta y límite de 7 días |
 | — | [`supabase/datos-prueba.sql`](supabase/datos-prueba.sql) | Opcional: 4 subastas de ejemplo |
 | — | [`supabase/borrar-tablas.sql`](supabase/borrar-tablas.sql) | ⚠️ Borra todo para empezar de cero |
 
@@ -55,6 +56,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/catalogo.js` | Lista de subastas activas (`index.html`) |
 | `js/registro.js` | Crear cuenta (`registro.html`) |
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
+| `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |
 | `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas |
 
 ## Cómo correrlo

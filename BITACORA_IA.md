@@ -103,13 +103,26 @@ Un archivo `supabase/datos-prueba.sql` para llenar la base con 4 subastas de eje
 **Qué le pedí:** que los usuarios puedan crear cuenta, iniciar y cerrar sesión, y que el menú cambie según quién esté conectado.
 
 **Qué me propuso:**
-- Usar Supabase Auth (`signUp`, `signInWithPassword`, `signOut`) en lugar de guardar contraseñas yo.
-- Un trigger en la base de datos (`supabase/seccion-5-usuarios.sql`) que crea el perfil al registrarse y no deja elegir el rol `administrador`.
-- `js/sesion.js` en todas las páginas: obtiene el perfil una sola vez (`promesaDelPerfilDelUsuarioActual`), muestra "Hola, nombre" y "Cerrar sesión", y solo muestra "Publicar" a los vendedores.
-- Traducir los errores de Supabase (vienen en inglés) a mensajes en español.
-- Deshabilitar el botón mientras se espera la respuesta (caso límite del doble clic) y rechazar nombres de puros espacios.
-- Desactivar la confirmación por correo en Supabase para la demo.
+Usar Supabase Auth (`signUp`, `signInWithPassword`, `signOut`) en lugar de guardar contraseñas yo.
+Un trigger en la base de datos (`supabase/seccion-5-usuarios.sql`) que crea el perfil al registrarse y no deja elegir el rol `administrador`.
+`js/sesion.js` en todas las páginas: obtiene el perfil una sola vez (`promesaDelPerfilDelUsuarioActual`), muestra "Hola, nombre" y "Cerrar sesión", y solo muestra "Publicar" a los vendedores.
+Traducir los errores de Supabase (vienen en inglés) a mensajes en español.
+Deshabilitar el botón mientras se espera la respuesta (caso límite del doble clic) y rechazar nombres de puros espacios.
+Desactivar la confirmación por correo en Supabase para la demo.
 
-**Qué acepté:** _(llénalo tú)_
+**Qué acepté:** las propuestas de la ia de seguridad para evitar modificacion manual en el html y en el js
 
-**Qué rechacé o cambié:** _(llénalo tú)_
+**Qué rechacé o cambié:** nada de momento
+
+---
+
+## 21 nov 2026 — Sección 6: Publicar subasta
+
+**Qué le pedí:** que los vendedores puedan publicar productos desde el formulario y que aparezcan en el catálogo.
+
+**Qué me propuso:**
+- `supabase/seccion-6-publicar.sql`: permiso `INSERT` solo para usuarios con sesión, política RLS "solo los vendedores activos publican", trigger que pone el vendedor, la fecha de inicio y el precio actual, y una regla de duración máxima de 7 días.
+- `js/publicar.js`: ocultar el formulario a quien no sea vendedor, validar los casos límite (puros espacios, negativos, texto en lugar de número, números gigantes, incremento mayor que el precio) y deshabilitar el botón para evitar el doble clic.
+- `traducirErrorDeLaBaseDeDatos` en `js/utilidades.js`, que convierte el nombre de la regla rota en un mensaje en español.
+
+**Error de la IA que se corrigió:** la primera versión del trigger ponía siempre el vendedor con `auth.uid()`. Desde el SQL Editor no hay sesión, así que `datos-prueba.sql` habría fallado con un vendedor vacío. Se corrigió para que solo lo haga cuando hay un usuario con sesión.
