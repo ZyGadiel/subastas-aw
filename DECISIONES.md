@@ -4,6 +4,21 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Modo oscuro con variables de CSS
+
+**Decisión:** el modo oscuro cambia solo los **valores** de las variables de color (`:root[data-tema="oscuro"]` en `css/estilos.css`). `js/tema.js` pone `data-tema="claro"` u `"oscuro"` en la etiqueta `<html>`.
+
+**Por qué:**
+- Gracias a que desde la Sección 3 todos los colores son variables, no hubo que repetir cada regla para el modo oscuro: bastó un segundo juego de colores.
+- Los textos de colores (verde, rojo, amarillo, enlaces) son más claros en modo oscuro para que se lean sobre fondo oscuro; los fondos de los botones se quedan oscuros para que su texto blanco siga leyéndose.
+
+**Comportamiento:**
+- La primera vez se usa el modo de la computadora o del celular (`prefers-color-scheme`).
+- El botón 🌙 / ☀️ del menú cambia el tema y la elección se guarda en el navegador (`localStorage`), así se mantiene en todas las páginas y la próxima visita.
+- `js/tema.js` se carga en el `<head>` (no al final como los demás scripts) para aplicar el tema antes de que se dibuje la página y evitar un destello blanco.
+
+---
+
 ## 21 nov 2026 — Correo con dominio completo
 
 **Decisión:** el correo del registro y del inicio de sesión debe tener la forma `ejemplo@dominio.algo`.

@@ -176,3 +176,21 @@ Atributo `pattern` en el campo de correo de `registro.html` e `iniciar-sesion.ht
 La misma regla en JavaScript (`esCorreoValido` y `PATRON_DE_CORREO_VALIDO` en `js/utilidades.js`), porque alguien puede borrar el `pattern` con las herramientas del navegador.
 La expresión regular pide: algo antes de la @, un dominio sin puntos seguidos y al final un punto con al menos 2 letras (`.com`, `.mx`, `.edu.mx`).
 Se probó con 8 correos (`ejemplo@ejemplo`, `a@b..com`, `a@b.c`, con espacios, sin @, `.c0m`, y dos válidos); el navegador y JavaScript dieron el mismo resultado.
+
+---
+
+## 21 nov 2026 — Sección 7.3: Modo oscuro
+
+**Qué le pedí (idea mía, después de probar la Sección 7):** agregar modo oscuro a la página.
+
+**Qué me propuso:**
+Aprovechar las variables de color de la Sección 3: en `css/estilos.css` se agregó un segundo juego de valores en `:root[data-tema="oscuro"]`. Las demás reglas no cambian porque todas usan `var(--...)`.
+Cambiar los colores que estaban escritos directo (el fondo verde de la puja más alta y el botón verde) por variables nuevas, y separar `--color-de-los-enlaces` para que los enlaces se lean bien sobre fondo oscuro.
+`js/tema.js` en el `<head>` de las 5 páginas: decide el tema ANTES de dibujar la página para que no "parpadee" en blanco.
+Un botón 🌙 / ☀️ en el menú. La primera vez usa el modo de la computadora o del celular (`prefers-color-scheme`); después recuerda la elección con `localStorage`.
+Casos límite: navegador que no deja usar `localStorage` (modo privado), un valor raro guardado a mano, y que la computadora cambie de modo con la página abierta.
+Se probó en el catálogo, el detalle de la subasta y el registro, en computadora y en celular, y que la elección se mantiene al cambiar de página.
+
+**Qué acepté:** la implementacion del modo oscuro
+
+**Qué rechacé o cambié:** nada de momento.

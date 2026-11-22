@@ -51,6 +51,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 
 | Archivo | Qué hace |
 |---|---|
+| `js/tema.js` | Modo claro u oscuro: botón 🌙 / ☀️ y la elección guardada (se carga en el `<head>` de todas las páginas) |
 | `js/conexion-a-supabase.js` | Crea la conexión `baseDeDatos` (se carga en todas las páginas) |
 | `js/utilidades.js` | Formato de dinero y tiempo, mensajes para el usuario, traducción de errores |
 | `js/sesion.js` | Sabe quién inició sesión, ajusta el menú y cierra sesión |
@@ -59,7 +60,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
 | `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |
 | `js/subasta.js` | Detalle de una subasta: entrar, pujar, historial y actualización en tiempo real (`subasta.html?id=…`) |
-| `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas |
+| `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas (los colores claros y oscuros están en la 1) |
 
 ## Cómo correrlo
 

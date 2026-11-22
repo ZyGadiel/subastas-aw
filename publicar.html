@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subastas AW | Publicar producto</title>
   <link rel="stylesheet" href="css/estilos.css">
+  <!-- El tema (claro u oscuro) se decide aquí, ANTES de dibujar la página,
+       para que no se vea blanca un instante y luego oscura -->
+  <script src="js/tema.js"></script>
 </head>
 <body>
 
@@ -20,6 +23,10 @@
         <li id="opcion-saludo" hidden><span id="saludo-al-usuario"></span></li>
         <li id="opcion-cerrar-sesion" hidden>
           <button type="button" id="boton-cerrar-sesion" class="boton-con-aspecto-de-enlace">Cerrar sesión</button>
+        </li>
+        <!-- js/tema.js le pone el ícono (🌙 o ☀️) y su función -->
+        <li>
+          <button type="button" id="boton-de-modo-oscuro" class="boton-con-aspecto-de-enlace" aria-label="Cambiar de tema">🌙</button>
         </li>
       </ul>
     </nav>
