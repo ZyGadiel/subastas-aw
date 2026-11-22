@@ -36,6 +36,12 @@ function formatearTiempoRestante(fechaDeFinalizacion) {
   return dias > 0 ? `${dias}d ${relojConFormato}` : relojConFormato;
 }
 
+// Imagen que se usa si la subasta no tiene foto o si la foto no carga
+const FOTO_POR_DEFECTO = 'https://placehold.co/600x400?text=Sin+foto';
+
+// Cupo máximo de participantes por subasta (también lo garantiza la base de datos)
+const LUGARES_POR_SUBASTA = 5;
+
 // Nombres para mostrar de las categorías guardadas en la base de datos
 const NOMBRES_DE_LAS_CATEGORIAS = {
   electronica: 'Electrónica',
@@ -81,6 +87,9 @@ const MENSAJES_DE_LAS_REGLAS_DE_LA_BASE_DE_DATOS = {
 // Códigos de error de PostgreSQL que nos interesan
 const CODIGO_DE_PERMISO_DENEGADO = '42501';   // la política RLS no lo permitió
 const CODIGO_DE_NUMERO_DEMASIADO_GRANDE = '22003';
+// "raise exception" de nuestras funciones (supabase/seccion-7-puja.sql).
+// Su mensaje ya está escrito en español para el usuario.
+const CODIGO_DE_REGLA_DEL_NEGOCIO = 'P0001';
 
 function traducirErrorDeLaBaseDeDatos(errorDeLaBaseDeDatos) {
   console.error('Error de la base de datos:', errorDeLaBaseDeDatos);
@@ -93,6 +102,9 @@ function traducirErrorDeLaBaseDeDatos(errorDeLaBaseDeDatos) {
     }
   }
 
+  if (errorDeLaBaseDeDatos.code === CODIGO_DE_REGLA_DEL_NEGOCIO) {
+    return textoDelError;
+  }
   if (errorDeLaBaseDeDatos.code === CODIGO_DE_PERMISO_DENEGADO) {
     return 'No tienes permiso para hacer esto. ¿Iniciaste sesión con la cuenta correcta?';
   }

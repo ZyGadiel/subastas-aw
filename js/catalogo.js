@@ -8,11 +8,8 @@
 const contenedorDeSubastas = document.getElementById('lista-de-subastas');
 const mensajeDelCatalogo = document.getElementById('mensaje-del-catalogo');
 
-// Imagen que se usa si la subasta no tiene foto o si la foto no carga
-const FOTO_POR_DEFECTO = 'https://placehold.co/600x400?text=Sin+foto';
-
-// Cupo máximo de participantes por subasta (también lo garantiza la base de datos)
-const LUGARES_POR_SUBASTA = 5;
+// FOTO_POR_DEFECTO y LUGARES_POR_SUBASTA están en js/utilidades.js
+// (también los usa la página de detalle, js/subasta.js)
 
 
 // ---------------------------------------------------------------------

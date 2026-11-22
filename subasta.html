@@ -28,69 +28,76 @@
   <main>
     <a href="index.html">&larr; Volver al catálogo</a>
 
-    <!-- En pantallas grandes: producto a la izquierda y estado/acciones a la derecha -->
-    <div class="detalle-en-dos-columnas">
+    <!-- Avisos generales: "Cargando...", "Esa subasta no existe", errores de conexión -->
+    <p id="mensaje-de-la-subasta" role="alert" class="mensaje-de-aviso">Cargando subasta...</p>
 
-      <!-- INFORMACIÓN DEL PRODUCTO -->
-      <article id="detalle-del-producto">
-        <img src="https://placehold.co/600x400?text=Producto" alt="Foto de bicicleta de montaña">
-        <h1>Bicicleta de montaña</h1>
-        <p>Categoría: Deportes</p>
-        <p>Bicicleta rodada 29, frenos de disco, poco uso.</p>
-        <p>Vendedor: Usuario #12</p>
-      </article>
+    <!-- Todo el contenido empieza oculto (hidden) y js/subasta.js lo llena con los
+         datos reales de la subasta cuyo id viene en la dirección: subasta.html?id=7 -->
+    <div id="contenido-de-la-subasta" hidden>
 
-      <div class="columna-de-estado-y-participacion">
-        <!-- ESTADO DE LA SUBASTA (en la Sección 7 se actualizará en tiempo real) -->
-        <section id="estado-de-la-subasta" aria-label="Estado de la subasta">
-          <h2>Estado de la subasta</h2>
-          <p>Precio inicial: $1,000.00</p>
-          <p>Precio actual: <strong>$1,500.00</strong></p>
-          <p>Incremento mínimo: $50.00</p>
-          <p>Tiempo restante: <time>00:04:59</time></p>
-          <p>Lugares ocupados: 3 / 5</p>
-        </section>
+      <!-- En pantallas grandes: producto a la izquierda y estado/acciones a la derecha -->
+      <div class="detalle-en-dos-columnas">
 
-        <!-- PARTICIPAR: primero se entra a la subasta (ocupar uno de los 5 lugares), luego se puja -->
-        <section id="participar-en-la-subasta" aria-label="Participar">
-          <h2>Participar</h2>
-          <button type="button" id="boton-entrar-a-la-subasta">Entrar a la subasta</button>
+        <!-- INFORMACIÓN DEL PRODUCTO -->
+        <article id="detalle-del-producto">
+          <img id="foto-del-producto" src="" alt="">
+          <h1 id="titulo-del-producto"></h1>
+          <p>Categoría: <span id="categoria-del-producto"></span></p>
+          <p id="descripcion-del-producto"></p>
+        </article>
 
-          <form id="formulario-de-puja">
-            <label for="monto-de-la-puja">Tu puja (mínimo $1,550.00)</label>
-            <input type="number" id="monto-de-la-puja" name="monto" min="0" step="0.01" required>
-            <button type="submit">Pujar</button>
-          </form>
-        </section>
+        <div class="columna-de-estado-y-participacion">
+          <!-- ESTADO DE LA SUBASTA: se actualiza en tiempo real cuando alguien puja -->
+          <section id="estado-de-la-subasta" aria-label="Estado de la subasta">
+            <h2>
+              Estado de la subasta
+              <!-- Se muestra cuando la conexión en tiempo real está activa -->
+              <span id="indicador-en-vivo" class="indicador-en-vivo" hidden>En vivo</span>
+            </h2>
+            <p>Precio inicial: <span id="precio-inicial"></span></p>
+            <p>Precio actual: <strong id="precio-actual"></strong></p>
+            <p>Incremento mínimo: <span id="incremento-minimo"></span></p>
+            <p>Tiempo restante: <time id="tiempo-restante"></time></p>
+            <p>Lugares ocupados: <span id="lugares-ocupados"></span></p>
+          </section>
+
+          <!-- PARTICIPAR: primero se entra a la subasta (ocupar uno de los 5 lugares), luego se puja.
+               js/subasta.js decide qué mostrar según quién está viendo la página. -->
+          <section id="participar-en-la-subasta" aria-label="Participar">
+            <h2>Participar</h2>
+            <p id="estado-de-tu-participacion"></p>
+
+            <button type="button" id="boton-entrar-a-la-subasta" hidden>Entrar a la subasta</button>
+
+            <form id="formulario-de-puja" hidden>
+              <label for="monto-de-la-puja">Tu puja (mínimo <span id="monto-minimo"></span>)</label>
+              <input type="number" id="monto-de-la-puja" name="monto" min="1" max="99999999.99" step="0.01" required>
+              <button type="submit">Pujar</button>
+            </form>
+
+            <!-- Resultado de entrar o pujar: "¡Puja registrada!", "Tu puja debe ser de al menos..." -->
+            <p id="mensaje-de-la-puja" role="alert"></p>
+          </section>
+        </div>
+
       </div>
 
-    </div>
+      <!-- HISTORIAL: los participantes se muestran como "Participante 1, 2..." para no revelar sus datos -->
+      <section id="historial-de-pujas" aria-label="Historial de pujas">
+        <h2>Historial de pujas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Participante</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Hora</th>
+            </tr>
+          </thead>
+          <tbody id="filas-del-historial"></tbody>
+        </table>
+      </section>
 
-    <!-- HISTORIAL: los participantes se muestran como "Participante 1, 2..." para no revelar sus datos -->
-    <section id="historial-de-pujas" aria-label="Historial de pujas">
-      <h2>Historial de pujas</h2>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Participante</th>
-            <th scope="col">Monto</th>
-            <th scope="col">Hora</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Participante 2</td>
-            <td>$1,500.00</td>
-            <td>10:42</td>
-          </tr>
-          <tr>
-            <td>Participante 1</td>
-            <td>$1,200.00</td>
-            <td>10:40</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    </div>
   </main>
 
   <footer>
@@ -106,5 +113,6 @@
   <script src="js/conexion-a-supabase.js"></script>
   <script src="js/utilidades.js"></script>
   <script src="js/sesion.js"></script>
+  <script src="js/subasta.js"></script>
 </body>
 </html>

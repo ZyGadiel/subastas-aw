@@ -126,3 +126,19 @@ Desactivar la confirmación por correo en Supabase para la demo.
 - `traducirErrorDeLaBaseDeDatos` en `js/utilidades.js`, que convierte el nombre de la regla rota en un mensaje en español.
 
 **Error de la IA que se corrigió:** la primera versión del trigger ponía siempre el vendedor con `auth.uid()`. Desde el SQL Editor no hay sesión, así que `datos-prueba.sql` habría fallado con un vendedor vacío. Se corrigió para que solo lo haga cuando hay un usuario con sesión.
+
+---
+
+## 21 nov 2026 — Sección 7: Entrar a la subasta y pujar en tiempo real
+
+**Qué le pedí:** que la página de detalle muestre la subasta real, que los compradores puedan ocupar uno de los 5 lugares y pujar, y que el precio se actualice solo cuando alguien puja desde otra computadora.
+
+**Qué me propuso:**
+- `supabase/seccion-7-puja.sql`: dos funciones de la base de datos (`entrar_a_la_subasta` y `pujar`) en lugar de dar permiso de `INSERT` al navegador. Revisan todas las reglas en el servidor y usan `for update` (un candado en la fila) para que dos clics al mismo tiempo no rompan el cupo de 5 ni acepten dos pujas con el mismo precio.
+- Agregar las tablas a la publicación `supabase_realtime` para recibir los cambios al instante.
+- `js/subasta.js`: leer el `?id=` de la dirección, cargar subasta, participantes y pujas con `Promise.all`, decidir qué ve cada quien (visitante, vendedor, comprador dentro o fuera, subasta llena o terminada) y mostrar el historial como "Participante N" para no revelar nombres.
+- Casos límite: id inválido o inexistente, doble clic, puja menor al mínimo, el que va ganando quiere pujar otra vez, el tiempo se acaba con la página abierta, se pierde el internet y regresa, dos actualizaciones que llegan desordenadas.
+
+**Qué acepté:** (llénalo tú)
+
+**Qué rechacé o cambié:** (llénalo tú)

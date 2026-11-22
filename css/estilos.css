@@ -344,6 +344,37 @@ button:disabled {
   color: var(--color-de-exito);
 }
 
+/* Etiqueta "En vivo": aparece cuando la conexión en tiempo real está activa */
+.indicador-en-vivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+  color: var(--color-de-error);
+  border: 1px solid var(--color-de-error);
+  border-radius: 999px; /* esquinas totalmente redondas (forma de píldora) */
+}
+
+/* El puntito rojo que "late" (::before crea un elemento sin escribirlo en el HTML) */
+.indicador-en-vivo::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--color-de-error);
+  animation: latido 1.5s ease-in-out infinite;
+}
+
+@keyframes latido {
+  50% {
+    opacity: 0.25;
+  }
+}
+
 /* El formulario de puja ya está dentro de una caja: le quitamos su propio marco */
 #formulario-de-puja {
   border: none;
@@ -368,6 +399,13 @@ td {
 th {
   color: var(--color-del-texto-secundario);
   font-weight: 600;
+}
+
+/* La puja más alta (la que va ganando) se resalta en el historial */
+.puja-mas-alta td {
+  font-weight: 600;
+  color: var(--color-de-exito);
+  background-color: #f0fdf4; /* verde muy claro */
 }
 
 

@@ -4,6 +4,27 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Pujar: funciones en la base de datos + tiempo real
+
+**Decisión:** entrar a una subasta y pujar se hacen con dos funciones de PostgreSQL (`entrar_a_la_subasta` y `pujar`, en `supabase/seccion-7-puja.sql`) que JavaScript llama con `baseDeDatos.rpc(...)`. El navegador **no** tiene permiso de `INSERT` en `participantes` ni en `pujas`.
+
+**Por qué:**
+- Pujar no es solo guardar una fila: hay que revisar que la subasta siga activa, que el usuario participe y que el monto alcance el mínimo, y luego guardar la puja **y** subir el precio. Si lo hiciera el navegador, alguien podría saltarse las revisiones.
+- **Carreras (dos personas al mismo tiempo):** las funciones bloquean la fila de la subasta con `select ... for update`. Si dos compradores pujan en el mismo segundo, el segundo espera y luego ve el precio nuevo; si su monto ya no alcanza, se rechaza. Lo mismo con el último de los 5 lugares.
+- La hora que cuenta es la del servidor (`now()`), no la de la computadora del usuario.
+
+**Reglas del negocio que elegí:**
+- Solo las cuentas de **comprador** participan (así el vendedor no puede pujar en su propia subasta).
+- Los lugares se dan por orden de llegada (1 al 5). Si ya estabas dentro, te regresa tu mismo lugar.
+- Monto mínimo = precio actual + incremento mínimo (también en la primera puja).
+- Quien va ganando no puede volver a pujar hasta que alguien lo supere.
+
+**Tiempo real:** las tablas `subastas`, `participantes` y `pujas` se agregaron a la publicación `supabase_realtime`. La página escucha los cambios de **su** subasta y, en cada aviso, vuelve a cargar todo (más simple que actualizar pedazos y siempre queda igual que la base de datos). La etiqueta "En vivo" indica que la conexión está activa.
+
+**Privacidad:** el historial muestra "Participante 3", nunca el nombre. La tabla `perfiles` sigue siendo visible solo para su dueño.
+
+---
+
 ## 21 nov 2026 — Publicar: tres capas de validación
 
 **Decisión:** cada subasta nueva se revisa en tres lugares:
