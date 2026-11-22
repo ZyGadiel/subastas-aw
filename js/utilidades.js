@@ -50,6 +50,15 @@ function calcularComision(precioFinal) {
   return Math.round(Number(precioFinal) * PORCENTAJE_DE_COMISION) / 100;
 }
 
+// Actualiza el tiempo restante de todas las tarjetas. Se ejecuta cada segundo.
+// Busca todos los elementos que tienen el atributo data-fecha-de-finalizacion.
+// (Lo usan el catálogo y Mis subastas.)
+function actualizarTiemposRestantes() {
+  document.querySelectorAll('[data-fecha-de-finalizacion]').forEach((tiempoRestante) => {
+    tiempoRestante.textContent = formatearTiempoRestante(tiempoRestante.dataset.fechaDeFinalizacion);
+  });
+}
+
 // Nombres para mostrar de las categorías guardadas en la base de datos
 const NOMBRES_DE_LAS_CATEGORIAS = {
   electronica: 'Electrónica',

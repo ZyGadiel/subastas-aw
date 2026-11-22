@@ -60,6 +60,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/registro.js` | Crear cuenta (`registro.html`) |
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
 | `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |
+| `js/mis-subastas.js` | Mis subastas: lo que publicó el vendedor o donde participa el comprador (`mis-subastas.html`) |
 | `js/subasta.js` | Detalle de una subasta: entrar, pujar, posiciones, historial, tiempo real y resultado final (`subasta.html?id=…`) |
 | `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas (los colores claros y oscuros están en la 1) |
 

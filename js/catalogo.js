@@ -125,17 +125,7 @@ function crearTarjetaDeSubasta(subasta) {
 }
 
 
-// ---------------------------------------------------------------------
-// Actualiza el tiempo restante de todas las tarjetas. Se ejecuta cada segundo.
-// Busca todos los elementos que tienen el atributo data-fecha-de-finalizacion.
-// ---------------------------------------------------------------------
-function actualizarTiemposRestantes() {
-  document.querySelectorAll('[data-fecha-de-finalizacion]').forEach((tiempoRestante) => {
-    tiempoRestante.textContent = formatearTiempoRestante(tiempoRestante.dataset.fechaDeFinalizacion);
-  });
-}
-
-
 // Al abrir la página: cargar las subastas y arrancar el reloj
+// (actualizarTiemposRestantes está en js/utilidades.js)
 cargarSubastasActivas();
 setInterval(actualizarTiemposRestantes, 1000);

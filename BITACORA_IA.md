@@ -202,12 +202,23 @@ Se probó en el catálogo, el detalle de la subasta y el registro, en computador
 **Qué le pedí:** que las subastas se cierren solas al terminar el tiempo, que gane la puja más alta y que cada quien vea el resultado.
 
 **Qué me propuso:**
-- `supabase/seccion-8-cierre.sql`: una función `cerrar_subastas_vencidas()` que cierra todas las subastas cuya hora ya pasó (según el reloj del servidor) y guarda al ganador (la puja más alta; si hay empate, la que llegó primero; sin pujas, sin ganador).
-- Dos formas de llamarla: **pg_cron** (el "Programador de tareas" de PostgreSQL) cada minuto, aunque nadie tenga la página abierta, y **la página** cuando su contador llega a cero, para que el ganador aparezca en el mismo segundo.
-- Caso límite: una puja del último segundo que todavía se está guardando. La función espera el candado (`for update`) y luego esa puja sí cuenta.
-- En `subasta.html`, una caja "Resultado" con un mensaje distinto para el ganador ("¡Ganaste!"), el vendedor (a quién se vendió, la comisión del 3 % y lo que recibe) y los demás; y un 🏆 en la lista de posiciones.
-- Caso límite: si el reloj de la computadora va adelantado y el servidor aún no la cierra, la página dice "Calculando el ganador..." y vuelve a intentar cada 5 segundos.
+`supabase/seccion-8-cierre.sql`: una función `cerrar_subastas_vencidas()` que cierra todas las subastas cuya hora ya pasó (según el reloj del servidor) y guarda al ganador (la puja más alta; si hay empate, la que llegó primero; sin pujas, sin ganador).
+Dos formas de llamarla: **pg_cron** (el "Programador de tareas" de PostgreSQL) cada minuto, aunque nadie tenga la página abierta, y **la página** cuando su contador llega a cero, para que el ganador aparezca en el mismo segundo.
+Caso límite: una puja del último segundo que todavía se está guardando. La función espera el candado (`for update`) y luego esa puja sí cuenta.
+En `subasta.html`, una caja "Resultado" con un mensaje distinto para el ganador ("¡Ganaste!"), el vendedor (a quién se vendió, la comisión del 3 % y lo que recibe) y los demás; y un 🏆 en la lista de posiciones.
+Caso límite: si el reloj de la computadora va adelantado y el servidor aún no la cierra, la página dice "Calculando el ganador..." y vuelve a intentar cada 5 segundos.
 
-**Qué acepté:** (llénalo tú)
+---
 
-**Qué rechacé o cambié:** (llénalo tú)
+## 21 nov 2026 — Sección 8.1: Mis subastas
+
+**Qué le pedí:** una página donde cada usuario vea sus subastas: el vendedor, lo que publicó y lo que vendió; el comprador, dónde participa y qué ganó.
+
+**Qué me propuso:**
+`mis-subastas.html` + `js/mis-subastas.js`, con el enlace "Mis subastas" en el menú (solo con sesión iniciada).
+**Vendedor:** tarjetas con etiqueta "En curso", "Vendida" o "Sin pujas"; en las vendidas, la comisión del 3 % y cuánto recibe; arriba un resumen con el total que recibe.
+**Comprador:** desde `participantes` se pide también la subasta (como un JOIN) y, con una sola consulta más (`in`), quién va ganando cada subasta en curso. Etiquetas: "Vas ganando", "Te superaron", "Ganaste 🎉" o "No ganaste"; resumen con el total a pagar.
+La lista se recarga cada 30 segundos para que aparezcan las subastas que se cierran.
+Casos límite: sin sesión, administrador, todavía sin subastas, subasta eliminada (la oculta RLS), subasta vencida que el servidor aún no cierra ("Cerrando..."), y error de conexión sin borrar la lista.
+`actualizarTiemposRestantes` se movió a `js/utilidades.js` porque ahora la usan dos páginas.
+Se probó con todas las cuentas que tienen subastas: los resultados coincidieron con la base de datos.

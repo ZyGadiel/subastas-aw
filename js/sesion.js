@@ -51,6 +51,7 @@ function actualizarMenuSegunElUsuario(perfil) {
   const esVendedor = hayUsuario && perfil.rol === 'vendedor';
 
   document.getElementById('opcion-publicar').hidden = !esVendedor;
+  document.getElementById('opcion-mis-subastas').hidden = !hayUsuario;
   document.getElementById('opcion-iniciar-sesion').hidden = hayUsuario;
   document.getElementById('opcion-registrarse').hidden = hayUsuario;
   document.getElementById('opcion-saludo').hidden = !hayUsuario;

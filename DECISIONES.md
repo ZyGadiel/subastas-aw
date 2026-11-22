@@ -4,6 +4,21 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Mis subastas: una página, dos vistas
+
+**Decisión:** una sola página (`mis-subastas.html`) que muestra una lista distinta según el rol: el vendedor ve lo que publicó y el comprador las subastas donde ocupó un lugar.
+
+**Por qué:**
+- Cada usuario tiene un solo rol, así que no hace falta una página por rol; el menú queda más corto ("Mis subastas" para todos).
+- Las tarjetas usan el mismo diseño que el catálogo, con una etiqueta de color para el estado.
+
+**Cómo se consulta:**
+- Vendedor: `subastas` donde `id_del_vendedor` soy yo.
+- Comprador: `participantes` donde `id_del_usuario` soy yo, pidiendo también su subasta (como un JOIN). Para saber si va ganando, una sola consulta de `pujas` con `in (...)` para todas sus subastas, en lugar de una consulta por subasta.
+- Se recarga cada 30 segundos en lugar de usar tiempo real: aquí no hace falta ver cada puja al instante, solo los cambios de estado.
+
+---
+
 ## 21 nov 2026 — Cierre automático: pg_cron + la página
 
 **Decisión:** las subastas se cierran con una función de la base de datos (`cerrar_subastas_vencidas`) que se llama de dos formas:

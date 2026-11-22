@@ -299,7 +299,8 @@ button:disabled {
 }
 
 /* Lista de tarjetas: Flexbox con wrap → se acomodan solas según el ancho */
-#lista-de-subastas {
+#lista-de-subastas,
+#lista-de-mis-subastas {
   display: flex;
   flex-wrap: wrap;
   gap: var(--espacio-entre-tarjetas);
@@ -339,6 +340,38 @@ button:disabled {
 
 .tarjeta-de-subasta p:last-of-type {
   margin-bottom: 1rem; /* espacio entre el último dato y el botón */
+}
+
+/* MIS SUBASTAS: etiqueta de color con el estado ("Vendida", "Ganaste 🎉"...) */
+.etiqueta-de-estado {
+  align-self: flex-start; /* no ocupa todo el ancho de la tarjeta */
+  margin: 0.75rem 1rem 0;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid currentColor; /* el borde toma el mismo color que el texto */
+  border-radius: 999px;
+}
+
+.etiqueta-de-exito {
+  color: var(--color-de-exito);
+}
+
+.etiqueta-de-error {
+  color: var(--color-de-error);
+}
+
+.etiqueta-de-aviso {
+  color: var(--color-de-aviso);
+}
+
+.etiqueta-neutra {
+  color: var(--color-del-texto-secundario);
+}
+
+#resumen-de-mis-subastas {
+  font-weight: 500;
+  color: var(--color-del-texto-secundario);
 }
 
 /* El enlace "Ver subasta" se ve como botón y siempre queda al fondo de la tarjeta */
