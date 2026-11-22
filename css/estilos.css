@@ -282,6 +282,31 @@ button:disabled {
   max-width: 420px;
 }
 
+/* Campo de contraseña con el botón "Mostrar / Ocultar" a su lado, en la misma fila */
+.contrasena-con-boton {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.contrasena-con-boton input {
+  flex: 1;       /* el campo ocupa todo el espacio que deja el botón */
+  min-width: 0;  /* sin esto, en celulares angostos el campo empujaría al botón fuera de la caja */
+}
+
+/* Botón secundario: con borde y sin relleno de color, para que no parezca
+   el botón principal del formulario ("Entrar" o "Crear cuenta") */
+.boton-de-ver-contrasena {
+  margin-top: 0;
+  padding: 0.6rem 0.9rem;
+  color: var(--color-de-los-enlaces);
+  background-color: var(--color-de-superficie);
+  border: 1px solid var(--color-de-los-bordes);
+}
+
+.boton-de-ver-contrasena:hover {
+  background-color: var(--color-de-fondo);
+}
+
 
 /* ---------------------------------------------------------------------
    5. CATÁLOGO (index.html)

@@ -86,6 +86,35 @@ function esCorreoValido(correo) {
 
 const MENSAJE_DE_CORREO_INVALIDO = 'Escribe un correo completo, por ejemplo: ejemplo@correo.com';
 
+
+// ---------------------------------------------------------------------
+// Botón "Mostrar / Ocultar" de la contraseña (registro e inicio de sesión).
+// El truco es cambiar el type del campo:
+//   type="password" → se ven puntitos      type="text" → se ven las letras
+// El valor escrito no cambia, solo cómo se muestra.
+// ---------------------------------------------------------------------
+function mostrarUOcultarContrasena(campoDeLaContrasena, botonVerContrasena, mostrar) {
+  campoDeLaContrasena.type = mostrar ? 'text' : 'password';
+  botonVerContrasena.textContent = mostrar ? 'Ocultar' : 'Mostrar';
+  // aria-pressed y aria-label: los lectores de pantalla dicen si está activado y qué hace
+  botonVerContrasena.setAttribute('aria-pressed', String(mostrar));
+  botonVerContrasena.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+}
+
+function activarBotonVerContrasena(campoDeLaContrasena, botonVerContrasena) {
+  botonVerContrasena.addEventListener('click', () => {
+    const estaOculta = campoDeLaContrasena.type === 'password';
+    mostrarUOcultarContrasena(campoDeLaContrasena, botonVerContrasena, estaOculta);
+  });
+
+  // CASO LÍMITE: el usuario envía el formulario con la contraseña visible.
+  // Se vuelve a ocultar: así no queda a la vista mientras sale "¡Listo!" y
+  // el navegador la sigue reconociendo como contraseña para ofrecer guardarla.
+  campoDeLaContrasena.form.addEventListener('submit', () => {
+    mostrarUOcultarContrasena(campoDeLaContrasena, botonVerContrasena, false);
+  });
+}
+
 // Muestra un mensaje en un elemento de la página.
 // tipoDeMensaje: 'error', 'exito' o 'aviso'
 // (los colores están en la sección 7 de css/estilos.css: .mensaje-de-error, etc.)

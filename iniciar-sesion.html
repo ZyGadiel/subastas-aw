@@ -51,7 +51,13 @@
              placeholder="ejemplo@correo.com">
 
       <label for="contrasena">Contraseña</label>
-      <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
+      <!-- El campo y el botón "Mostrar" van juntos en una fila (css: .contrasena-con-boton).
+           type="button" = el botón NO envía el formulario; js/utilidades.js le da su función. -->
+      <div class="contrasena-con-boton">
+        <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
+        <button type="button" id="boton-ver-contrasena" class="boton-de-ver-contrasena"
+                aria-controls="contrasena" aria-pressed="false" aria-label="Mostrar contraseña">Mostrar</button>
+      </div>
 
       <button type="submit">Entrar</button>
     </form>

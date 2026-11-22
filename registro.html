@@ -54,7 +54,13 @@
              placeholder="ejemplo@correo.com">
 
       <label for="contrasena">Contraseña (mínimo 6 caracteres)</label>
-      <input type="password" id="contrasena" name="contrasena" minlength="6" autocomplete="new-password" required>
+      <!-- El campo y el botón "Mostrar" van juntos en una fila (css: .contrasena-con-boton).
+           type="button" = el botón NO envía el formulario; js/utilidades.js le da su función. -->
+      <div class="contrasena-con-boton">
+        <input type="password" id="contrasena" name="contrasena" minlength="6" autocomplete="new-password" required>
+        <button type="button" id="boton-ver-contrasena" class="boton-de-ver-contrasena"
+                aria-controls="contrasena" aria-pressed="false" aria-label="Mostrar contraseña">Mostrar</button>
+      </div>
 
       <!-- El rol define qué puede hacer el usuario. El administrador NO se elige aquí:
            se asigna aparte para que nadie pueda registrarse como administrador. -->

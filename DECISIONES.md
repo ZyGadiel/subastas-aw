@@ -4,6 +4,19 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — Botón para ver la contraseña
+
+**Decisión:** en el registro y el inicio de sesión hay un botón "Mostrar / Ocultar" junto a la contraseña. Empieza oculta y se vuelve a ocultar al enviar el formulario.
+
+**Por qué:**
+- Al escribir una contraseña sin verla es fácil equivocarse, sobre todo en el celular. Verla evita errores de "Correo o contraseña incorrectos".
+- Empieza oculta porque alguien puede estar viendo la pantalla; el usuario decide cuándo mostrarla.
+- Se oculta al enviar para que no quede a la vista y para que el navegador la siga tratando como contraseña (y ofrezca guardarla).
+
+**Por qué un botón con texto y no un ícono de ojo:** "Mostrar" y "Ocultar" se entienden sin adivinar qué significa el dibujo, y los lectores de pantalla los leen claro.
+
+---
+
 ## 22 nov 2026 — La foto debe ser https://
 
 **Decisión:** la dirección de la foto de una subasta debe empezar con `https://` (o quedar vacía). Ya no se acepta `http://`.

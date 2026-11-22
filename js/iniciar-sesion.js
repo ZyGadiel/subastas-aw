@@ -55,3 +55,9 @@ promesaDelPerfilDelUsuarioActual.then((perfil) => {
 });
 
 formularioDeInicioDeSesion.addEventListener('submit', iniciarSesion);
+
+// Botón "Mostrar / Ocultar" de la contraseña (la función está en js/utilidades.js)
+activarBotonVerContrasena(
+  document.getElementById('contrasena'),
+  document.getElementById('boton-ver-contrasena')
+);

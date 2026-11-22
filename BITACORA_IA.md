@@ -287,3 +287,21 @@ Se probó en el navegador: el texto de los botones sigue blanco en los dos temas
 **Qué acepté:** las modificaciones sigeridas de la ia
 
 **Qué rechacé o cambié:** nada de momento.
+
+---
+
+## 22 nov 2026 — Sección 13: Ver la contraseña
+
+**Qué le pedí:** agregar la opción de ver la contraseña al registrarse y al iniciar sesión.
+
+**Qué me propuso:**
+Un botón "Mostrar / Ocultar" junto al campo de contraseña en `registro.html` e `iniciar-sesion.html`. Funciona cambiando el `type` del campo: `password` muestra puntitos y `text` muestra las letras (lo escrito no cambia).
+La función `activarBotonVerContrasena` va en `js/utilidades.js` porque la usan las dos páginas; `js/registro.js` y `js/iniciar-sesion.js` solo la llaman.
+El botón es `type="button"` para que no envíe el formulario, y tiene `aria-pressed` y `aria-label` para los lectores de pantalla.
+Estilo de botón secundario (con borde, sin fondo de color) para que no se confunda con "Entrar" o "Crear cuenta". Usa solo variables de color, así funciona en modo claro y oscuro.
+Caso límite: si se envía el formulario con la contraseña visible, se vuelve a ocultar, así no queda a la vista y el navegador la sigue reconociendo como contraseña para ofrecer guardarla.
+Se probó en el navegador, en las dos páginas, en modo claro y oscuro y en pantalla de celular: mostrar, ocultar, que el botón no envíe el formulario y que al enviar se oculte (con un nombre de puros espacios, para no crear una cuenta). Sin errores en la consola.
+
+**Qué acepté:** la implementacion de visualizar la contrasena
+
+**Qué rechacé o cambié:** no hubo cambios.
