@@ -4,6 +4,22 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Cierre automático: pg_cron + la página
+
+**Decisión:** las subastas se cierran con una función de la base de datos (`cerrar_subastas_vencidas`) que se llama de dos formas:
+1. **pg_cron**, cada minuto, desde el servidor. Así se cierran aunque nadie esté viendo la página.
+2. **La página de la subasta**, cuando su contador llega a cero. Así el ganador aparece al instante y no hasta el siguiente minuto. Gracias al tiempo real, todas las pantallas abiertas se actualizan.
+
+**Por qué no solo con JavaScript:** si cerrar dependiera del navegador, una subasta que nadie está viendo nunca se cerraría. Y si solo fuera pg_cron, el ganador tardaría hasta un minuto en aparecer, lo que se ve mal en la demo.
+
+**Reglas que elegí:**
+- Gana la puja más alta; si hubiera empate, la que llegó primero (en la práctica no hay empates porque cada puja debe superar a la anterior).
+- Sin pujas = termina sin ganador.
+- Comisión de la página: 3 % del precio final. Solo el vendedor ve el desglose (comisión y lo que recibe).
+- Cualquiera puede llamar a la función (incluso sin sesión) porque no recibe datos y solo cierra lo que ya venció según el reloj del servidor.
+
+---
+
 ## 21 nov 2026 — Modo oscuro con variables de CSS
 
 **Decisión:** el modo oscuro cambia solo los **valores** de las variables de color (`:root[data-tema="oscuro"]` en `css/estilos.css`). `js/tema.js` pone `data-tema="claro"` u `"oscuro"` en la etiqueta `<html>`.

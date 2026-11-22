@@ -42,6 +42,14 @@ const FOTO_POR_DEFECTO = 'https://placehold.co/600x400?text=Sin+foto';
 // Cupo máximo de participantes por subasta (también lo garantiza la base de datos)
 const LUGARES_POR_SUBASTA = 5;
 
+// La página cobra una comisión del 3 % sobre el precio final de venta
+const PORCENTAJE_DE_COMISION = 3;
+
+// Comisión de un precio, redondeada a centavos: 1310 → 39.30
+function calcularComision(precioFinal) {
+  return Math.round(Number(precioFinal) * PORCENTAJE_DE_COMISION) / 100;
+}
+
 // Nombres para mostrar de las categorías guardadas en la base de datos
 const NOMBRES_DE_LAS_CATEGORIAS = {
   electronica: 'Electrónica',

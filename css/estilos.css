@@ -363,6 +363,7 @@ button:disabled {
    6. DETALLE DE SUBASTA (subasta.html)
    --------------------------------------------------------------------- */
 #detalle-del-producto,
+#resultado-de-la-subasta,
 #estado-de-la-subasta,
 #participar-en-la-subasta,
 #posiciones-de-los-participantes,
@@ -383,6 +384,24 @@ button:disabled {
 #estado-de-la-subasta strong {
   font-size: 1.5rem;
   color: var(--color-de-exito);
+}
+
+/* Caja del resultado: borde verde a la izquierda para que resalte */
+#resultado-de-la-subasta {
+  border-left: 5px solid var(--color-de-exito);
+}
+
+#resultado-de-la-subasta h2 {
+  margin-top: 0;
+}
+
+#texto-del-resultado {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#detalle-del-resultado {
+  color: var(--color-del-texto-secundario);
 }
 
 /* Etiqueta "En vivo": aparece cuando la conexión en tiempo real está activa */

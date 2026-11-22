@@ -143,7 +143,7 @@ Casos límite: id inválido o inexistente, doble clic, puja menor al mínimo, el
 
 **Qué rechacé o cambié:** reconoci areas de mejora y comence el proceso de modificacion
 1.Agregar un boton de puja automatica sin quitar la funcion manual.
-2.Necesariamente utilizar la direccion de correo con . (''ejemplo@ejemplo.com'') con el type=email deja poner sin punto.
+2.Necesariamente utilizar una dirección de correo con punto (por ejemplo, `ejemplo@ejemplo.com`); `type="email"` permite ingresar una dirección sin punto.
 3.Agregar funcion de modo oscuro.
 4.acercar a los pujadores cerca de la pantalla para poder ver el podio.
 
@@ -194,3 +194,20 @@ Se probó en el catálogo, el detalle de la subasta y el registro, en computador
 **Qué acepté:** la implementacion del modo oscuro
 
 **Qué rechacé o cambié:** nada de momento.
+
+---
+
+## 21 nov 2026 — Sección 8: Cierre automático y ganador
+
+**Qué le pedí:** que las subastas se cierren solas al terminar el tiempo, que gane la puja más alta y que cada quien vea el resultado.
+
+**Qué me propuso:**
+- `supabase/seccion-8-cierre.sql`: una función `cerrar_subastas_vencidas()` que cierra todas las subastas cuya hora ya pasó (según el reloj del servidor) y guarda al ganador (la puja más alta; si hay empate, la que llegó primero; sin pujas, sin ganador).
+- Dos formas de llamarla: **pg_cron** (el "Programador de tareas" de PostgreSQL) cada minuto, aunque nadie tenga la página abierta, y **la página** cuando su contador llega a cero, para que el ganador aparezca en el mismo segundo.
+- Caso límite: una puja del último segundo que todavía se está guardando. La función espera el candado (`for update`) y luego esa puja sí cuenta.
+- En `subasta.html`, una caja "Resultado" con un mensaje distinto para el ganador ("¡Ganaste!"), el vendedor (a quién se vendió, la comisión del 3 % y lo que recibe) y los demás; y un 🏆 en la lista de posiciones.
+- Caso límite: si el reloj de la computadora va adelantado y el servidor aún no la cierra, la página dice "Calculando el ganador..." y vuelve a intentar cada 5 segundos.
+
+**Qué acepté:** (llénalo tú)
+
+**Qué rechacé o cambié:** (llénalo tú)

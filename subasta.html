@@ -63,6 +63,14 @@
         </div>
 
         <div class="columna-de-estado-y-participacion">
+          <!-- RESULTADO: aparece cuando la subasta se cierra (Sección 8).
+               aria-live="polite" = los lectores de pantalla lo anuncian al aparecer -->
+          <section id="resultado-de-la-subasta" aria-label="Resultado de la subasta" aria-live="polite" hidden>
+            <h2>Resultado</h2>
+            <p id="texto-del-resultado"></p>
+            <p id="detalle-del-resultado"></p>
+          </section>
+
           <!-- ESTADO DE LA SUBASTA: se actualiza en tiempo real cuando alguien puja -->
           <section id="estado-de-la-subasta" aria-label="Estado de la subasta">
             <h2>

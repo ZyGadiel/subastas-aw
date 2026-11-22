@@ -7,7 +7,8 @@
 //     Las posiciones (quién va ganando) se ven junto al formulario.
 //  4. Escucha los cambios en TIEMPO REAL: si alguien puja desde otra
 //     computadora, esta página se actualiza sola, sin recargar.
-//  5. Cada segundo actualiza el tiempo restante.
+//  5. Cada segundo actualiza el tiempo restante. Cuando llega a cero, pide
+//     a la base de datos cerrar la subasta y muestra al ganador (Sección 8).
 // =====================================================================
 
 
@@ -36,6 +37,9 @@ const botonPujar = formularioDePuja.querySelector('button[type="submit"]');
 const botonPujarElMinimo = document.getElementById('boton-pujar-el-minimo');
 const textoDeLaPujaRapida = document.getElementById('monto-de-la-puja-rapida');
 const listaDePosiciones = document.getElementById('lista-de-posiciones');
+const seccionDelResultado = document.getElementById('resultado-de-la-subasta');
+const textoDelResultado = document.getElementById('texto-del-resultado');
+const detalleDelResultado = document.getElementById('detalle-del-resultado');
 const mensajeDeLaPuja = document.getElementById('mensaje-de-la-puja');
 const filasDelHistorial = document.getElementById('filas-del-historial');
 
@@ -48,6 +52,7 @@ let pujasDeLaSubasta = [];             // [{ id_del_usuario, monto, fecha_de_la_
 let numeroDeLaUltimaCarga = 0;         // ver el CASO LÍMITE dentro de cargarSubasta()
 let laSubastaYaTerminoEnPantalla = false;
 let elProductoYaSeMostro = false;      // la foto, el título y la descripción no cambian
+let cierreEnCurso = false;             // ¿ya le pedimos a la base de datos cerrar la subasta?
 
 
 // ---------------------------------------------------------------------
@@ -84,7 +89,7 @@ async function cargarSubasta() {
     // SELECT ... FROM subastas WHERE id = 7   (una fila o ninguna)
     baseDeDatos
       .from('subastas')
-      .select('id, id_del_vendedor, titulo, descripcion, categoria, url_de_la_foto, precio_inicial, incremento_minimo, precio_actual, fecha_de_finalizacion, estado')
+      .select('id, id_del_vendedor, titulo, descripcion, categoria, url_de_la_foto, precio_inicial, incremento_minimo, precio_actual, fecha_de_finalizacion, estado, id_del_ganador')
       .eq('id', idDeLaSubasta)
       .maybeSingle(),
     // SELECT id_del_usuario, numero_de_lugar FROM participantes WHERE id_de_la_subasta = 7
@@ -198,6 +203,7 @@ function mostrarSubasta() {
     elProductoYaSeMostro = true;
   }
   mostrarEstadoDeLaSubasta();
+  mostrarResultadoDeLaSubasta();
   mostrarOpcionesDeParticipacion();
   mostrarPosiciones();
   mostrarHistorialDePujas();
@@ -231,7 +237,11 @@ function mostrarOpcionesDeParticipacion() {
   formularioDePuja.hidden = true;
 
   if (subastaTerminada()) {
-    mostrarMensaje(estadoDeTuParticipacion, 'Esta subasta ya terminó. Ya no se aceptan pujas.', 'aviso');
+    // CASO LÍMITE: el tiempo ya pasó pero la base de datos aún no la cierra
+    const textoDelCierre = subastaActual.estado === 'finalizada'
+      ? 'Esta subasta ya terminó. Ya no se aceptan pujas.'
+      : 'El tiempo terminó. Calculando el ganador...';
+    mostrarMensaje(estadoDeTuParticipacion, textoDelCierre, 'aviso');
     return;
   }
   if (!perfilDelUsuario) {
@@ -291,6 +301,51 @@ function mostrarOpcionesDeParticipacion() {
 }
 
 // ---------------------------------------------------------------------
+// RESULTADO (Sección 8): solo aparece cuando la subasta ya se cerró.
+// Cada quien ve un mensaje distinto:
+//   * el ganador:      "¡Ganaste esta subasta!"
+//   * el vendedor:     a quién se vendió, la comisión del 3 % y lo que recibe
+//   * los demás:       "Ganó el Participante 3 con $1,310.00"
+//   * sin pujas:       "Terminó sin pujas"
+// ---------------------------------------------------------------------
+function mostrarResultadoDeLaSubasta() {
+  if (subastaActual.estado !== 'finalizada') {
+    seccionDelResultado.hidden = true;
+    return;
+  }
+  seccionDelResultado.hidden = false;
+
+  const precioFinal = Number(subastaActual.precio_actual);
+  const idDelGanador = subastaActual.id_del_ganador;
+  const esElVendedor = perfilDelUsuario !== null && perfilDelUsuario.id === subastaActual.id_del_vendedor;
+  const esElGanador = perfilDelUsuario !== null && perfilDelUsuario.id === idDelGanador;
+
+  // CASO LÍMITE: nadie pujó
+  if (!idDelGanador) {
+    textoDelResultado.textContent = 'La subasta terminó sin pujas. No hubo ganador.';
+    detalleDelResultado.textContent = esElVendedor ? 'Puedes volver a publicar tu producto.' : '';
+    return;
+  }
+
+  const nombreDelGanador = obtenerNombreParaMostrar(idDelGanador);
+
+  if (esElGanador) {
+    textoDelResultado.textContent = '¡Ganaste esta subasta! 🎉';
+    detalleDelResultado.textContent = `Tu puja ganadora fue de ${formatearDinero(precioFinal)}.`;
+  } else if (esElVendedor) {
+    const comision = calcularComision(precioFinal);
+    textoDelResultado.textContent = `Vendido a ${nombreDelGanador} por ${formatearDinero(precioFinal)}.`;
+    detalleDelResultado.textContent =
+      `Comisión de la página (${PORCENTAJE_DE_COMISION} %): ${formatearDinero(comision)}. ` +
+      `Tú recibes: ${formatearDinero(precioFinal - comision)}.`;
+  } else {
+    textoDelResultado.textContent = `Ganó ${nombreDelGanador} con ${formatearDinero(precioFinal)}.`;
+    detalleDelResultado.textContent = '';
+  }
+}
+
+
+// ---------------------------------------------------------------------
 // POSICIONES: una lista corta con los 5 lugares, ordenada de quien va
 // ganando a quien no ha pujado, y al final los lugares libres.
 //   1º  Participante 3 (tú)   $1,600.00
@@ -332,7 +387,12 @@ function calcularPosiciones() {
 function mostrarPosiciones() {
   const renglones = calcularPosiciones().map((posicion, indice) => {
     const tienePujas = posicion.montoMasAlto !== null;
-    const textoDeLaPosicion = tienePujas ? `${indice + 1}º` : '—';
+    // Cuando la subasta ya cerró, el primer lugar lleva un trofeo
+    const esElGanador = subastaActual.estado === 'finalizada' && indice === 0 && tienePujas;
+    let textoDeLaPosicion = tienePujas ? `${indice + 1}º` : '—';
+    if (esElGanador) {
+      textoDeLaPosicion = '🏆';
+    }
     const textoDelMonto = tienePujas ? formatearDinero(posicion.montoMasAlto) : 'Sin pujas';
     const renglon = crearRenglonDePosicion(
       textoDeLaPosicion,
@@ -557,6 +617,39 @@ function actualizarReloj() {
     mostrarOpcionesDeParticipacion();
   }
   laSubastaYaTerminoEnPantalla = terminoAhora;
+
+  // Ya pasó la hora pero sigue "activa" en la base de datos → pedimos cerrarla
+  if (terminoAhora && subastaActual.estado === 'activa') {
+    pedirCierreDeLaSubasta();
+  }
+}
+
+
+// ---------------------------------------------------------------------
+// 8. Cierre (Sección 8): le pide a la base de datos cerrar las subastas
+//    vencidas. El servidor también lo hace solo cada minuto (pg_cron);
+//    esto es para que el ganador aparezca en el mismo segundo.
+//    No hace falta recargar aquí: al cerrarse, la subasta cambia y el
+//    tiempo real (punto 6) avisa a TODAS las pantallas abiertas.
+// ---------------------------------------------------------------------
+async function pedirCierreDeLaSubasta() {
+  // CASO LÍMITE: el reloj llama a esta función cada segundo; solo se pide una vez
+  if (cierreEnCurso) {
+    return;
+  }
+  cierreEnCurso = true;
+
+  const { error: errorAlCerrar } = await baseDeDatos.rpc('cerrar_subastas_vencidas');
+  if (errorAlCerrar) {
+    console.error('No se pudo cerrar la subasta:', errorAlCerrar);
+  }
+  await cargarSubasta();
+
+  // CASO LÍMITE: el reloj de esta computadora va adelantado y el servidor
+  // todavía no la cierra. Se vuelve a intentar en 5 segundos.
+  setTimeout(() => {
+    cierreEnCurso = false;
+  }, 5000);
 }
 
 

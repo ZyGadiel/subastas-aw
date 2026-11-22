@@ -44,6 +44,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | 2 | [`supabase/seccion-5-usuarios.sql`](supabase/seccion-5-usuarios.sql) | Trigger que crea el perfil al registrarse |
 | 3 | [`supabase/seccion-6-publicar.sql`](supabase/seccion-6-publicar.sql) | Permiso para que los vendedores publiquen, trigger que prepara la subasta y límite de 7 días |
 | 4 | [`supabase/seccion-7-puja.sql`](supabase/seccion-7-puja.sql) | Funciones `entrar_a_la_subasta` y `pujar`, y tiempo real |
+| 5 | [`supabase/seccion-8-cierre.sql`](supabase/seccion-8-cierre.sql) | Función `cerrar_subastas_vencidas` (elige al ganador) y tarea de pg_cron que la llama cada minuto |
 | — | [`supabase/datos-prueba.sql`](supabase/datos-prueba.sql) | Opcional: 4 subastas de ejemplo |
 | — | [`supabase/borrar-tablas.sql`](supabase/borrar-tablas.sql) | ⚠️ Borra todo para empezar de cero |
 
@@ -59,7 +60,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 | `js/registro.js` | Crear cuenta (`registro.html`) |
 | `js/iniciar-sesion.js` | Iniciar sesión (`iniciar-sesion.html`) |
 | `js/publicar.js` | Validar y guardar una subasta nueva (`publicar.html`) |
-| `js/subasta.js` | Detalle de una subasta: entrar, pujar, historial y actualización en tiempo real (`subasta.html?id=…`) |
+| `js/subasta.js` | Detalle de una subasta: entrar, pujar, posiciones, historial, tiempo real y resultado final (`subasta.html?id=…`) |
 | `css/estilos.css` | Todos los estilos, divididos en 8 secciones numeradas (los colores claros y oscuros están en la 1) |
 
 ## Cómo correrlo
