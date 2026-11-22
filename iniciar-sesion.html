@@ -13,9 +13,14 @@
     <nav>
       <ul>
         <li><a href="index.html">Catálogo</a></li>
-        <li><a href="publicar.html">Publicar</a></li>
-        <li><a href="iniciar-sesion.html">Iniciar sesión</a></li>
-        <li><a href="registro.html">Registrarse</a></li>
+        <!-- js/sesion.js muestra u oculta estas opciones según el usuario (atributo hidden) -->
+        <li id="opcion-publicar" hidden><a href="publicar.html">Publicar</a></li>
+        <li id="opcion-iniciar-sesion"><a href="iniciar-sesion.html">Iniciar sesión</a></li>
+        <li id="opcion-registrarse"><a href="registro.html">Registrarse</a></li>
+        <li id="opcion-saludo" hidden><span id="saludo-al-usuario"></span></li>
+        <li id="opcion-cerrar-sesion" hidden>
+          <button type="button" id="boton-cerrar-sesion" class="boton-con-aspecto-de-enlace">Cerrar sesión</button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -42,6 +47,17 @@
   <footer>
     <p>Subastas AW · Proyecto final de Aplicaciones Web · UABC FIAD 2026</p>
   </footer>
+
+  <!-- SCRIPTS. El orden importa:
+       1) la librería de Supabase (desde un CDN, con versión fija)
+       2) nuestra conexión (usa la librería)
+       3) utilidades y 4) la sesión (usan la conexión)
+       5) la lógica de esta página -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+  <script src="js/conexion-a-supabase.js"></script>
+  <script src="js/utilidades.js"></script>
+  <script src="js/sesion.js"></script>
+  <script src="js/iniciar-sesion.js"></script>
 
 </body>
 </html>

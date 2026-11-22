@@ -95,3 +95,21 @@ Un archivo `supabase/datos-prueba.sql` para llenar la base con 4 subastas de eje
 **Qué acepté:** la creacion de los js donde se maneja la base de datos.
 
 **Qué rechacé o cambié:** los nombres de las varibles y funciones. a nombres claros y entendibles.
+
+---
+
+## 21 nov 2026 — Sección 5: Registro e inicio de sesión
+
+**Qué le pedí:** que los usuarios puedan crear cuenta, iniciar y cerrar sesión, y que el menú cambie según quién esté conectado.
+
+**Qué me propuso:**
+- Usar Supabase Auth (`signUp`, `signInWithPassword`, `signOut`) en lugar de guardar contraseñas yo.
+- Un trigger en la base de datos (`supabase/seccion-5-usuarios.sql`) que crea el perfil al registrarse y no deja elegir el rol `administrador`.
+- `js/sesion.js` en todas las páginas: obtiene el perfil una sola vez (`promesaDelPerfilDelUsuarioActual`), muestra "Hola, nombre" y "Cerrar sesión", y solo muestra "Publicar" a los vendedores.
+- Traducir los errores de Supabase (vienen en inglés) a mensajes en español.
+- Deshabilitar el botón mientras se espera la respuesta (caso límite del doble clic) y rechazar nombres de puros espacios.
+- Desactivar la confirmación por correo en Supabase para la demo.
+
+**Qué acepté:** _(llénalo tú)_
+
+**Qué rechacé o cambié:** _(llénalo tú)_

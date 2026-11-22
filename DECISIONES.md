@@ -4,6 +4,20 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Usuarios: Supabase Auth + trigger que crea el perfil
+
+**Decisión:** el registro y el inicio de sesión los hace Supabase Auth. El perfil (nombre y rol) lo crea la base de datos con un trigger (`al_registrarse_crear_perfil`), no JavaScript.
+
+**Por qué:**
+- No guardo contraseñas yo: Supabase las guarda cifradas. Programarlo yo sería menos seguro.
+- Si JavaScript insertara el perfil, alguien podría modificar la petición y registrarse como `administrador`. El trigger solo acepta `comprador` o `vendedor`; cualquier otro valor se convierte en `comprador`.
+
+**Confirmación por correo desactivada:** en Supabase desactivé *Confirm email* para que la demo sea inmediata (el plan gratis solo manda unos pocos correos por hora). En una página real la dejaría activada para comprobar que el correo existe. El código funciona en los dos casos: si no hay sesión después de registrarse, pide revisar el correo.
+
+**Casos límite cubiertos:** nombre de puros espacios, doble clic en "Crear cuenta" o "Entrar" (el botón se deshabilita), correo ya registrado, contraseña incorrecta y falta de internet (mensajes en español).
+
+---
+
 ## 20 nov 2026 — Nombres claros y en español en todo el código
 
 **Decisión:** todos los nombres que invento (variables, funciones, ids, clases, variables de CSS, columnas de la base de datos y archivos) son descriptivos, completos y en español. Sin abreviaturas ni letras sueltas: `baseDeDatos` en lugar de `db`, `fecha_de_finalizacion` en lugar de `termina_en`, `iniciar-sesion.html` en lugar de `login.html`.

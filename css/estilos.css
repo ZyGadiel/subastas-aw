@@ -115,6 +115,30 @@ nav a:hover {
   text-decoration: underline;
 }
 
+/* Saludo "Hola, nombre" del usuario con sesión iniciada */
+#saludo-al-usuario {
+  color: var(--color-del-texto-secundario);
+}
+
+/* Un botón (porque ejecuta una acción) que se ve como enlace del menú */
+.boton-con-aspecto-de-enlace {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: var(--color-principal);
+  font-weight: 500;
+}
+
+.boton-con-aspecto-de-enlace:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+/* Lo que tiene el atributo hidden nunca se muestra, aunque otra regla le ponga display */
+[hidden] {
+  display: none !important;
+}
+
 footer {
   text-align: center;
   padding: 1rem;
