@@ -20,6 +20,7 @@
   --color-del-texto-secundario: #6b7280;
   --color-de-los-bordes: #e5e7eb;
   --color-de-exito: #15803d;
+  --color-de-exito-oscuro: #166534;          /* botón verde al pasar el mouse */
   --color-de-error: #b91c1c;
   --color-de-aviso: #b45309;
 
@@ -325,6 +326,7 @@ button:disabled {
 #detalle-del-producto,
 #estado-de-la-subasta,
 #participar-en-la-subasta,
+#posiciones-de-los-participantes,
 #historial-de-pujas {
   background-color: var(--color-de-superficie);
   border: 1px solid var(--color-de-los-bordes);
@@ -381,6 +383,89 @@ button:disabled {
   box-shadow: none;
   padding: 0;
   margin: 0;
+}
+
+/* Botón de puja rápida: ocupa todo el ancho para que sea fácil de tocar en el celular */
+.boton-de-puja-rapida {
+  width: 100%;
+  margin-top: 0;
+  font-size: 1.05rem;
+  background-color: var(--color-de-exito);
+}
+
+.boton-de-puja-rapida:hover {
+  background-color: var(--color-de-exito-oscuro);
+}
+
+/* "o escribe otra cantidad", con una línea a cada lado */
+.separador-de-opciones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-del-texto-secundario);
+}
+
+.separador-de-opciones::before,
+.separador-de-opciones::after {
+  content: "";
+  flex: 1; /* cada línea ocupa la mitad del espacio que sobra */
+  border-top: 1px solid var(--color-de-los-bordes);
+}
+
+/* Lista de posiciones: cada renglón con la posición, el nombre y el monto */
+#posiciones-de-los-participantes h2 {
+  margin-top: 0;
+}
+
+#lista-de-posiciones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#lista-de-posiciones li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--color-de-los-bordes);
+}
+
+#lista-de-posiciones li:last-child {
+  border-bottom: none;
+}
+
+.numero-de-posicion {
+  width: 2rem;
+  font-weight: 700;
+  color: var(--color-del-texto-secundario);
+}
+
+.nombre-en-la-posicion {
+  flex: 1; /* empuja el monto hasta la derecha */
+}
+
+.monto-en-la-posicion {
+  font-weight: 600;
+}
+
+/* El que va ganando, en verde */
+.posicion-ganadora,
+.posicion-ganadora .numero-de-posicion {
+  color: var(--color-de-exito);
+  font-weight: 600;
+}
+
+/* Participantes que todavía no pujan y lugares libres, en gris */
+.posicion-sin-pujas,
+.lugar-libre {
+  color: var(--color-del-texto-secundario);
+}
+
+.lugar-libre {
+  font-style: italic;
 }
 
 /* Tabla del historial de pujas */

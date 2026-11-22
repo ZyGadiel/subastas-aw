@@ -38,13 +38,22 @@
       <!-- En pantallas grandes: producto a la izquierda y estado/acciones a la derecha -->
       <div class="detalle-en-dos-columnas">
 
-        <!-- INFORMACIÓN DEL PRODUCTO -->
-        <article id="detalle-del-producto">
-          <img id="foto-del-producto" src="" alt="">
-          <h1 id="titulo-del-producto"></h1>
-          <p>Categoría: <span id="categoria-del-producto"></span></p>
-          <p id="descripcion-del-producto"></p>
-        </article>
+        <div class="columna-del-producto-y-posiciones">
+          <!-- INFORMACIÓN DEL PRODUCTO -->
+          <article id="detalle-del-producto">
+            <img id="foto-del-producto" src="" alt="">
+            <h1 id="titulo-del-producto"></h1>
+            <p>Categoría: <span id="categoria-del-producto"></span></p>
+            <p id="descripcion-del-producto"></p>
+          </article>
+
+          <!-- POSICIONES: quién va ganando, en el espacio libre debajo del producto
+               (así no hay que bajar hasta el historial). Lo llena js/subasta.js. -->
+          <section id="posiciones-de-los-participantes" aria-label="Posiciones de los participantes">
+            <h2>Posiciones</h2>
+            <ul id="lista-de-posiciones"></ul>
+          </section>
+        </div>
 
         <div class="columna-de-estado-y-participacion">
           <!-- ESTADO DE LA SUBASTA: se actualiza en tiempo real cuando alguien puja -->
@@ -70,9 +79,17 @@
             <button type="button" id="boton-entrar-a-la-subasta" hidden>Entrar a la subasta</button>
 
             <form id="formulario-de-puja" hidden>
+              <!-- PUJA RÁPIDA: un clic y se puja exactamente el mínimo.
+                   type="button" = este botón NO envía el formulario; tiene su propia función. -->
+              <button type="button" id="boton-pujar-el-minimo" class="boton-de-puja-rapida">
+                Pujar el mínimo: <span id="monto-de-la-puja-rapida"></span>
+              </button>
+
+              <p class="separador-de-opciones">o escribe otra cantidad</p>
+
               <label for="monto-de-la-puja">Tu puja (mínimo <span id="monto-minimo"></span>)</label>
               <input type="number" id="monto-de-la-puja" name="monto" min="1" max="99999999.99" step="0.01" required>
-              <button type="submit">Pujar</button>
+              <button type="submit">Pujar esta cantidad</button>
             </form>
 
             <!-- Resultado de entrar o pujar: "¡Puja registrada!", "Tu puja debe ser de al menos..." -->

@@ -4,6 +4,18 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Puja rápida y lista de posiciones
+
+**Decisión:** en el detalle de la subasta agregué un botón **"Pujar el mínimo"** y una lista de **posiciones** debajo del producto.
+
+**Por qué:**
+- En una subasta de pocos minutos, escribir el monto es lento y fácil de equivocar. Con un clic se puja exactamente precio actual + incremento. El campo para escribir otra cantidad se queda para quien quiera pujar más alto.
+- El historial completo está hasta abajo; la lista de posiciones aprovecha el espacio libre debajo del producto y deja ver de un vistazo quién va ganando.
+
+**Cómo:** los dos botones llaman a la misma función (`enviarPuja`), así que las validaciones y la llamada a la base de datos están en un solo lugar. La base de datos no cambió: la función `pujar` de la Sección 7 sigue revisando todo.
+
+---
+
 ## 21 nov 2026 — Pujar: funciones en la base de datos + tiempo real
 
 **Decisión:** entrar a una subasta y pujar se hacen con dos funciones de PostgreSQL (`entrar_a_la_subasta` y `pujar`, en `supabase/seccion-7-puja.sql`) que JavaScript llama con `baseDeDatos.rpc(...)`. El navegador **no** tiene permiso de `INSERT` en `participantes` ni en `pujas`.

@@ -3,6 +3,8 @@
 //  1. Lee el id de la dirección y carga la subasta, sus participantes y sus pujas.
 //  2. Decide qué puede hacer quien está viendo: entrar, pujar o solo mirar.
 //  3. Entra y puja con las funciones de la base de datos (supabase/seccion-7-puja.sql).
+//     Se puede pujar el mínimo con un clic o escribir otra cantidad.
+//     Las posiciones (quién va ganando) se ven junto al formulario.
 //  4. Escucha los cambios en TIEMPO REAL: si alguien puja desde otra
 //     computadora, esta página se actualiza sola, sin recargar.
 //  5. Cada segundo actualiza el tiempo restante.
@@ -31,6 +33,9 @@ const formularioDePuja = document.getElementById('formulario-de-puja');
 const campoDelMontoDeLaPuja = document.getElementById('monto-de-la-puja');
 const textoDelMontoMinimo = document.getElementById('monto-minimo');
 const botonPujar = formularioDePuja.querySelector('button[type="submit"]');
+const botonPujarElMinimo = document.getElementById('boton-pujar-el-minimo');
+const textoDeLaPujaRapida = document.getElementById('monto-de-la-puja-rapida');
+const listaDePosiciones = document.getElementById('lista-de-posiciones');
 const mensajeDeLaPuja = document.getElementById('mensaje-de-la-puja');
 const filasDelHistorial = document.getElementById('filas-del-historial');
 
@@ -162,6 +167,16 @@ function usuarioVaGanando() {
   return perfilDelUsuario !== null && pujasDeLaSubasta[0]?.id_del_usuario === perfilDelUsuario.id;
 }
 
+// Privacidad: nunca se muestra el nombre real, solo "Participante 3".
+// Si es el usuario que está viendo, se agrega "(tú)".
+function obtenerNombreParaMostrar(idDelUsuario) {
+  let nombreParaMostrar = `Participante ${buscarLugarDelUsuario(idDelUsuario)}`;
+  if (perfilDelUsuario && idDelUsuario === perfilDelUsuario.id) {
+    nombreParaMostrar += ' (tú)';
+  }
+  return nombreParaMostrar;
+}
+
 // "2026-11-21T18:42:05Z" → "10:42:05 a.m." (con la hora de la computadora del usuario)
 function formatearHora(fechaYHora) {
   return new Date(fechaYHora).toLocaleTimeString('es-MX', {
@@ -184,6 +199,7 @@ function mostrarSubasta() {
   }
   mostrarEstadoDeLaSubasta();
   mostrarOpcionesDeParticipacion();
+  mostrarPosiciones();
   mostrarHistorialDePujas();
   contenidoDeLaSubasta.hidden = false;
 }
@@ -252,6 +268,7 @@ function mostrarOpcionesDeParticipacion() {
     mostrarMensaje(estadoDeTuParticipacion, `Eres el Participante ${lugarDelUsuario}.`, 'exito');
     const montoMinimo = calcularMontoMinimo();
     textoDelMontoMinimo.textContent = formatearDinero(montoMinimo);
+    textoDeLaPujaRapida.textContent = formatearDinero(montoMinimo);
     campoDelMontoDeLaPuja.min = montoMinimo; // el navegador tampoco deja enviar menos
     formularioDePuja.hidden = false;
     return;
@@ -273,6 +290,94 @@ function mostrarOpcionesDeParticipacion() {
   botonEntrarALaSubasta.hidden = false;
 }
 
+// ---------------------------------------------------------------------
+// POSICIONES: una lista corta con los 5 lugares, ordenada de quien va
+// ganando a quien no ha pujado, y al final los lugares libres.
+//   1º  Participante 3 (tú)   $1,600.00
+//   2º  Participante 1        $1,550.00
+//   —   Participante 2        Sin pujas
+//   —   Lugar libre
+// ---------------------------------------------------------------------
+function calcularPosiciones() {
+  // La puja más alta de cada participante. Las pujas vienen de la más nueva a
+  // la más vieja y el precio solo sube, así que la primera que encontramos
+  // de cada usuario es la más alta.
+  const pujaMasAltaDeCadaUsuario = new Map(); // id_del_usuario → monto
+  for (const puja of pujasDeLaSubasta) {
+    if (!pujaMasAltaDeCadaUsuario.has(puja.id_del_usuario)) {
+      pujaMasAltaDeCadaUsuario.set(puja.id_del_usuario, Number(puja.monto));
+    }
+  }
+
+  const posiciones = participantesDeLaSubasta.map((participante) => ({
+    idDelUsuario: participante.id_del_usuario,
+    numeroDeLugar: participante.numero_de_lugar,
+    montoMasAlto: pujaMasAltaDeCadaUsuario.get(participante.id_del_usuario) ?? null,
+  }));
+
+  // Ordenar: primero los que pujaron (del monto mayor al menor);
+  // después los que no han pujado, por su número de lugar.
+  posiciones.sort((primera, segunda) => {
+    if (primera.montoMasAlto === null && segunda.montoMasAlto === null) {
+      return primera.numeroDeLugar - segunda.numeroDeLugar;
+    }
+    if (primera.montoMasAlto === null) return 1;   // sin pujas → hacia abajo
+    if (segunda.montoMasAlto === null) return -1;
+    return segunda.montoMasAlto - primera.montoMasAlto;
+  });
+
+  return posiciones;
+}
+
+function mostrarPosiciones() {
+  const renglones = calcularPosiciones().map((posicion, indice) => {
+    const tienePujas = posicion.montoMasAlto !== null;
+    const textoDeLaPosicion = tienePujas ? `${indice + 1}º` : '—';
+    const textoDelMonto = tienePujas ? formatearDinero(posicion.montoMasAlto) : 'Sin pujas';
+    const renglon = crearRenglonDePosicion(
+      textoDeLaPosicion,
+      obtenerNombreParaMostrar(posicion.idDelUsuario),
+      textoDelMonto
+    );
+
+    if (indice === 0 && tienePujas) {
+      renglon.className = 'posicion-ganadora';
+    } else if (!tienePujas) {
+      renglon.className = 'posicion-sin-pujas';
+    }
+    return renglon;
+  });
+
+  // Los lugares que nadie ha ocupado
+  const lugaresLibres = LUGARES_POR_SUBASTA - participantesDeLaSubasta.length;
+  for (let contadorDeLugaresLibres = 1; contadorDeLugaresLibres <= lugaresLibres; contadorDeLugaresLibres += 1) {
+    const renglonLibre = crearRenglonDePosicion('—', 'Lugar libre', '');
+    renglonLibre.className = 'lugar-libre';
+    renglones.push(renglonLibre);
+  }
+
+  listaDePosiciones.replaceChildren(...renglones);
+}
+
+// Un renglón <li> con tres partes: posición, nombre y monto
+function crearRenglonDePosicion(textoDeLaPosicion, textoDelNombre, textoDelMonto) {
+  const numeroDePosicion = document.createElement('span');
+  numeroDePosicion.className = 'numero-de-posicion';
+  numeroDePosicion.textContent = textoDeLaPosicion;
+
+  const nombreEnLaPosicion = document.createElement('span');
+  nombreEnLaPosicion.className = 'nombre-en-la-posicion';
+  nombreEnLaPosicion.textContent = textoDelNombre;
+
+  const montoEnLaPosicion = document.createElement('span');
+  montoEnLaPosicion.className = 'monto-en-la-posicion';
+  montoEnLaPosicion.textContent = textoDelMonto;
+
+  const renglon = document.createElement('li');
+  renglon.append(numeroDePosicion, nombreEnLaPosicion, montoEnLaPosicion);
+  return renglon;
+}
+
 // Tabla del historial: la puja más nueva (la más alta) arriba y resaltada
 function mostrarHistorialDePujas() {
   // CASO LÍMITE: todavía no hay pujas → una fila con un aviso, no una tabla vacía
@@ -290,14 +395,8 @@ function mostrarHistorialDePujas() {
   filasDelHistorial.replaceChildren(...filas);
 }
 
-// Privacidad: nunca se muestra el nombre, solo "Participante 3".
-// Si la puja es del usuario que está viendo, agrega "(tú)".
 function crearFilaDelHistorial(puja, esLaPujaMasAlta) {
-  const lugarDeQuienPujo = buscarLugarDelUsuario(puja.id_del_usuario);
-  let nombreParaMostrar = `Participante ${lugarDeQuienPujo}`;
-  if (perfilDelUsuario && puja.id_del_usuario === perfilDelUsuario.id) {
-    nombreParaMostrar += ' (tú)';
-  }
+  const nombreParaMostrar = obtenerNombreParaMostrar(puja.id_del_usuario);
 
   const fila = document.createElement('tr');
   if (esLaPujaMasAlta) {
@@ -341,12 +440,24 @@ async function entrarALaSubasta() {
 
 
 // ---------------------------------------------------------------------
-// 5. Pujar
+// 5. Pujar. Hay dos formas, y las dos terminan en enviarPuja(monto):
+//    a) Botón "Pujar el mínimo": un clic, sin escribir nada.
+//    b) Escribir otra cantidad en el campo y dar "Pujar esta cantidad".
 // ---------------------------------------------------------------------
-async function enviarPuja(eventoDeEnvio) {
-  eventoDeEnvio.preventDefault();
+function pujarElMinimo() {
+  // El mínimo se calcula en el momento del clic, con el precio más reciente.
+  // CASO LÍMITE: si alguien pujó un instante antes y la página aún no se
+  // enteraba, la base de datos rechaza la puja, la página se recarga y el
+  // botón ya muestra el mínimo nuevo.
+  enviarPuja(calcularMontoMinimo());
+}
 
-  const montoOfrecido = Number(campoDelMontoDeLaPuja.value);
+function pujarLaCantidadEscrita(eventoDeEnvio) {
+  eventoDeEnvio.preventDefault();
+  enviarPuja(Number(campoDelMontoDeLaPuja.value));
+}
+
+async function enviarPuja(montoOfrecido) {
   const montoMinimo = calcularMontoMinimo();
 
   // CASO LÍMITE: texto, vacío, cero o negativo
@@ -366,8 +477,10 @@ async function enviarPuja(eventoDeEnvio) {
     return;
   }
 
-  // CASO LÍMITE: doble clic → dos pujas. Deshabilitamos el botón mientras se envía.
+  // CASO LÍMITE: doble clic → dos pujas. Deshabilitamos LOS DOS botones mientras
+  // se envía (si no, se podría dar clic en uno y luego en el otro).
   botonPujar.disabled = true;
+  botonPujarElMinimo.disabled = true;
   mostrarMensaje(mensajeDeLaPuja, 'Enviando tu puja...', 'aviso');
 
   const { data: precioNuevo, error: errorAlPujar } = await baseDeDatos.rpc('pujar', {
@@ -376,6 +489,7 @@ async function enviarPuja(eventoDeEnvio) {
   });
 
   botonPujar.disabled = false;
+  botonPujarElMinimo.disabled = false;
 
   if (errorAlPujar) {
     // Por ejemplo: alguien pujó más alto mientras escribías
@@ -477,5 +591,6 @@ fotoDelProducto.onerror = () => {
 };
 
 botonEntrarALaSubasta.addEventListener('click', entrarALaSubasta);
-formularioDePuja.addEventListener('submit', enviarPuja);
+botonPujarElMinimo.addEventListener('click', pujarElMinimo);
+formularioDePuja.addEventListener('submit', pujarLaCantidadEscrita);
 iniciarPagina();

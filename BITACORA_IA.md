@@ -142,3 +142,24 @@ Desactivar la confirmación por correo en Supabase para la demo.
 **Qué acepté:** (llénalo tú)
 
 **Qué rechacé o cambié:** (llénalo tú)
+
+---
+
+## 21 nov 2026 — Sección 7.1: Puja rápida y posiciones
+
+**Qué le pedí (idea mía, después de probar la Sección 7):**
+- Un botón para pujar el mínimo sin escribir el monto a mano, pero dejando la opción de escribir otra cantidad.
+- Ver las posiciones de los participantes en el espacio en blanco de la pantalla, en una lista pequeña, para no tener que bajar hasta el historial.
+
+**Qué me propuso:**
+- Botón verde "Pujar el mínimo: $X" arriba del campo, separado por "o escribe otra cantidad". Los dos caminos usan la misma función `enviarPuja(monto)`, así las validaciones no se repiten.
+- Deshabilitar los dos botones mientras se envía (caso límite: clic en uno y luego en el otro).
+- Si alguien puja justo antes del clic, la base de datos rechaza la puja rápida, la página se recarga y el botón ya muestra el mínimo nuevo.
+- Lista "Posiciones": 1º, 2º... según la puja más alta de cada participante; abajo los que no han pujado y los lugares libres. Solo dice "Participante N" (privacidad).
+- `obtenerNombreParaMostrar` para que el historial y las posiciones usen el mismo nombre ("Participante 3 (tú)").
+
+**Error de la IA que se corrigió:** primero puso las posiciones en la columna derecha, pero el espacio en blanco estaba debajo del producto (columna izquierda). Se movieron ahí al revisar la captura de pantalla.
+
+**Qué acepté:** (llénalo tú)
+
+**Qué rechacé o cambié:** (llénalo tú)
