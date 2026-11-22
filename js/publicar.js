@@ -77,6 +77,12 @@ function validarDatosDeLaSubasta(subastaNueva, duracionEnMinutos) {
     return 'El incremento mínimo no puede ser mayor que el precio inicial.';
   }
 
+  // CASO LÍMITE: type="url" acepta direcciones como "ftp://..." o "javascript:...",
+  // que no son fotos. Solo se aceptan páginas web normales (o ninguna foto).
+  if (subastaNueva.url_de_la_foto !== null && !/^https?:\/\//i.test(subastaNueva.url_de_la_foto)) {
+    return 'La dirección de la foto debe empezar con https:// (o déjala vacía).';
+  }
+
   if (!DURACIONES_PERMITIDAS_EN_MINUTOS.includes(duracionEnMinutos)) {
     return 'Elige una duración de la lista.';
   }

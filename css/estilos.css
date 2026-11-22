@@ -419,6 +419,12 @@ button:disabled {
   margin: 1rem 0;
 }
 
+/* CASO LÍMITE: descripciones con varios renglones. pre-line respeta los
+   saltos de línea que escribió el vendedor (sin esto, todo sale en un párrafo) */
+#descripcion-del-producto {
+  white-space: pre-line;
+}
+
 #detalle-del-producto img {
   border-radius: var(--radio-de-las-esquinas-pequenas);
   margin-bottom: 1rem;

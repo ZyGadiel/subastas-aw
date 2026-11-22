@@ -61,7 +61,10 @@ function actualizarMenuSegunElUsuario(perfil) {
   document.getElementById('opcion-cerrar-sesion').hidden = !hayUsuario;
 
   if (hayUsuario) {
-    document.getElementById('saludo-al-usuario').textContent = `Hola, ${perfil.nombre}`;
+    // CASO LÍMITE: el administrador suspendió la cuenta. Puede seguir viendo,
+    // pero el saludo le avisa por qué ya no puede publicar ni pujar.
+    const avisoDeSuspension = perfil.suspendido ? ' (cuenta suspendida)' : '';
+    document.getElementById('saludo-al-usuario').textContent = `Hola, ${perfil.nombre}${avisoDeSuspension}`;
   }
 }
 

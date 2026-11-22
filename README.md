@@ -4,6 +4,8 @@ Proyecto final de **Aplicaciones Web** (UABC FIAD Ensenada, 2026-2).
 
 Plataforma de subastas en línea donde los vendedores publican productos y los compradores pujan por ellos.
 
+🌐 **Página publicada:** https://zygadiel.github.io/subastas-aw/
+
 ## ¿Cómo funciona?
 
 - Cada subasta acepta **solo 5 participantes**; los lugares se asignan por orden de llegada.
@@ -19,6 +21,85 @@ Plataforma de subastas en línea donde los vendedores publican productos y los c
 | Comprador | Registrarse, buscar y filtrar productos, entrar a subastas, pujar, ver si ganó |
 | Vendedor | Publicar productos con fotos, ver participantes (anónimos) y el ganador |
 | Administrador | Suspender usuarios, eliminar publicaciones, ver estadísticas |
+
+## Mapa del sistema
+
+Cada página es un archivo HTML con su propio JavaScript. Todas cargan los mismos 4 scripts compartidos y hablan **directo** con Supabase. No hay un servidor propio en medio: la seguridad la ponen la base de datos (reglas, políticas RLS y funciones) y Supabase Auth.
+
+```mermaid
+flowchart TB
+    subgraph Navegador["Navegador (GitHub Pages)"]
+        direction TB
+        Compartidos["Scripts compartidos<br/>tema.js · conexion-a-supabase.js<br/>utilidades.js · sesion.js"]
+        Catalogo["index.html<br/>catalogo.js"]
+        Detalle["subasta.html<br/>subasta.js"]
+        Publicar["publicar.html<br/>publicar.js"]
+        Cuenta["registro.html · iniciar-sesion.html"]
+        Mias["mis-subastas.html<br/>mis-subastas.js"]
+        Panel["administrador.html<br/>administrador.js"]
+    end
+
+    subgraph Supabase["Supabase (en la nube)"]
+        direction TB
+        Auth["Supabase Auth<br/>correo y contraseña"]
+        Tablas[("PostgreSQL<br/>perfiles · subastas<br/>participantes · pujas")]
+        Funciones["Funciones<br/>entrar_a_la_subasta · pujar<br/>cerrar_subastas_vencidas<br/>funciones del administrador"]
+        TiempoReal["Realtime<br/>avisa los cambios"]
+        Reloj["pg_cron<br/>cada minuto"]
+    end
+
+    Cuenta -- "signUp / signIn" --> Auth
+    Auth -- "trigger crea el perfil" --> Tablas
+    Catalogo -- "SELECT con filtros" --> Tablas
+    Publicar -- "INSERT (política RLS + trigger)" --> Tablas
+    Detalle -- "rpc: entrar, pujar, cerrar" --> Funciones
+    Mias -- "SELECT" --> Tablas
+    Panel -- "rpc del administrador" --> Funciones
+    Funciones --> Tablas
+    Reloj -- "cerrar_subastas_vencidas()" --> Funciones
+    Tablas -- "cambios" --> TiempoReal
+    TiempoReal -- "precio, pujas y ganador al instante" --> Detalle
+```
+
+### Recorrido de una puja
+
+```mermaid
+sequenceDiagram
+    actor Comprador
+    participant Pagina as subasta.js
+    participant Base as pujar() en PostgreSQL
+    participant TiempoReal as Supabase Realtime
+    actor Otro as Otro participante
+
+    Comprador->>Pagina: Clic en "Pujar el mínimo"
+    Pagina->>Pagina: Valida el monto y deshabilita los botones
+    Pagina->>Base: rpc('pujar', id, monto)
+    Base->>Base: Candado (for update) y revisa:<br/>activa, participante, monto mínimo
+    Base-->>Pagina: Nuevo precio (o error en español)
+    Base->>TiempoReal: Cambiaron "pujas" y "subastas"
+    TiempoReal-->>Otro: Aviso al instante
+    Otro->>Otro: Recarga la subasta: nuevo precio y posiciones
+```
+
+## Casos límite cubiertos (para la demo)
+
+| Caso | Qué pasa | Dónde se detiene |
+|---|---|---|
+| Dos personas quieren el último de los 5 lugares al mismo tiempo | Solo uno entra; el otro ve "ya tiene sus 5 lugares ocupados" | `for update` en `entrar_a_la_subasta` |
+| Dos pujas en el mismo segundo | La segunda espera y, si ya no alcanza el mínimo, se rechaza | `for update` en `pujar` |
+| Puja menor al mínimo, texto, cero o negativo | Mensaje claro | HTML (`min`), JavaScript y `pujar` |
+| El que va ganando quiere pujar otra vez | "Ya tienes la puja más alta" | `pujar` |
+| Puja en el último segundo | Cuenta la hora del servidor, no la de la computadora | `now()` en `pujar` y en el cierre |
+| Doble clic en publicar, entrar, pujar, suspender | El botón se deshabilita mientras espera | JavaScript |
+| Textos de puros espacios, números gigantes, foto que no es `https://` | Se rechazan con un mensaje | HTML, `publicar.js` y reglas con nombre |
+| Correo sin punto (`ejemplo@ejemplo`) | Se rechaza | `pattern` del HTML y `esCorreoValido` |
+| Registrarse como administrador modificando la petición | Se guarda como comprador | Trigger `crear_perfil_del_usuario_nuevo` |
+| Un comprador abre `administrador.html` a mano | No ve nada, y las funciones lo rechazan | `administrador.js` y `es_administrador()` |
+| `subasta.html?id=abc` o un id que no existe | "Esta subasta no existe" | `subasta.js` |
+| Buscar "lampara" (sin acento), "100%" o `<script>` | Encuentra "Lámpara"; el `%` cuenta como letra; no se ejecuta código | `titulo_para_buscar`, `escaparComodines`, `textContent` |
+| Borrar un usuario que ya pujó | La base de datos no lo permite; por eso se suspende | Llaves foráneas |
+| Sin internet o se cae la conexión en vivo | Mensaje de error; al volver, se recarga la subasta | `traducirErrorDeLaBaseDeDatos` y Realtime |
+| Foto rota | Se pone una imagen por defecto | `onerror` |
 
 ## Tecnologías
 
@@ -69,7 +150,9 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 
 ## Cómo correrlo
 
-Abrir `index.html` en el navegador (doble clic o con la extensión *Live Server* de VS Code).
+- **En internet:** https://zygadiel.github.io/subastas-aw/ (GitHub Pages publica la rama `main`).
+- **En la computadora:** abrir `index.html` con la extensión *Live Server* de VS Code, o desde la carpeta del proyecto correr `python -m http.server 5500` y abrir `http://127.0.0.1:5500`.
+- **Base de datos nueva:** crear un proyecto en Supabase, ejecutar los archivos SQL en el orden de la tabla de arriba y poner la URL y la llave pública en `js/conexion-a-supabase.js`.
 
 ## Documentación del proceso
 

@@ -255,3 +255,18 @@ Casos límite: un comprador o vendedor abre `administrador.html` a mano, el admi
 **Qué acepté:** el panel de administrador con las funciones de suspender eliminar y reactivar
 
 **Qué rechacé o cambié:** nada de momento
+
+---
+
+## 21 nov 2026 — Sección 11: Casos límite y publicación en GitHub Pages
+
+**Qué le pedí:** revisar los casos límite que faltaban y dejar la página publicada en internet para entregarla.
+
+**Qué me propuso:**
+Revisar que GitHub Pages no falle: los nombres de los archivos coinciden exactamente (GitHub distingue mayúsculas), todas las rutas son relativas y el repositorio es público.
+Casos límite nuevos: la foto debe empezar con `https://` (`type="url"` aceptaba `ftp://` o `javascript:`), el saludo avisa "(cuenta suspendida)", la descripción respeta los saltos de línea y un ícono en la pestaña (sin él salía un error 404 en la consola de cada página).
+En el README: el enlace a la página publicada, un **mapa del sistema** y el **recorrido de una puja** (diagramas Mermaid que GitHub dibuja solo) y una tabla de casos límite para la demo. Se comprobó que los dos diagramas se dibujan sin errores.
+
+**Qué acepté:** la modificacion del readme con el enlace
+
+**Qué rechacé o cambié:** nada.

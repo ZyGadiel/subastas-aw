@@ -4,6 +4,19 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Publicar en GitHub Pages
+
+**Decisión:** la página se publica con **GitHub Pages** desde la rama `main`: https://zygadiel.github.io/subastas-aw/
+
+**Por qué:**
+- El proyecto es HTML, CSS y JavaScript sin compilar: GitHub Pages solo tiene que servir los archivos tal cual, gratis y desde el mismo repositorio que se entrega.
+- La base de datos ya está en internet (Supabase), así que no hace falta otro servidor.
+- Cada `git push` a `main` actualiza la página sola en uno o dos minutos.
+
+**Cuidados:** GitHub Pages distingue mayúsculas en los nombres de archivo (Windows no); todas las rutas son relativas (`css/estilos.css`, no `/css/estilos.css`) porque la página vive en la carpeta `/subastas-aw/`; y en el código solo está la llave **pública** de Supabase, que está pensada para ir en el navegador. La seguridad la ponen las políticas RLS y las funciones, no esconder la llave.
+
+---
+
 ## 21 nov 2026 — Administrador: suspender y ocultar, nunca borrar
 
 **Decisión:** el administrador **suspende** usuarios (`suspendido = true`) y **elimina** publicaciones marcándolas como `estado = 'eliminada'`. No se borra ninguna fila.
