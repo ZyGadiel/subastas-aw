@@ -4,6 +4,20 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Búsqueda: en la dirección y sin acentos
+
+**Decisión 1: la búsqueda viaja en la dirección** (`index.html?texto_a_buscar=bici&categoria=deportes`). El formulario usa `method="get"`, que es lo que el navegador hace por defecto, y `js/catalogo.js` lee los parámetros.
+
+**Por qué:** el botón "Atrás" regresa a la búsqueda anterior, al recargar no se pierde y el enlace se puede compartir. Además, no hace falta JavaScript para enviar el formulario.
+
+**Decisión 2: buscar sin importar acentos ni mayúsculas.** La base de datos guarda una columna calculada `titulo_para_buscar` (con la extensión `unaccent`) y la búsqueda usa `ILIKE` sobre ella.
+
+**Por qué:** mucha gente escribe sin acentos ("lampara", "audifonos"). Lo encontré al probar: "lampara" no encontraba "Lámpara de escritorio". Se eligió una columna calculada (`generated ... stored`) porque se llena sola al publicar y nadie la puede escribir mal.
+
+**Qué se busca:** solo el título (no la descripción). Es lo que la gente espera en un catálogo y evita resultados por palabras sueltas de las descripciones.
+
+---
+
 ## 21 nov 2026 — Mis subastas: una página, dos vistas
 
 **Decisión:** una sola página (`mis-subastas.html`) que muestra una lista distinta según el rol: el vendedor ve lo que publicó y el comprador las subastas donde ocupó un lugar.

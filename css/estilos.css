@@ -298,6 +298,12 @@ button:disabled {
   flex: 1 1 200px; /* crecen, se encogen y miden mínimo ~200px */
 }
 
+/* "3 resultados para «bici» · Quitar filtros" */
+#resumen-de-la-busqueda {
+  margin-top: 0;
+  color: var(--color-del-texto-secundario);
+}
+
 /* Lista de tarjetas: Flexbox con wrap → se acomodan solas según el ancho */
 #lista-de-subastas,
 #lista-de-mis-subastas {

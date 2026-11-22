@@ -222,3 +222,19 @@ La lista se recarga cada 30 segundos para que aparezcan las subastas que se cier
 Casos límite: sin sesión, administrador, todavía sin subastas, subasta eliminada (la oculta RLS), subasta vencida que el servidor aún no cierra ("Cerrando..."), y error de conexión sin borrar la lista.
 `actualizarTiemposRestantes` se movió a `js/utilidades.js` porque ahora la usan dos páginas.
 Se probó con todas las cuentas que tienen subastas: los resultados coincidieron con la base de datos.
+
+---
+
+## 21 nov 2026 — Sección 9: Búsqueda y filtro
+
+**Qué le pedí:** que funcionen el buscador y el filtro por categoría del catálogo.
+
+**Qué me propuso:**
+Que el formulario se envíe solo (`method="get"`): la búsqueda queda en la dirección (`index.html?texto_a_buscar=bici&categoria=deportes`), así funciona el botón "Atrás" y el enlace se puede compartir. `js/catalogo.js` lee la dirección y arma la consulta por partes: solo agrega el filtro de texto o de categoría si se usaron.
+Un resumen arriba ("2 resultados para «bici» en Deportes · Quitar filtros") y un mensaje distinto cuando la búsqueda no encuentra nada.
+Casos límite: puros espacios, texto enorme (se recorta a 80), categoría inventada en la dirección (`?categoria=juguetes` → todas), `<b>` o `<script>` en la búsqueda (se muestra como texto, sin XSS), y los signos `%` y `_` (en ILIKE significan "cualquier cosa"; se escapan con `\`).
+**Caso límite encontrado al probar:** "lampara" no encontraba "Lámpara". Se agregó `supabase/seccion-9-busqueda.sql`: la extensión `unaccent` y una columna calculada `titulo_para_buscar` (título sin acentos y en minúsculas). JavaScript limpia el texto igual con `normalize('NFD')`.
+
+**Qué acepté:** la implementacion de busqueda y filtro
+
+**Qué rechacé o cambié:** nada en esta parte

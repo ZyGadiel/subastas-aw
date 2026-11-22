@@ -37,10 +37,15 @@
   <main>
     <h1>Subastas activas</h1>
 
-    <!-- BÚSQUEDA Y FILTRO (en la Sección 9 les daremos funcionalidad con JavaScript) -->
-    <form id="formulario-de-busqueda" role="search">
+    <!-- BÚSQUEDA Y FILTRO (Sección 9).
+         Este formulario NO necesita JavaScript para enviarse: con method="get" el
+         navegador vuelve a abrir index.html con los datos en la dirección:
+           index.html?texto_a_buscar=bici&categoria=deportes
+         Después js/catalogo.js lee esa dirección y filtra. Ventajas: el botón
+         "Atrás" regresa a la búsqueda anterior y el enlace se puede compartir. -->
+    <form id="formulario-de-busqueda" role="search" action="index.html" method="get">
       <label for="texto-a-buscar">Buscar producto</label>
-      <input type="search" id="texto-a-buscar" name="texto_a_buscar" placeholder="Ej. bicicleta, celular...">
+      <input type="search" id="texto-a-buscar" name="texto_a_buscar" maxlength="80" placeholder="Ej. bicicleta, celular...">
 
       <label for="filtro-de-categoria">Categoría</label>
       <select id="filtro-de-categoria" name="categoria">
@@ -54,6 +59,12 @@
 
       <button type="submit">Buscar</button>
     </form>
+
+    <!-- Qué se está buscando: "3 resultados para «bici» en Deportes · Quitar filtros" -->
+    <p id="resumen-de-la-busqueda" hidden>
+      <span id="texto-del-resumen-de-la-busqueda"></span>
+      · <a href="index.html">Quitar filtros</a>
+    </p>
 
     <!-- Mensajes para el usuario: "Cargando...", "No hay subastas", errores -->
     <p id="mensaje-del-catalogo" role="status"></p>
