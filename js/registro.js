@@ -27,6 +27,14 @@ async function registrarUsuario(eventoDeEnvio) {
     return;
   }
 
+  // CASO LÍMITE: correo sin punto en el dominio ("ejemplo@ejemplo").
+  // El "pattern" del HTML ya lo detiene, pero alguien podría quitarlo
+  // desde las herramientas del navegador; por eso revisamos otra vez aquí.
+  if (!esCorreoValido(correo)) {
+    mostrarMensaje(mensajeDeRegistro, MENSAJE_DE_CORREO_INVALIDO, 'error');
+    return;
+  }
+
   // CASO LÍMITE: doble clic. Deshabilitamos el botón mientras esperamos
   // la respuesta, así no se manda el registro dos veces.
   botonCrearCuenta.disabled = true;

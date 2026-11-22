@@ -14,6 +14,12 @@ async function iniciarSesion(eventoDeEnvio) {
   const correo = datosDelFormulario.get('correo').trim();
   const contrasena = datosDelFormulario.get('contrasena');
 
+  // CASO LÍMITE: correo incompleto. Así ni siquiera se pregunta al servidor.
+  if (!esCorreoValido(correo)) {
+    mostrarMensaje(mensajeDeInicioDeSesion, MENSAJE_DE_CORREO_INVALIDO, 'error');
+    return;
+  }
+
   // CASO LÍMITE: doble clic → deshabilitamos el botón mientras esperamos
   botonEntrar.disabled = true;
   mostrarMensaje(mensajeDeInicioDeSesion, 'Entrando...', 'aviso');

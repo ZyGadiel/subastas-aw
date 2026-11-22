@@ -51,6 +51,24 @@ const NOMBRES_DE_LAS_CATEGORIAS = {
   otros: 'Otros',
 };
 
+// ---------------------------------------------------------------------
+// ¿El correo tiene la forma ejemplo@dominio.algo?
+// type="email" del navegador acepta "ejemplo@ejemplo" (sin punto), que es
+// válido en redes internas pero no en internet. Esta expresión regular pide:
+//   [^@\s]+          algo antes de la @ (sin espacios ni otra @)
+//   @                 la arroba
+//   [^@\s.]+         el nombre del dominio (sin puntos seguidos)
+//   (\.[^@\s.]+)*    subdominios opcionales: correo.uabc...
+//   \.[A-Za-z]{2,}    un punto y al menos 2 letras al final: .com, .mx, .edu
+// ---------------------------------------------------------------------
+const PATRON_DE_CORREO_VALIDO = /^[^@\s]+@[^@\s.]+(\.[^@\s.]+)*\.[A-Za-z]{2,}$/;
+
+function esCorreoValido(correo) {
+  return PATRON_DE_CORREO_VALIDO.test(correo);
+}
+
+const MENSAJE_DE_CORREO_INVALIDO = 'Escribe un correo completo, por ejemplo: ejemplo@correo.com';
+
 // Muestra un mensaje en un elemento de la página.
 // tipoDeMensaje: 'error', 'exito' o 'aviso'
 // (los colores están en la sección 7 de css/estilos.css: .mensaje-de-error, etc.)

@@ -4,6 +4,20 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 21 nov 2026 — Correo con dominio completo
+
+**Decisión:** el correo del registro y del inicio de sesión debe tener la forma `ejemplo@dominio.algo`.
+
+**Por qué:** `type="email"` acepta `ejemplo@ejemplo`, que es válido en redes internas pero no en internet. Un correo así no puede recibir mensajes y llena la base de datos de cuentas inútiles.
+
+**Cómo (dos capas, como en Publicar):**
+1. **HTML:** atributo `pattern` + `title` con un ejemplo. El navegador avisa antes de enviar.
+2. **JavaScript:** `esCorreoValido` en `js/utilidades.js` revisa otra vez, por si alguien borra el `pattern`. En el inicio de sesión, además, evita preguntarle al servidor por un correo que no puede existir.
+
+Supabase Auth hace una tercera revisión del formato al registrar (`email_address_invalid`).
+
+---
+
 ## 21 nov 2026 — Puja rápida y lista de posiciones
 
 **Decisión:** en el detalle de la subasta agregué un botón **"Pujar el mínimo"** y una lista de **posiciones** debajo del producto.

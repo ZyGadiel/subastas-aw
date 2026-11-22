@@ -121,9 +121,9 @@ Desactivar la confirmación por correo en Supabase para la demo.
 **Qué le pedí:** que los vendedores puedan publicar productos desde el formulario y que aparezcan en el catálogo.
 
 **Qué me propuso:**
-- `supabase/seccion-6-publicar.sql`: permiso `INSERT` solo para usuarios con sesión, política RLS "solo los vendedores activos publican", trigger que pone el vendedor, la fecha de inicio y el precio actual, y una regla de duración máxima de 7 días.
-- `js/publicar.js`: ocultar el formulario a quien no sea vendedor, validar los casos límite (puros espacios, negativos, texto en lugar de número, números gigantes, incremento mayor que el precio) y deshabilitar el botón para evitar el doble clic.
-- `traducirErrorDeLaBaseDeDatos` en `js/utilidades.js`, que convierte el nombre de la regla rota en un mensaje en español.
+`supabase/seccion-6-publicar.sql`: permiso `INSERT` solo para usuarios con sesión, política RLS "solo los vendedores activos publican", trigger que pone el vendedor, la fecha de inicio y el precio actual, y una regla de duración máxima de 7 días.
+`js/publicar.js`: ocultar el formulario a quien no sea vendedor, validar los casos límite (puros espacios, negativos, texto en lugar de número, números gigantes, incremento mayor que el precio) y deshabilitar el botón para evitar el doble clic.
+`traducirErrorDeLaBaseDeDatos` en `js/utilidades.js`, que convierte el nombre de la regla rota en un mensaje en español.
 
 **Error de la IA que se corrigió:** la primera versión del trigger ponía siempre el vendedor con `auth.uid()`. Desde el SQL Editor no hay sesión, así que `datos-prueba.sql` habría fallado con un vendedor vacío. Se corrigió para que solo lo haga cuando hay un usuario con sesión.
 
@@ -134,32 +134,45 @@ Desactivar la confirmación por correo en Supabase para la demo.
 **Qué le pedí:** que la página de detalle muestre la subasta real, que los compradores puedan ocupar uno de los 5 lugares y pujar, y que el precio se actualice solo cuando alguien puja desde otra computadora.
 
 **Qué me propuso:**
-- `supabase/seccion-7-puja.sql`: dos funciones de la base de datos (`entrar_a_la_subasta` y `pujar`) en lugar de dar permiso de `INSERT` al navegador. Revisan todas las reglas en el servidor y usan `for update` (un candado en la fila) para que dos clics al mismo tiempo no rompan el cupo de 5 ni acepten dos pujas con el mismo precio.
-- Agregar las tablas a la publicación `supabase_realtime` para recibir los cambios al instante.
-- `js/subasta.js`: leer el `?id=` de la dirección, cargar subasta, participantes y pujas con `Promise.all`, decidir qué ve cada quien (visitante, vendedor, comprador dentro o fuera, subasta llena o terminada) y mostrar el historial como "Participante N" para no revelar nombres.
-- Casos límite: id inválido o inexistente, doble clic, puja menor al mínimo, el que va ganando quiere pujar otra vez, el tiempo se acaba con la página abierta, se pierde el internet y regresa, dos actualizaciones que llegan desordenadas.
+`supabase/seccion-7-puja.sql`: dos funciones de la base de datos (`entrar_a_la_subasta` y `pujar`) en lugar de dar permiso de `INSERT` al navegador. Revisan todas las reglas en el servidor y usan `for update` (un candado en la fila) para que dos clics al mismo tiempo no rompan el cupo de 5 ni acepten dos pujas con el mismo precio.
+Agregar las tablas a la publicación `supabase_realtime` para recibir los cambios al instante.
+`js/subasta.js`: leer el `?id=` de la dirección, cargar subasta, participantes y pujas con `Promise.all`, decidir qué ve cada quien (visitante, vendedor, comprador dentro o fuera, subasta llena o terminada) y mostrar el historial como "Participante N" para no revelar nombres.
+Casos límite: id inválido o inexistente, doble clic, puja menor al mínimo, el que va ganando quiere pujar otra vez, el tiempo se acaba con la página abierta, se pierde el internet y regresa, dos actualizaciones que llegan desordenadas.
 
-**Qué acepté:** (llénalo tú)
+**Qué acepté:** la propuesta de la ia
 
-**Qué rechacé o cambié:** (llénalo tú)
+**Qué rechacé o cambié:** reconoci areas de mejora y comence el proceso de modificacion
+1.Agregar un boton de puja automatica sin quitar la funcion manual.
+2.Necesariamente utilizar la direccion de correo con . (''ejemplo@ejemplo.com'') con el type=email deja poner sin punto.
+3.Agregar funcion de modo oscuro.
+4.acercar a los pujadores cerca de la pantalla para poder ver el podio.
 
 ---
 
 ## 21 nov 2026 — Sección 7.1: Puja rápida y posiciones
 
 **Qué le pedí (idea mía, después de probar la Sección 7):**
-- Un botón para pujar el mínimo sin escribir el monto a mano, pero dejando la opción de escribir otra cantidad.
-- Ver las posiciones de los participantes en el espacio en blanco de la pantalla, en una lista pequeña, para no tener que bajar hasta el historial.
+Un botón para pujar el mínimo sin escribir el monto a mano, pero dejando la opción de escribir otra cantidad.
+Ver las posiciones de los participantes (el podio) en el espacio en blanco de la pantalla, en una lista pequeña, para no tener que bajar hasta el historial.
 
 **Qué me propuso:**
-- Botón verde "Pujar el mínimo: $X" arriba del campo, separado por "o escribe otra cantidad". Los dos caminos usan la misma función `enviarPuja(monto)`, así las validaciones no se repiten.
-- Deshabilitar los dos botones mientras se envía (caso límite: clic en uno y luego en el otro).
-- Si alguien puja justo antes del clic, la base de datos rechaza la puja rápida, la página se recarga y el botón ya muestra el mínimo nuevo.
-- Lista "Posiciones": 1º, 2º... según la puja más alta de cada participante; abajo los que no han pujado y los lugares libres. Solo dice "Participante N" (privacidad).
-- `obtenerNombreParaMostrar` para que el historial y las posiciones usen el mismo nombre ("Participante 3 (tú)").
+Botón verde "Pujar el mínimo: $X" arriba del campo, separado por "o escribe otra cantidad". Los dos caminos usan la misma función `enviarPuja(monto)`, así las validaciones no se repiten.
+Deshabilitar los dos botones mientras se envía (caso límite: clic en uno y luego en el otro).
+Si alguien puja justo antes del clic, la base de datos rechaza la puja rápida, la página se recarga y el botón ya muestra el mínimo nuevo.
+Lista "Posiciones": 1º, 2º... según la puja más alta de cada participante; abajo los que no han pujado y los lugares libres. Solo dice "Participante N" (privacidad).
+`obtenerNombreParaMostrar` para que el historial y las posiciones usen el mismo nombre ("Participante 3 (tú)").
 
 **Error de la IA que se corrigió:** primero puso las posiciones en la columna derecha, pero el espacio en blanco estaba debajo del producto (columna izquierda). Se movieron ahí al revisar la captura de pantalla.
 
-**Qué acepté:** (llénalo tú)
+---
 
-**Qué rechacé o cambié:** (llénalo tú)
+## 21 nov 2026 — Sección 7.2: Correo válido
+
+**Qué le pedí (idea mía, después de probar la Sección 7):** que al registrarse o iniciar sesión el correo tenga que ser completo, como `ejemplo@ejemplo.com`. El `type="email"` del navegador dejaba escribir `ejemplo@ejemplo`, sin punto.
+
+**Qué me propuso:**
+Explicación: `type="email"` acepta correos sin punto porque son válidos en redes internas (por ejemplo `admin@localhost`), pero no sirven en internet.
+Atributo `pattern` en el campo de correo de `registro.html` e `iniciar-sesion.html`, con un `title` que da el ejemplo, y `placeholder="ejemplo@correo.com"`.
+La misma regla en JavaScript (`esCorreoValido` y `PATRON_DE_CORREO_VALIDO` en `js/utilidades.js`), porque alguien puede borrar el `pattern` con las herramientas del navegador.
+La expresión regular pide: algo antes de la @, un dominio sin puntos seguidos y al final un punto con al menos 2 letras (`.com`, `.mx`, `.edu.mx`).
+Se probó con 8 correos (`ejemplo@ejemplo`, `a@b..com`, `a@b.c`, con espacios, sin @, `.c0m`, y dos válidos); el navegador y JavaScript dieron el mismo resultado.
