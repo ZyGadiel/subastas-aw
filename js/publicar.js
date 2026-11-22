@@ -77,9 +77,12 @@ function validarDatosDeLaSubasta(subastaNueva, duracionEnMinutos) {
     return 'El incremento mínimo no puede ser mayor que el precio inicial.';
   }
 
-  // CASO LÍMITE: type="url" acepta direcciones como "ftp://..." o "javascript:...",
-  // que no son fotos. Solo se aceptan páginas web normales (o ninguna foto).
-  if (subastaNueva.url_de_la_foto !== null && !/^https?:\/\//i.test(subastaNueva.url_de_la_foto)) {
+  // CASO LÍMITE: type="url" acepta direcciones como "http://...", "ftp://..." o
+  // "javascript:...". Solo se aceptan direcciones seguras https:// (o ninguna foto):
+  // la página publicada es https y el navegador puede bloquear una foto http.
+  // /^https:\/\/.+/ = "empieza con https:// y sigue algo más". Es la misma regla
+  // que el pattern="https://.+" de publicar.html, para que las dos capas decidan igual.
+  if (subastaNueva.url_de_la_foto !== null && !/^https:\/\/.+/.test(subastaNueva.url_de_la_foto)) {
     return 'La dirección de la foto debe empezar con https:// (o déjala vacía).';
   }
 

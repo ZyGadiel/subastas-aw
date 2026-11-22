@@ -270,3 +270,20 @@ En el README: el enlace a la página publicada, un **mapa del sistema** y el **r
 **Qué acepté:** la modificacion del readme con el enlace
 
 **Qué rechacé o cambié:** nada.
+
+---
+
+## 22 nov 2026 — Sección 12: Colores con variables y foto solo con https
+
+**Qué le pedí:** que leyera todo el proyecto y luego que corrigiera dos detalles que encontró al revisarlo.
+
+**Qué me propuso:**
+**Colores:** en `css/estilos.css` había dos `color: #ffffff` escritos directo (los botones y el enlace "Ver subasta"), y la regla del proyecto es que todos los colores son variables de la sección 1. Se creó `--color-del-texto-de-los-botones` en los dos temas (en el oscuro sigue blanco porque los fondos de los botones son oscuros).
+**Foto:** el mensaje de `js/publicar.js` decía "debe empezar con https://", pero la expresión `/^https?:\/\//` también aceptaba `http://` (la `s?` significa "la s es opcional"). Propuso exigir `https://` en lugar de cambiar el mensaje, porque la página publicada es https y el navegador puede bloquear fotos http (contenido mixto). Se agregó la misma regla en el HTML con `pattern="https://.+"`.
+Se probó en el navegador: el texto de los botones sigue blanco en los dos temas, y 7 direcciones (`https://`, `HTTPS://`, `http://`, `ftp://`, `javascript:`, `https://` sin nada más y vacía) dan el mismo resultado en el HTML y en JavaScript.
+
+**Error de la IA que se corrigió:** en la primera versión, el JavaScript aceptaba `HTTPS://...` en mayúsculas y `https://` sin nada después, pero el `pattern` del HTML los rechazaba. La prueba lo detectó y se igualó la expresión a la del HTML (`/^https:\/\/.+/`).
+
+**Qué acepté:** las modificaciones sigeridas de la ia
+
+**Qué rechacé o cambié:** nada de momento.

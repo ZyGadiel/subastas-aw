@@ -4,6 +4,18 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — La foto debe ser https://
+
+**Decisión:** la dirección de la foto de una subasta debe empezar con `https://` (o quedar vacía). Ya no se acepta `http://`.
+
+**Por qué:**
+- La página publicada en GitHub Pages es `https`. Si una foto llega por `http`, el navegador la marca como "contenido mixto" y la puede bloquear o mostrar el aviso de página insegura.
+- El mensaje para el usuario ya pedía `https://`, pero el código aceptaba `http://`. Era mejor que el código hiciera lo que dice el mensaje (y lo que dicen el README y la bitácora).
+
+**Cómo (dos capas):** `pattern="https://.+"` en `publicar.html` y la misma regla en `validarDatosDeLaSubasta` (`js/publicar.js`). Las dos se probaron con las mismas 7 direcciones y dan el mismo resultado.
+
+---
+
 ## 21 nov 2026 — Publicar en GitHub Pages
 
 **Decisión:** la página se publica con **GitHub Pages** desde la rama `main`: https://zygadiel.github.io/subastas-aw/

@@ -71,7 +71,12 @@
         </select>
 
         <label for="url-de-la-foto">Dirección (URL) de la foto</label>
-        <input type="url" id="url-de-la-foto" name="url_de_la_foto" placeholder="https://...">
+        <!-- CASO LÍMITE: type="url" acepta "http://", "ftp://" o "javascript:". El pattern
+             exige https:// (la página publicada es https y el navegador puede bloquear
+             fotos http). La misma regla está en js/publicar.js (validarDatosDeLaSubasta). -->
+        <input type="url" id="url-de-la-foto" name="url_de_la_foto" placeholder="https://..."
+               pattern="https://.+"
+               title="La dirección debe empezar con https:// (o déjala vacía)">
       </fieldset>
 
       <fieldset>

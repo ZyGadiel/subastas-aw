@@ -18,6 +18,7 @@
 
   --color-principal: #4f46e5;                /* fondo de los botones */
   --color-principal-oscuro: #3730a3;         /* botones al pasar el mouse */
+  --color-del-texto-de-los-botones: #ffffff; /* texto de los botones y del enlace "Ver subasta" */
   --color-de-los-enlaces: #4f46e5;
   --color-de-fondo: #f5f5f7;
   --color-de-superficie: #ffffff;            /* tarjetas, cajas y formularios */
@@ -51,6 +52,7 @@
 
   --color-principal: #4f46e5;
   --color-principal-oscuro: #6366f1;         /* al pasar el mouse se aclara un poco */
+  --color-del-texto-de-los-botones: #ffffff; /* sigue blanco: los fondos de los botones son oscuros */
   --color-de-los-enlaces: #a5b4fc;
   --color-de-fondo: #0f172a;
   --color-de-superficie: #1e293b;
@@ -257,7 +259,7 @@ button {
   padding: 0.65rem 1.25rem;
   font: inherit;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--color-del-texto-de-los-botones);
   background-color: var(--color-principal);
   border: none;
   border-radius: var(--radio-de-las-esquinas-pequenas);
@@ -391,7 +393,7 @@ button:disabled {
   text-align: center;
   padding: 0.6rem;
   background-color: var(--color-principal);
-  color: #ffffff;
+  color: var(--color-del-texto-de-los-botones);
   text-decoration: none;
   border-radius: var(--radio-de-las-esquinas-pequenas);
   font-weight: 600;
