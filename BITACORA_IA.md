@@ -370,3 +370,26 @@ Se probó en el navegador: computadora y celular, modo claro y oscuro; clic en e
 **Qué acepté:** los cambios sugeridos
 
 **Qué rechacé o cambié:** nada de momento
+
+---
+
+## 22 nov 2026 — Sección 17: Encabezado minimalista
+
+**Qué le pedí:** seguir el rediseño minimalista con el encabezado.
+
+**Qué me propuso:**
+Todo con CSS y un poco de `js/sesion.js`; **el HTML de las 7 páginas no cambió**.
+**Logotipo:** un cuadrito con el color principal y un martillo de subasta recortado, junto a "Subastas AW". Se hace con dos moldes de CSS (`mask`): el cuadrito completo menos el martillo (`mask-composite: exclude`). A través del recorte se ve el fondo del encabezado, así cambia solo en modo oscuro sin escribir ningún color.
+**Menú en gris:** los enlaces ya no son morados; la página donde estás se ve más oscura. `marcarPaginaActualEnElMenu` (en `js/sesion.js`) le pone `aria-current="page"` al enlace de la página actual (compara solo el nombre del archivo, así `iniciar-sesion.html?volver=...` cuenta). Los lectores de pantalla dicen "página actual".
+**Un solo botón con color:** "Registrarse", en forma de pastilla, para que quien es nuevo sepa qué hacer primero. El botón del tema es un círculo pequeño con borde.
+**Alineación:** en pantallas grandes, el logotipo y el menú empiezan y terminan en las mismas orillas que el contenido (`padding` con `max()` y `calc()` usando `--ancho-maximo-del-contenido`).
+Colores: ninguno nuevo.
+Se probó en el navegador: en 1400 px el logotipo y el contenido empiezan en el mismo píxel (175) y el menú y el contenido terminan en el mismo (1211); el ícono en claro y oscuro (agrandado 4 veces para revisarlo); la página actual marcada en el catálogo y el registro, y ninguna en el detalle de una subasta; el menú de un visitante y el de un vendedor (simulado) en celular, sin salirse de la pantalla.
+
+**Errores de la IA que se corrigieron:**
+- La primera versión del ícono usaba un solo molde: solo se habría visto el martillo y el cuadrito habría desaparecido. Se cambió a dos moldes combinados.
+- En celular, el encabezado de un visitante ocupaba 3 renglones (el botón del tema quedaba solo). Se redujeron un poco la letra y la separación del menú en celular: ahora son 2 renglones.
+
+**Qué acepté:** la modificacion del encabezado
+
+**Qué rechacé o cambié:** nada de momento

@@ -135,6 +135,9 @@ h1 {
 /* ---------------------------------------------------------------------
    3. ENCABEZADO Y PIE DE PÁGINA
    --------------------------------------------------------------------- */
+/* ENCABEZADO MINIMALISTA (Sección 17): el logotipo con su ícono, el menú en
+   gris (la página donde estás, más oscura) y un solo botón con color:
+   "Registrarse". Todo con CSS: el HTML de las 7 páginas no cambió. */
 header {
   background-color: var(--color-de-superficie);
   border-bottom: 1px solid var(--color-de-los-bordes);
@@ -144,31 +147,83 @@ header {
   flex-wrap: wrap;                /* en celular el menú baja a otra línea */
   justify-content: space-between; /* logotipo a la izquierda, menú a la derecha */
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem 1rem;
 }
 
 .logotipo {
-  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.15rem;
   color: var(--color-del-texto);
   text-decoration: none;
+  letter-spacing: -0.01em;
 }
 
+/* El ícono del logotipo: un cuadrito con el color principal y un martillo
+   de subasta RECORTADO (a través del recorte se ve el fondo del encabezado).
+   Se usan dos moldes (mask): el cuadrito completo MENOS el martillo
+   (mask-composite: exclude). Los moldes solo dan la FORMA ("black" ahí no
+   es un color que se vea); el color real sale de las variables, así que
+   funciona en los dos temas. */
+.logotipo::before {
+  content: "";
+  flex: 0 0 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+  background-color: var(--color-principal);
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(-45 12 12)'%3E%3Crect x='6' y='3' width='12' height='6' rx='1.5'/%3E%3Crect x='10.75' y='9' width='2.5' height='11' rx='1.25'/%3E%3C/g%3E%3C/svg%3E") center / 1.15rem no-repeat,
+    linear-gradient(black, black);
+  -webkit-mask-composite: xor;      /* nombre viejo de "exclude" (Safari y Chrome antiguos) */
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(-45 12 12)'%3E%3Crect x='6' y='3' width='12' height='6' rx='1.5'/%3E%3Crect x='10.75' y='9' width='2.5' height='11' rx='1.25'/%3E%3C/g%3E%3C/svg%3E") center / 1.15rem no-repeat,
+    linear-gradient(black, black);
+  mask-composite: exclude;
+}
+
+/* En celular, letra y separación un poco más chicas: así el menú de un
+   visitante (Catálogo, Iniciar sesión, Registrarse y el tema) cabe en un
+   solo renglón. En pantallas grandes crecen (sección 8). */
 nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.35rem 0.8rem;
+  font-size: 0.95rem;
 }
 
+/* Los enlaces del menú en gris: no compiten con el contenido de la página */
 nav a {
+  color: var(--color-del-texto-secundario);
   text-decoration: none;
   font-weight: 500;
 }
 
 nav a:hover {
-  text-decoration: underline;
+  color: var(--color-del-texto);
+}
+
+/* La página donde estás (js/sesion.js le pone aria-current="page") */
+nav a[aria-current="page"] {
+  color: var(--color-del-texto);
+}
+
+/* "Registrarse": el único botón con color del menú, para que se note
+   qué hacer primero si eres nuevo */
+#opcion-registrarse a {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  color: var(--color-del-texto-de-los-botones);
+  background-color: var(--color-principal);
+  border-radius: 999px;
+}
+
+#opcion-registrarse a:hover {
+  background-color: var(--color-principal-oscuro);
 }
 
 /* Saludo "Hola, nombre" del usuario con sesión iniciada */
@@ -181,19 +236,30 @@ nav a:hover {
   margin: 0;
   padding: 0;
   background: none;
-  color: var(--color-de-los-enlaces);
+  color: var(--color-del-texto-secundario);
   font-weight: 500;
 }
 
 .boton-con-aspecto-de-enlace:hover {
   background: none;
-  text-decoration: underline;
+  color: var(--color-del-texto);
 }
 
-/* Botón de modo oscuro: solo un ícono (🌙 o ☀️), un poco más grande */
+/* Botón de modo oscuro: un círculo pequeño con el ícono (🌙 o ☀️) */
 #boton-de-modo-oscuro {
-  font-size: 1.1rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
   line-height: 1;
+  border: 1px solid var(--color-de-los-bordes);
+  border-radius: 50%;
+}
+
+#boton-de-modo-oscuro:hover {
+  background-color: var(--color-de-fondo);
 }
 
 /* Lo que tiene el atributo hidden nunca se muestra, aunque otra regla le ponga display */
@@ -1127,8 +1193,17 @@ th {
    8. DISEÑO ADAPTABLE (responsive): tablet y computadora
    --------------------------------------------------------------------- */
 @media (min-width: 768px) {
+  /* Sección 17: el logotipo y el menú se alinean con las orillas del
+     contenido (main mide máximo 1100px y tiene 2rem de relleno).
+     max() elige el mayor: 2rem en pantallas medianas, o el espacio que
+     sobra a los lados en pantallas muy anchas. */
   header {
-    padding: 1rem 2rem;
+    padding: 0.9rem max(2rem, calc((100% - var(--ancho-maximo-del-contenido)) / 2 + 2rem));
+  }
+
+  nav ul {
+    gap: 0.35rem 1.1rem;
+    font-size: 1rem;
   }
 
   main {

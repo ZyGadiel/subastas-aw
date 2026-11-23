@@ -78,6 +78,27 @@ function actualizarMenuSegunElUsuario(perfil) {
 
 
 // ---------------------------------------------------------------------
+// Sección 17: marca en el menú la página donde estás, con
+// aria-current="page". El CSS la pinta más oscura y los lectores de
+// pantalla dicen "página actual".
+// Se compara solo el nombre del archivo: "iniciar-sesion.html?volver=..."
+// cuenta como "iniciar-sesion.html".
+// ---------------------------------------------------------------------
+function marcarPaginaActualEnElMenu() {
+  const nombreDeLaPaginaActual = obtenerPaginaActual().split('?')[0];
+
+  document.querySelectorAll('nav a').forEach((enlaceDelMenu) => {
+    const nombreDeLaPaginaDelEnlace = enlaceDelMenu.getAttribute('href').split('?')[0];
+    if (nombreDeLaPaginaDelEnlace === nombreDeLaPaginaActual) {
+      enlaceDelMenu.setAttribute('aria-current', 'page');
+    } else {
+      enlaceDelMenu.removeAttribute('aria-current');
+    }
+  });
+}
+
+
+// ---------------------------------------------------------------------
 // Cierra la sesión y regresa al catálogo
 // ---------------------------------------------------------------------
 async function cerrarSesion() {
@@ -120,4 +141,5 @@ function traducirErrorDeAutenticacion(errorDeAutenticacion) {
 // Al abrir cualquier página
 // ---------------------------------------------------------------------
 document.getElementById('boton-cerrar-sesion').addEventListener('click', cerrarSesion);
+marcarPaginaActualEnElMenu();
 promesaDelPerfilDelUsuarioActual.then(actualizarMenuSegunElUsuario);
