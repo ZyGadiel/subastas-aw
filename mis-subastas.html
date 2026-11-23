@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subastas AW | Mis subastas</title>
   <link rel="stylesheet" href="css/estilos.css">
+  <!-- Sección 20 (internet lento): "preconnect" le dice al navegador que vaya
+       abriendo la conexión con estos servidores MIENTRAS carga la página, en
+       lugar de esperar a necesitarlos. Con internet lento se ahorra tiempo.
+       crossorigin: Supabase se usa con fetch (otra página), y así la conexión sirve. -->
+  <link rel="preconnect" href="https://syrnzaehedhbwppngimq.supabase.co" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <!-- Ícono de la pestaña: un martillo de subasta dibujado con un emoji dentro de un SVG.
        Va escrito aquí mismo (data:), así no hace falta un archivo de imagen. -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔨</text></svg>">

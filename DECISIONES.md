@@ -4,6 +4,33 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — Pensado para internet lento
+
+**Decisión:** la página avisa cuando el servidor tarda, y abre las conexiones antes de necesitarlas.
+
+**Por qué:** la conexión de la universidad a veces es lenta, y uno de los casos límite de la presentación es "que la API o el servidor tarde o no responda". Antes, si tardaba, la página se quedaba en "Cargando..." sin explicar nada y parecía trabada.
+
+**Cómo (cosas pequeñas, fáciles de explicar):**
+- Si una carga o un envío tarda más de 8 segundos, se avisa "La conexión está lenta. Seguimos intentando..." (`avisarSiLaConexionEstaLenta` en `js/utilidades.js`). Al pujar o publicar, el aviso pide no enviarlo otra vez.
+- `<link rel="preconnect">` en las 7 páginas: el navegador abre la conexión con Supabase mientras carga la página.
+- La foto principal del detalle se descarga de inmediato (sin `lazy`).
+- Los errores que ya están manejados se escriben en la consola como advertencia (`console.warn`), no como error rojo, porque la página no se rompió: el usuario ve su mensaje.
+
+---
+
+## 22 nov 2026 — La foto se pone con su dirección (URL), no subiendo el archivo
+
+**Decisión:** el vendedor pone la **dirección** de una foto que ya está en internet (`https://...`). La página no permite subir el archivo desde la computadora. En mi documento de "Idea de proyecto" (agosto) decía "Subir fotografías".
+
+**Por qué:**
+- Subir archivos necesita un lugar para guardarlos (Supabase Storage), con sus propias reglas de permisos (quién sube, qué tamaño, qué tipo de archivo) y casos límite nuevos (archivos enormes, archivos que no son imágenes). Era otra parte completa del sistema.
+- Con los días que tenía, preferí terminar bien lo principal de una subasta (lugares, pujas en tiempo real, cierre automático, ganador y comisión) y poder explicarlo todo.
+- La dirección también tiene sus validaciones: debe empezar con `https://`, y si la foto no carga aparece el recuadro "Sin foto".
+
+**Cómo lo haría después:** un "bucket" de Supabase Storage para fotos, con una política para que solo el vendedor suba fotos de sus subastas, y un `<input type="file" accept="image/*">` en Publicar.
+
+---
+
 ## 22 nov 2026 — "Sin foto" hecho con CSS, no con una imagen de internet
 
 **Decisión:** cuando una subasta no tiene foto o la foto no carga, se muestra un recuadro hecho con CSS (`.foto-por-defecto`) en lugar de la imagen de `placehold.co`.

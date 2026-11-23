@@ -59,7 +59,11 @@ function crearFotoPorDefecto(tituloDelProducto) {
   return fotoPorDefecto;
 }
 
-function crearFotoDelProducto(urlDeLaFoto, tituloDelProducto) {
+// esLaFotoPrincipal (Sección 20): en el catálogo hay muchas fotos y se
+// descargan solo las que están cerca de verse ("lazy"). En el detalle, la
+// foto es lo PRIMERO que se ve: se pide de inmediato ("eager"), así con
+// internet lento no se queda el hueco vacío.
+function crearFotoDelProducto(urlDeLaFoto, tituloDelProducto, esLaFotoPrincipal = false) {
   // CASO LÍMITE: la subasta se publicó sin foto
   if (!urlDeLaFoto) {
     return crearFotoPorDefecto(tituloDelProducto);
@@ -68,7 +72,7 @@ function crearFotoDelProducto(urlDeLaFoto, tituloDelProducto) {
   const foto = document.createElement('img');
   foto.src = urlDeLaFoto;
   foto.alt = `Foto de ${tituloDelProducto}`;
-  foto.loading = 'lazy'; // la foto se descarga hasta que está cerca de verse
+  foto.loading = esLaFotoPrincipal ? 'eager' : 'lazy';
 
   // CASO LÍMITE: la dirección de la foto está rota (la borraron, no es una
   // imagen, no hay internet...) → se cambia por el recuadro "Sin foto".
@@ -240,6 +244,30 @@ function borrarMensaje(elementoDelMensaje) {
 
 
 // ---------------------------------------------------------------------
+// CASO LÍMITE (Sección 20): el servidor TARDA en responder (por ejemplo,
+// con el internet lento de la escuela). Sin esto, la página se quedaría en
+// "Cargando..." sin explicar nada y parecería que se trabó.
+// Cómo funciona: se pone un "despertador" (setTimeout) de 8 segundos.
+//   * Si la respuesta llega antes, se cancela y el usuario no ve nada extra.
+//   * Si no, se avisa que la conexión está lenta y que se sigue intentando.
+// Uso:
+//   const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(mensaje);
+//   const respuesta = await baseDeDatos...;   ← lo que puede tardar
+//   cancelarAvisoDeConexionLenta();
+// ---------------------------------------------------------------------
+const SEGUNDOS_ANTES_DE_AVISAR_CONEXION_LENTA = 8;
+
+function avisarSiLaConexionEstaLenta(elementoDelMensaje, textoDelAviso = 'La conexión está lenta. Seguimos intentando...') {
+  const despertador = setTimeout(() => {
+    mostrarMensaje(elementoDelMensaje, textoDelAviso, 'aviso');
+  }, SEGUNDOS_ANTES_DE_AVISAR_CONEXION_LENTA * 1000);
+
+  // Regresa una función que apaga el despertador (clearTimeout)
+  return () => clearTimeout(despertador);
+}
+
+
+// ---------------------------------------------------------------------
 // Traduce los errores de la base de datos a mensajes claros en español.
 // Cuando una regla (constraint) se rompe, el mensaje de PostgreSQL trae
 // su nombre, por ejemplo: violates check constraint "precio_inicial_positivo".
@@ -265,7 +293,11 @@ const CODIGO_DE_NUMERO_DEMASIADO_GRANDE = '22003';
 const CODIGO_DE_REGLA_DEL_NEGOCIO = 'P0001';
 
 function traducirErrorDeLaBaseDeDatos(errorDeLaBaseDeDatos) {
-  console.error('Error de la base de datos:', errorDeLaBaseDeDatos);
+  // Sección 20: console.warn (advertencia, en amarillo) y no console.error
+  // (en rojo): este error YA está manejado, el usuario ve un mensaje claro.
+  // Se deja en la consola para quien programa, sin que parezca que la
+  // página se rompió. (Igual en los demás archivos.)
+  console.warn('Error de la base de datos:', errorDeLaBaseDeDatos);
   const textoDelError = errorDeLaBaseDeDatos.message ?? '';
 
   // ¿El error menciona alguna de nuestras reglas con nombre?

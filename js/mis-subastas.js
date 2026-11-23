@@ -308,7 +308,7 @@ function mostrarListaVacia(textoDelAviso) {
 // CASO LÍMITE: sin internet. Si ya había una lista, se deja como estaba
 // y solo se avisa; así no desaparece todo por un error de un momento.
 function mostrarErrorDeCarga(errorDeLaConsulta) {
-  console.error('Error al cargar mis subastas:', errorDeLaConsulta);
+  console.warn('Error al cargar mis subastas:', errorDeLaConsulta);
   mostrarMensaje(
     mensajeDeMisSubastas,
     'No pudimos cargar tus subastas. Revisa tu conexión; lo intentaremos de nuevo en unos segundos.',

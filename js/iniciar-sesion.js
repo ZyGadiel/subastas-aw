@@ -30,12 +30,16 @@ async function iniciarSesion(eventoDeEnvio) {
   // CASO LÍMITE: doble clic → deshabilitamos el botón mientras esperamos
   botonEntrar.disabled = true;
   mostrarMensaje(mensajeDeInicioDeSesion, 'Entrando...', 'aviso');
+  // Sección 20: si tarda más de 8 segundos, se avisa (js/utilidades.js)
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(mensajeDeInicioDeSesion);
 
   // signInWithPassword es la función de Supabase para iniciar sesión con correo y contraseña
   const { error: errorDelInicioDeSesion } = await baseDeDatos.auth.signInWithPassword({
     email: correo,
     password: contrasena,
   });
+
+  cancelarAvisoDeConexionLenta();
 
   if (errorDelInicioDeSesion) {
     mostrarMensaje(

@@ -126,6 +126,11 @@ async function publicarSubasta(eventoDeEnvio) {
   // CASO LÍMITE: doble clic → se publicaría dos veces. Deshabilitamos el botón.
   botonPublicar.disabled = true;
   mostrarMensaje(mensajeDePublicacion, 'Publicando tu subasta...', 'aviso');
+  // Sección 20: si tarda más de 8 segundos, se avisa (js/utilidades.js)
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(
+    mensajeDePublicacion,
+    'La conexión está lenta. Tu subasta se sigue publicando, no la envíes otra vez...'
+  );
 
   // Es como: INSERT INTO subastas (...) VALUES (...) RETURNING id;
   const { data: subastaGuardada, error: errorAlGuardar } = await baseDeDatos
@@ -133,6 +138,8 @@ async function publicarSubasta(eventoDeEnvio) {
     .insert(subastaNueva)
     .select('id')
     .single();
+
+  cancelarAvisoDeConexionLenta();
 
   if (errorAlGuardar) {
     mostrarMensaje(mensajeDePublicacion, traducirErrorDeLaBaseDeDatos(errorAlGuardar), 'error');

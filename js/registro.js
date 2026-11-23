@@ -46,6 +46,8 @@ async function registrarUsuario(eventoDeEnvio) {
   // la respuesta, así no se manda el registro dos veces.
   botonCrearCuenta.disabled = true;
   mostrarMensaje(mensajeDeRegistro, 'Creando tu cuenta...', 'aviso');
+  // Sección 20: si tarda más de 8 segundos, se avisa (js/utilidades.js)
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(mensajeDeRegistro);
 
   // signUp es la función de Supabase para registrar.
   // "options.data" son datos extra que el trigger usa para crear el perfil.
@@ -56,6 +58,8 @@ async function registrarUsuario(eventoDeEnvio) {
       data: { nombre: nombre, rol: rol },
     },
   });
+
+  cancelarAvisoDeConexionLenta();
 
   if (errorDelRegistro) {
     mostrarMensaje(mensajeDeRegistro, traducirErrorDeAutenticacion(errorDelRegistro), 'error');

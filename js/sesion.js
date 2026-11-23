@@ -30,7 +30,7 @@ async function obtenerPerfilDelUsuarioActual() {
     .single();
 
   if (errorDeLaConsulta) {
-    console.error('No se pudo leer el perfil del usuario:', errorDeLaConsulta);
+    console.warn('No se pudo leer el perfil del usuario:', errorDeLaConsulta);
     return null;
   }
 
@@ -123,7 +123,7 @@ const MENSAJES_DE_ERROR_DE_AUTENTICACION = {
 };
 
 function traducirErrorDeAutenticacion(errorDeAutenticacion) {
-  console.error('Error de autenticación:', errorDeAutenticacion);
+  console.warn('Error de autenticación:', errorDeAutenticacion);
 
   // CASO LÍMITE: no hay internet o el servidor no responde
   if (errorDeAutenticacion.name === 'AuthRetryableFetchError') {

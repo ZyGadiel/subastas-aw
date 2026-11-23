@@ -114,15 +114,20 @@ async function cargarSubastasActivas(filtros) {
     consultaDeSubastas = consultaDeSubastas.eq('categoria', filtros.categoria);
   }
 
+  // Si tarda más de 8 segundos, se avisa que la conexión está lenta (js/utilidades.js)
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(mensajeDelCatalogo);
+
   // Supabase responde con { data, error } (nombres en inglés de la librería);
   // al recibirlos les ponemos nombres en español.
   const { data: subastasActivas, error: errorDeLaConsulta } = await consultaDeSubastas
     .order('fecha_de_finalizacion', { ascending: true });
 
+  cancelarAvisoDeConexionLenta();
+
   // CASO LÍMITE: la base de datos no responde o hay un error.
   // En lugar de dejar la pantalla en blanco, avisamos al usuario.
   if (errorDeLaConsulta) {
-    console.error('Error al cargar las subastas:', errorDeLaConsulta);
+    console.warn('Error al cargar las subastas:', errorDeLaConsulta);
     mostrarMensaje(
       mensajeDelCatalogo,
       'No pudimos cargar las subastas. Revisa tu conexión y recarga la página.',
@@ -293,7 +298,7 @@ async function cargarUltimasSubastasTerminadas() {
   // CASO LÍMITE: falla la conexión. Solo se avisa en la mini lista;
   // el catálogo de la derecha sigue funcionando.
   if (errorDeLaConsulta) {
-    console.error('Error al cargar las últimas subastas:', errorDeLaConsulta);
+    console.warn('Error al cargar las últimas subastas:', errorDeLaConsulta);
     mostrarMensaje(mensajeDeUltimasSubastas, 'No pudimos cargar esta lista.', 'error');
     return;
   }

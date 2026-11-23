@@ -127,6 +127,10 @@ Desactivar la confirmación por correo en Supabase para la demo.
 
 **Error de la IA que se corrigió:** la primera versión del trigger ponía siempre el vendedor con `auth.uid()`. Desde el SQL Editor no hay sesión, así que `datos-prueba.sql` habría fallado con un vendedor vacío. Se corrigió para que solo lo haga cuando hay un usuario con sesión.
 
+**Qué acepté:** _
+
+**Qué rechacé o cambié:** _
+
 ---
 
 ## 21 nov 2026 — Sección 7: Entrar a la subasta y pujar en tiempo real
@@ -164,6 +168,10 @@ Lista "Posiciones": 1º, 2º... según la puja más alta de cada participante; a
 
 **Error de la IA que se corrigió:** primero puso las posiciones en la columna derecha, pero el espacio en blanco estaba debajo del producto (columna izquierda). Se movieron ahí al revisar la captura de pantalla.
 
+**Qué acepté:** _
+
+**Qué rechacé o cambié:** _
+
 ---
 
 ## 21 nov 2026 — Sección 7.2: Correo válido
@@ -176,6 +184,10 @@ Atributo `pattern` en el campo de correo de `registro.html` e `iniciar-sesion.ht
 La misma regla en JavaScript (`esCorreoValido` y `PATRON_DE_CORREO_VALIDO` en `js/utilidades.js`), porque alguien puede borrar el `pattern` con las herramientas del navegador.
 La expresión regular pide: algo antes de la @, un dominio sin puntos seguidos y al final un punto con al menos 2 letras (`.com`, `.mx`, `.edu.mx`).
 Se probó con 8 correos (`ejemplo@ejemplo`, `a@b..com`, `a@b.c`, con espacios, sin @, `.c0m`, y dos válidos); el navegador y JavaScript dieron el mismo resultado.
+
+**Qué acepté:** _
+
+**Qué rechacé o cambié:** _
 
 ---
 
@@ -208,6 +220,10 @@ Caso límite: una puja del último segundo que todavía se está guardando. La f
 En `subasta.html`, una caja "Resultado" con un mensaje distinto para el ganador ("¡Ganaste!"), el vendedor (a quién se vendió, la comisión del 3 % y lo que recibe) y los demás; y un 🏆 en la lista de posiciones.
 Caso límite: si el reloj de la computadora va adelantado y el servidor aún no la cierra, la página dice "Calculando el ganador..." y vuelve a intentar cada 5 segundos.
 
+**Qué acepté:** _
+
+**Qué rechacé o cambié:** _
+
 ---
 
 ## 21 nov 2026 — Sección 8.1: Mis subastas
@@ -222,6 +238,10 @@ La lista se recarga cada 30 segundos para que aparezcan las subastas que se cier
 Casos límite: sin sesión, administrador, todavía sin subastas, subasta eliminada (la oculta RLS), subasta vencida que el servidor aún no cierra ("Cerrando..."), y error de conexión sin borrar la lista.
 `actualizarTiemposRestantes` se movió a `js/utilidades.js` porque ahora la usan dos páginas.
 Se probó con todas las cuentas que tienen subastas: los resultados coincidieron con la base de datos.
+
+**Qué acepté:** _
+
+**Qué rechacé o cambié:** _
 
 ---
 
@@ -444,5 +464,26 @@ Colores: ninguno nuevo.
 Se probó en el navegador con "Ferrari lego": computadora y celular, modo claro y oscuro, sin salirse de la pantalla. Con datos cambiados solo en la memoria de la página (subasta activa con 45 segundos): el tiempo se pone rojo y aparece "En vivo".
 
 **Qué acepté:** el cambio sugerido de la subasta
+
+**Qué rechacé o cambié:** nada de momento
+
+---
+
+## 22 nov 2026 — Sección 20: Internet lento y requisitos de la entrega
+
+**Qué le pedí:** dejar la página lo mejor posible para el miércoles, sencilla de explicar, sabiendo que la conexión de la universidad a veces es lenta. Después le pedí revisar a detalle la tarea del Proyecto Final en Classroom para ver si cumplo todo.
+
+**Qué me propuso:**
+actividad encontró que se califica el último commit antes del **22 nov a las 11:59 PM**, y comparó la tarea y mi PDF de "Idea de proyecto" con lo que construí. Cumplo con todo lo de la entrega; faltaba documentar por qué la foto se pone con su dirección y no subiendo el archivo (mi PDF decía "Subir fotografías"), y cubrir mejor el caso límite "que la API o el servidor tarde o no responda".
+**Aviso de conexión lenta:** `avisarSiLaConexionEstaLenta` (en `js/utilidades.js`) pone un "despertador" (`setTimeout`) de 8 segundos al esperar al servidor; si la respuesta llega antes se apaga (`clearTimeout`), y si no, avisa "La conexión está lenta. Seguimos intentando...". Se usa en el catálogo, el detalle, entrar, pujar, iniciar sesión, registro y publicar. Al pujar y publicar, el aviso pide no enviarlo otra vez.
+**`preconnect`** en el `<head>` de las 7 páginas: el navegador abre la conexión con Supabase mientras carga la página.
+**La foto principal del detalle sin `lazy`** (parámetro `esLaFotoPrincipal` en `crearFotoDelProducto`): es lo primero que se ve, se pide de inmediato.
+**`console.warn` en lugar de `console.error`** en los 8 errores que ya se manejan: la tarea dice que se pierden puntos si aparece "error en consola", y estos no son errores de la página (el usuario ve su mensaje).
+**Dos decisiones nuevas** en `DECISIONES.md`: "Pensado para internet lento" y "La foto se pone con su dirección (URL), no subiendo el archivo".
+Se probó en el navegador simulando un servidor que tarda 11 segundos: a los 3 s dice "Cargando...", a los 9 s avisa que la conexión está lenta y al responder muestra lo normal; con respuesta rápida el aviso no aparece. La foto del detalle es `eager` y carga; la consola queda limpia.
+
+**Error de la IA que se corrigió:** la primera prueba de la conexión lenta no funcionó porque cambiaba `window.fetch`, y la librería de Supabase guarda su propia copia de `fetch` al crearse. Se repitió la prueba sobre la copia de Supabase.
+
+**Qué acepté:** el cambio sugerido
 
 **Qué rechacé o cambié:** nada de momento

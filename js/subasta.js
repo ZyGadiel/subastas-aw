@@ -89,6 +89,9 @@ async function cargarSubasta() {
   numeroDeLaUltimaCarga += 1;
   const numeroDeEstaCarga = numeroDeLaUltimaCarga;
 
+  // Si las 3 consultas tardan más de 8 segundos, se avisa arriba (js/utilidades.js)
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(mensajeDeLaSubasta);
+
   const [respuestaDeLaSubasta, respuestaDeLosParticipantes, respuestaDeLasPujas] = await Promise.all([
     // SELECT ... FROM subastas WHERE id = 7   (una fila o ninguna)
     baseDeDatos
@@ -109,6 +112,8 @@ async function cargarSubasta() {
       .order('fecha_de_la_puja', { ascending: false }),
   ]);
 
+  cancelarAvisoDeConexionLenta();
+
   if (numeroDeEstaCarga !== numeroDeLaUltimaCarga) {
     return; // ya hay una carga más nueva; esta se descarta
   }
@@ -117,7 +122,7 @@ async function cargarSubasta() {
   const errorDeLaConsulta =
     respuestaDeLaSubasta.error ?? respuestaDeLosParticipantes.error ?? respuestaDeLasPujas.error;
   if (errorDeLaConsulta) {
-    console.error('Error al cargar la subasta:', errorDeLaConsulta);
+    console.warn('Error al cargar la subasta:', errorDeLaConsulta);
     mostrarMensaje(
       mensajeDeLaSubasta,
       'No pudimos cargar la subasta. Revisa tu conexión y recarga la página.',
@@ -220,7 +225,8 @@ function mostrarSubasta() {
 function mostrarDetalleDelProducto() {
   document.title = `Subastas AW | ${subastaActual.titulo}`;
   // La foto, o el recuadro "Sin foto" si no tiene o no carga (js/utilidades.js)
-  lugarDeLaFoto.replaceChildren(crearFotoDelProducto(subastaActual.url_de_la_foto, subastaActual.titulo));
+  // true = es la foto principal: se descarga de inmediato (sin "lazy")
+  lugarDeLaFoto.replaceChildren(crearFotoDelProducto(subastaActual.url_de_la_foto, subastaActual.titulo, true));
   tituloDelProducto.textContent = subastaActual.titulo;
   categoriaDelProducto.textContent =
     NOMBRES_DE_LAS_CATEGORIAS[subastaActual.categoria] ?? subastaActual.categoria;
@@ -505,11 +511,17 @@ async function entrarALaSubasta() {
   // regresa el mismo lugar en vez de dar dos.)
   botonEntrarALaSubasta.disabled = true;
   mostrarMensaje(mensajeDeLaPuja, 'Apartando tu lugar...', 'aviso');
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(
+    mensajeDeLaPuja,
+    'La conexión está lenta. Seguimos apartando tu lugar, no cierres la página...'
+  );
 
   // Es como llamar a un procedimiento almacenado: CALL entrar_a_la_subasta(7)
   const { data: numeroDeLugar, error: errorAlEntrar } = await baseDeDatos.rpc('entrar_a_la_subasta', {
     id_de_la_subasta_elegida: idDeLaSubasta,
   });
+
+  cancelarAvisoDeConexionLenta();
 
   botonEntrarALaSubasta.disabled = false;
 
@@ -566,11 +578,19 @@ async function enviarPuja(montoOfrecido) {
   botonPujar.disabled = true;
   botonPujarElMinimo.disabled = true;
   mostrarMensaje(mensajeDeLaPuja, 'Enviando tu puja...', 'aviso');
+  // CASO LÍMITE: con internet lento, quien no ve respuesta tiende a pujar otra
+  // vez. Los botones ya están deshabilitados; además le decimos que espere.
+  const cancelarAvisoDeConexionLenta = avisarSiLaConexionEstaLenta(
+    mensajeDeLaPuja,
+    'La conexión está lenta. Tu puja sigue en camino, no la envíes otra vez...'
+  );
 
   const { data: precioNuevo, error: errorAlPujar } = await baseDeDatos.rpc('pujar', {
     id_de_la_subasta_elegida: idDeLaSubasta,
     monto_ofrecido: montoOfrecido,
   });
+
+  cancelarAvisoDeConexionLenta();
 
   botonPujar.disabled = false;
   botonPujarElMinimo.disabled = false;
@@ -675,7 +695,7 @@ async function pedirCierreDeLaSubasta() {
 
   const { error: errorAlCerrar } = await baseDeDatos.rpc('cerrar_subastas_vencidas');
   if (errorAlCerrar) {
-    console.error('No se pudo cerrar la subasta:', errorAlCerrar);
+    console.warn('No se pudo cerrar la subasta:', errorAlCerrar);
   }
   await cargarSubasta();
 
