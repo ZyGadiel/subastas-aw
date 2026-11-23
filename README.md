@@ -99,7 +99,7 @@ sequenceDiagram
 | Buscar "lampara" (sin acento), "100%" o `<script>` | Encuentra "Lámpara"; el `%` cuenta como letra; no se ejecuta código | `titulo_para_buscar`, `escaparComodines`, `textContent` |
 | Borrar un usuario que ya pujó | La base de datos no lo permite; por eso se suspende | Llaves foráneas |
 | Sin internet o se cae la conexión en vivo | Mensaje de error; al volver, se recarga la subasta | `traducirErrorDeLaBaseDeDatos` y Realtime |
-| Foto rota | Se pone una imagen por defecto | `onerror` |
+| Subasta sin foto o foto rota | Se muestra un recuadro "Sin foto" hecho con CSS (no depende de internet) | `crearFotoDelProducto` y `onerror` |
 | Enlace con `?volver=https://pagina-falsa.com` | Al iniciar sesión se ignora y va al catálogo; solo regresa a páginas de este sitio | `esPaginaPropiaParaVolver` |
 
 ## Tecnologías

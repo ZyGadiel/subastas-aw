@@ -16,7 +16,7 @@
 const mensajeDeLaSubasta = document.getElementById('mensaje-de-la-subasta');
 const contenidoDeLaSubasta = document.getElementById('contenido-de-la-subasta');
 
-const fotoDelProducto = document.getElementById('foto-del-producto');
+const lugarDeLaFoto = document.getElementById('lugar-de-la-foto');
 const tituloDelProducto = document.getElementById('titulo-del-producto');
 const categoriaDelProducto = document.getElementById('categoria-del-producto');
 const descripcionDelProducto = document.getElementById('descripcion-del-producto');
@@ -201,7 +201,8 @@ function formatearHora(fechaYHora) {
 // ---------------------------------------------------------------------
 function mostrarSubasta() {
   // El producto se dibuja una sola vez. Si se volviera a poner la foto en cada
-  // actualización, una foto rota que ya cambió por la de defecto volvería a romperse.
+  // actualización, se descargaría otra vez y una foto rota que ya cambió por
+  // el recuadro "Sin foto" volvería a fallar (y a parpadear).
   if (!elProductoYaSeMostro) {
     mostrarDetalleDelProducto();
     elProductoYaSeMostro = true;
@@ -218,8 +219,8 @@ function mostrarSubasta() {
 // Igual que en el catálogo: textContent (no innerHTML) para evitar XSS
 function mostrarDetalleDelProducto() {
   document.title = `Subastas AW | ${subastaActual.titulo}`;
-  fotoDelProducto.src = subastaActual.url_de_la_foto || FOTO_POR_DEFECTO;
-  fotoDelProducto.alt = `Foto de ${subastaActual.titulo}`;
+  // La foto, o el recuadro "Sin foto" si no tiene o no carga (js/utilidades.js)
+  lugarDeLaFoto.replaceChildren(crearFotoDelProducto(subastaActual.url_de_la_foto, subastaActual.titulo));
   tituloDelProducto.textContent = subastaActual.titulo;
   categoriaDelProducto.textContent =
     NOMBRES_DE_LAS_CATEGORIAS[subastaActual.categoria] ?? subastaActual.categoria;
@@ -704,12 +705,6 @@ async function iniciarPagina() {
   }
   setInterval(actualizarReloj, 1000);
 }
-
-// CASO LÍMITE: la dirección de la foto está rota → foto por defecto (una sola vez)
-fotoDelProducto.onerror = () => {
-  fotoDelProducto.onerror = null;
-  fotoDelProducto.src = FOTO_POR_DEFECTO;
-};
 
 botonEntrarALaSubasta.addEventListener('click', entrarALaSubasta);
 botonPujarElMinimo.addEventListener('click', pujarElMinimo);

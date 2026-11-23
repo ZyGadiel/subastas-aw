@@ -21,7 +21,7 @@ const textoDelResumenDeLaBusqueda = document.getElementById('texto-del-resumen-d
 
 const LONGITUD_MAXIMA_DE_LA_BUSQUEDA = 80; // igual que maxlength del HTML y el título de la subasta
 
-// FOTO_POR_DEFECTO y LUGARES_POR_SUBASTA están en js/utilidades.js
+// crearFotoDelProducto y LUGARES_POR_SUBASTA están en js/utilidades.js
 // (también los usa la página de detalle, js/subasta.js)
 
 
@@ -183,16 +183,9 @@ function crearTarjetaDeSubasta(subasta) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'tarjeta-de-subasta tarjeta-clicable'; // toda la tarjeta lleva al detalle
 
-  // Foto del producto
-  const fotoDelProducto = document.createElement('img');
-  fotoDelProducto.src = subasta.url_de_la_foto || FOTO_POR_DEFECTO;
-  fotoDelProducto.alt = `Foto de ${subasta.titulo}`;
-  fotoDelProducto.loading = 'lazy'; // la foto se descarga hasta que está cerca de verse
-  // CASO LÍMITE: la dirección de la foto está rota → ponemos la foto por defecto (una sola vez)
-  fotoDelProducto.onerror = () => {
-    fotoDelProducto.onerror = null;
-    fotoDelProducto.src = FOTO_POR_DEFECTO;
-  };
+  // Foto del producto, o el recuadro "Sin foto" si no tiene o no carga
+  // (crearFotoDelProducto está en js/utilidades.js)
+  const fotoDelProducto = crearFotoDelProducto(subasta.url_de_la_foto, subasta.titulo);
 
   // Sección 16 (diseño minimalista): sin etiquetas repetidas ("Precio actual:",
   // "Categoría:"...). Cada dato se entiende por su lugar y su tamaño:

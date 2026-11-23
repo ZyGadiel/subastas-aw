@@ -393,3 +393,20 @@ Se probó en el navegador: en 1400 px el logotipo y el contenido empiezan en el 
 **Qué acepté:** la modificacion del encabezado
 
 **Qué rechacé o cambié:** nada de momento
+
+---
+
+## 22 nov 2026 — Sección 18: Recuadro "Sin foto" propio
+
+**Qué le pedí:** seguir el rediseño con el "Sin foto".
+
+**Qué me propuso:**
+Antes, cuando una subasta no tenía foto (o la foto no cargaba) se mostraba una imagen de `placehold.co`: un recuadro gris enorme que dependía de otra página de internet (si fallaba, la tarjeta quedaba en blanco) y que no cambiaba en modo oscuro. El mismo código del `onerror` estaba repetido en 3 archivos.
+**Una sola función** en `js/utilidades.js`: `crearFotoDelProducto(url, titulo)`. Si hay foto crea el `<img>`; si no hay foto, o si la foto falla (`onerror` + `replaceWith`), pone en su lugar el recuadro de `crearFotoPorDefecto`. La usan `js/catalogo.js`, `js/subasta.js` y `js/mis-subastas.js`. En `subasta.html`, el `<img>` fijo se cambió por un contenedor (`lugar-de-la-foto`).
+**El recuadro** (`.foto-por-defecto` en `css/estilos.css`): el gris de fondo de la página, un ícono de foto (molde `mask`, como la lupa) y "Sin foto" en gris. Mide lo mismo que una foto (3:2) para que las tarjetas no cambien de alto. Ningún color nuevo; cambia solo en modo oscuro.
+**Accesibilidad:** el recuadro tiene `role="img"` y `aria-label` ("Título: sin foto"), así los lectores de pantalla lo anuncian como imagen. Se escribe con `setAttribute`, que no interpreta HTML (evita XSS).
+Se probó en el navegador: sin foto → recuadro; foto rota (dominio que no existe) → se cambió sola por el recuadro; foto buena → cargó; un título `<img src=x onerror=alert(1)>` se mostró como texto. Las 4 tarjetas miden lo mismo de alto. También en el detalle (la foto real de "Ferrari lego" y una simulada sin foto) y en Mis subastas, en modo claro y oscuro.
+
+**Qué acepté:** el cambio de imagen sin implementacion
+
+**Qué rechacé o cambié:** nada de momento

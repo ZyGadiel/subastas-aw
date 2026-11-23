@@ -36,8 +36,48 @@ function formatearTiempoRestante(fechaDeFinalizacion) {
   return dias > 0 ? `${dias}d ${relojConFormato}` : relojConFormato;
 }
 
-// Imagen que se usa si la subasta no tiene foto o si la foto no carga
-const FOTO_POR_DEFECTO = 'https://placehold.co/600x400?text=Sin+foto';
+// ---------------------------------------------------------------------
+// FOTO DEL PRODUCTO (Sección 18). La usan el catálogo, el detalle de la
+// subasta y Mis subastas.
+//   * Con foto: un <img>.
+//   * Sin foto, o si la foto no carga: un recuadro "Sin foto" hecho con CSS
+//     (.foto-por-defecto). Antes era una imagen de placehold.co: dependía de
+//     otra página de internet y no cambiaba en modo oscuro.
+// ---------------------------------------------------------------------
+function crearFotoPorDefecto(tituloDelProducto) {
+  const fotoPorDefecto = document.createElement('div');
+  fotoPorDefecto.className = 'foto-por-defecto';
+  // role="img" + aria-label: los lectores de pantalla lo anuncian como una
+  // imagen, igual que el alt de un <img>. (setAttribute no interpreta HTML:
+  // aunque el título traiga "<script>", es solo texto.)
+  fotoPorDefecto.setAttribute('role', 'img');
+  fotoPorDefecto.setAttribute('aria-label', `${tituloDelProducto}: sin foto`);
+
+  const textoSinFoto = document.createElement('span');
+  textoSinFoto.textContent = 'Sin foto';
+  fotoPorDefecto.append(textoSinFoto);
+  return fotoPorDefecto;
+}
+
+function crearFotoDelProducto(urlDeLaFoto, tituloDelProducto) {
+  // CASO LÍMITE: la subasta se publicó sin foto
+  if (!urlDeLaFoto) {
+    return crearFotoPorDefecto(tituloDelProducto);
+  }
+
+  const foto = document.createElement('img');
+  foto.src = urlDeLaFoto;
+  foto.alt = `Foto de ${tituloDelProducto}`;
+  foto.loading = 'lazy'; // la foto se descarga hasta que está cerca de verse
+
+  // CASO LÍMITE: la dirección de la foto está rota (la borraron, no es una
+  // imagen, no hay internet...) → se cambia por el recuadro "Sin foto".
+  // replaceWith pone el recuadro exactamente donde estaba la foto.
+  foto.onerror = () => {
+    foto.replaceWith(crearFotoPorDefecto(tituloDelProducto));
+  };
+  return foto;
+}
 
 // Cupo máximo de participantes por subasta (también lo garantiza la base de datos)
 const LUGARES_POR_SUBASTA = 5;

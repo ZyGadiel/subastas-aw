@@ -52,14 +52,8 @@ function crearTarjetaDeMiSubasta(datosDeLaTarjeta) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'tarjeta-de-subasta';
 
-  const fotoDelProducto = document.createElement('img');
-  fotoDelProducto.src = subasta.url_de_la_foto || FOTO_POR_DEFECTO;
-  fotoDelProducto.alt = `Foto de ${subasta.titulo}`;
-  fotoDelProducto.loading = 'lazy';
-  fotoDelProducto.onerror = () => {
-    fotoDelProducto.onerror = null;
-    fotoDelProducto.src = FOTO_POR_DEFECTO;
-  };
+  // Foto, o el recuadro "Sin foto" si no tiene o no carga (js/utilidades.js)
+  const fotoDelProducto = crearFotoDelProducto(subasta.url_de_la_foto, subasta.titulo);
 
   const etiquetaDeEstado = document.createElement('span');
   etiquetaDeEstado.className = `etiqueta-de-estado etiqueta-${tipoDeEtiqueta === 'neutra' ? 'neutra' : 'de-' + tipoDeEtiqueta}`;

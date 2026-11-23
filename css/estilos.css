@@ -661,6 +661,35 @@ button:disabled {
   object-fit: cover; /* recorta la foto sin deformarla */
 }
 
+/* RECUADRO "SIN FOTO" (Sección 18): lo crea crearFotoDelProducto
+   (js/utilidades.js) cuando la subasta no tiene foto o la foto no carga.
+   Mide lo mismo que una foto (3:2) para que las tarjetas no cambien de alto.
+   Colores suaves: el gris de fondo de la página y el gris del texto secundario. */
+.foto-por-defecto {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-del-texto-secundario);
+  background-color: var(--color-de-fondo);
+}
+
+/* El ícono de foto. Igual que la lupa: el dibujo es solo un molde (mask);
+   el color sale de la variable, así cambia solo en modo oscuro. */
+.foto-por-defecto::before {
+  content: "";
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: var(--color-del-texto-secundario);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2.5'/%3E%3Ccircle cx='9' cy='9.5' r='1.75'/%3E%3Cpath d='m3.5 17 5-5 4 4 2.5-2.5L20.5 19'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2.5'/%3E%3Ccircle cx='9' cy='9.5' r='1.75'/%3E%3Cpath d='m3.5 17 5-5 4 4 2.5-2.5L20.5 19'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 /* Títulos y renglones de las tarjetas de MIS SUBASTAS.
    ">" = solo los hijos DIRECTOS de la tarjeta. (Sección 16: las del catálogo
    tienen sus datos dentro de .cuerpo-de-la-tarjeta, con su propio estilo.) */
@@ -893,7 +922,8 @@ button:disabled {
   white-space: pre-line;
 }
 
-#detalle-del-producto img {
+#detalle-del-producto img,
+#detalle-del-producto .foto-por-defecto {
   border-radius: var(--radio-de-las-esquinas-pequenas);
   margin-bottom: 1rem;
 }

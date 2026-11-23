@@ -4,6 +4,17 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — "Sin foto" hecho con CSS, no con una imagen de internet
+
+**Decisión:** cuando una subasta no tiene foto o la foto no carga, se muestra un recuadro hecho con CSS (`.foto-por-defecto`) en lugar de la imagen de `placehold.co`.
+
+**Por qué:**
+- La imagen venía de otra página de internet: si esa página fallaba o tardaba, la tarjeta quedaba en blanco (pasó en las pruebas).
+- No cambiaba en modo oscuro: era un recuadro gris claro en medio de la página oscura.
+- El mismo código estaba repetido en 3 archivos; ahora es una sola función (`crearFotoDelProducto` en `js/utilidades.js`).
+
+---
+
 ## 22 nov 2026 — Diseño minimalista con los mismos colores
 
 **Decisión:** el catálogo se simplifica sin cambiar la paleta: menos etiquetas, menos cajas y un solo color de acento (el morado). Se empezó por las tarjetas y la búsqueda.
