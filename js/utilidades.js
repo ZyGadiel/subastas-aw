@@ -50,12 +50,23 @@ function calcularComision(precioFinal) {
   return Math.round(Number(precioFinal) * PORCENTAJE_DE_COMISION) / 100;
 }
 
+// El último minuto de una subasta (para pintar el tiempo de rojo)
+const MILISEGUNDOS_DEL_ULTIMO_MINUTO = 60 * 1000;
+
 // Actualiza el tiempo restante de todas las tarjetas. Se ejecuta cada segundo.
 // Busca todos los elementos que tienen el atributo data-fecha-de-finalizacion.
 // (Lo usan el catálogo y Mis subastas.)
 function actualizarTiemposRestantes() {
   document.querySelectorAll('[data-fecha-de-finalizacion]').forEach((tiempoRestante) => {
-    tiempoRestante.textContent = formatearTiempoRestante(tiempoRestante.dataset.fechaDeFinalizacion);
+    const fechaDeFinalizacion = tiempoRestante.dataset.fechaDeFinalizacion;
+    tiempoRestante.textContent = formatearTiempoRestante(fechaDeFinalizacion);
+
+    // Sección 16: en el ÚLTIMO MINUTO el tiempo se pinta de rojo (clase
+    // tiempo-por-acabar). Es el único color de alerta de la tarjeta, así
+    // que llama la atención justo cuando importa y no cansa la vista el resto del tiempo.
+    const milisegundosRestantes = new Date(fechaDeFinalizacion) - new Date();
+    const quedaMenosDeUnMinuto = milisegundosRestantes > 0 && milisegundosRestantes <= MILISEGUNDOS_DEL_ULTIMO_MINUTO;
+    tiempoRestante.classList.toggle('tiempo-por-acabar', quedaMenosDeUnMinuto);
   });
 }
 

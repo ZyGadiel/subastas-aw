@@ -346,3 +346,27 @@ Se probó en el navegador: la portada en computadora y celular, en claro y oscur
 **Qué acepté:** los cambios sugeridos
 
 **Qué rechacé o cambié:** modificar y mejorar el diseno de la pagina.
+
+---
+
+## 22 nov 2026 — Sección 16: Diseño minimalista (tarjetas y búsqueda)
+
+**Qué le pedí:** que la página fuera bonita y minimalista, con los mismos colores y solo colores que no cansen la vista. Empezamos por las tarjetas del catálogo y la búsqueda.
+
+**Qué me propuso:**
+**Tarjetas** (`js/catalogo.js` y `css/estilos.css`): sin etiquetas repetidas ("Precio actual:", "Categoría:"…). Cada dato se entiende por su lugar y su tamaño: la categoría pequeña en mayúsculas, el título, el precio grande y una línea con el tiempo y los lugares ("3 de 5 lugares" o "Llena (puedes verla)"). Se quitó el botón "Ver subasta": **toda la tarjeta se puede clicar**. El enlace está en el título y un `::after` lo estira para cubrir la tarjeta, así sigue siendo un solo enlace con un nombre claro para los lectores de pantalla. Al pasar el mouse sube un poco; con el teclado se marca toda la tarjeta.
+**Tiempo en rojo solo en el último minuto:** `actualizarTiemposRestantes` (`js/utilidades.js`) pone la clase `tiempo-por-acabar`. Es el único color de alerta de la tarjeta, así llama la atención solo cuando importa. También funciona en Mis subastas.
+**Búsqueda** (`index.html`): una sola barra redonda con lupa, campo y botón, sin caja alrededor. Las etiquetas siguen para los lectores de pantalla, pero ocultas a la vista (`solo-para-lectores-de-pantalla`). Las categorías son "pastillas": botones de opción con el mismo `name="categoria"` que tenía el select, así la dirección no cambió (`?categoria=hogar`). Al elegir una se busca en ese momento y se conserva el texto escrito. La lupa es un `mask` de CSS: el dibujo solo da la forma y el color sale de una variable.
+**Colores:** no se agregó ninguno nuevo. El morado solo en el botón y la pastilla elegida; lo demás en grises.
+**Mis subastas no cambió:** su botón usaba la regla `.tarjeta-de-subasta a`; ahora tiene su propia clase (`enlace-ver-subasta`), y las reglas de sus párrafos usan `>` (hijos directos) para no afectar a las tarjetas nuevas.
+Se probó en el navegador: computadora y celular, modo claro y oscuro; clic en el precio abre la subasta; la pastilla "Hogar" busca y conserva "lampara"; `?categoria=juguetes` marca "Todas"; el tiempo se pone rojo solo con menos de un minuto; las tarjetas de Mis subastas se ven igual que antes.
+
+**Errores de la IA que se corrigieron:**
+- La primera versión del CSS usaba `!important` para ganarle a las reglas viejas de los párrafos. Se cambió por el selector `>` en las reglas viejas, que es más limpio.
+- El efecto de "subir al pasar el mouse" también salía en las tarjetas de Mis subastas, que no se pueden clicar completas. Se limitó a la clase `tarjeta-clicable`.
+- En celular, el texto de ejemplo del buscador se cortaba; se acortó a "Busca un producto".
+- Caso límite encontrado al probar: si el navegador tiene guardada una copia vieja de `index.html` (sin portada) y el JavaScript nuevo, salía un error en la consola. GitHub Pages deja guardar los archivos hasta 10 minutos, así que le puede pasar a un visitante justo después de publicar. `mostrarPortadaSegunElUsuario` ahora revisa que la portada exista.
+
+**Qué acepté:** los cambios sugeridos
+
+**Qué rechacé o cambié:** nada de momento

@@ -85,6 +85,7 @@ function crearTarjetaDeMiSubasta(datosDeLaTarjeta) {
   }
 
   const enlaceAlDetalle = document.createElement('a');
+  enlaceAlDetalle.className = 'enlace-ver-subasta'; // botón "Ver subasta" (css: .enlace-ver-subasta)
   enlaceAlDetalle.href = `subasta.html?id=${subasta.id}`;
   enlaceAlDetalle.textContent = 'Ver subasta';
 

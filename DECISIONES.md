@@ -4,6 +4,21 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — Diseño minimalista con los mismos colores
+
+**Decisión:** el catálogo se simplifica sin cambiar la paleta: menos etiquetas, menos cajas y un solo color de acento (el morado). Se empezó por las tarjetas y la búsqueda.
+
+**Por qué:**
+- Las tarjetas repetían "Categoría:", "Precio actual:", "Tiempo restante:" y "Lugares ocupados:" en cada una. Quitándolas, lo importante (foto, precio y tiempo) resalta por su tamaño y su lugar.
+- Tres botones morados iguales ("Ver subasta") competían por la atención. Hacer clicable toda la tarjeta es lo que la gente espera en una tienda en línea.
+- En celular, la búsqueda ocupaba toda la primera pantalla; ahora es una barra y una fila de pastillas.
+
+**Colores que no cansan la vista:** ningún color nuevo. Los grises para casi todo; el morado solo en botones y en la pastilla elegida (áreas pequeñas); el rojo solo cuando falta menos de un minuto, para que signifique "urgente" y no sea parte del paisaje.
+
+**Cuidado:** las pastillas son botones de opción con el mismo `name` que el select de antes, así que la dirección de la búsqueda (`?categoria=...`) y la Sección 9 no cambiaron.
+
+---
+
 ## 22 nov 2026 — Sin pantalla obligatoria de inicio de sesión: portada y regreso
 
 **Decisión:** cualquiera puede ver el catálogo y las subastas sin cuenta. A los visitantes se les muestra una portada que explica cómo funciona en 3 pasos, y la cuenta se pide solo cuando quieren participar. Después de iniciar sesión o registrarse, regresan a la página donde estaban (`?volver=`).

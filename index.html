@@ -94,20 +94,28 @@
              Después js/catalogo.js lee esa dirección y filtra. Ventajas: el botón
              "Atrás" regresa a la búsqueda anterior y el enlace se puede compartir. -->
         <form id="formulario-de-busqueda" role="search" action="index.html" method="get">
-          <label for="texto-a-buscar">Buscar producto</label>
-          <input type="search" id="texto-a-buscar" name="texto_a_buscar" maxlength="80" placeholder="Ej. bicicleta, celular...">
+          <!-- Sección 16 (diseño minimalista): una sola barra con la lupa, el campo
+               y el botón. La etiqueta sigue existiendo para los lectores de
+               pantalla, pero no se ve (clase solo-para-lectores-de-pantalla). -->
+          <div class="barra-de-busqueda">
+            <label for="texto-a-buscar" class="solo-para-lectores-de-pantalla">Buscar producto</label>
+            <input type="search" id="texto-a-buscar" name="texto_a_buscar" maxlength="80" placeholder="Busca un producto">
+            <button type="submit">Buscar</button>
+          </div>
 
-          <label for="filtro-de-categoria">Categoría</label>
-          <select id="filtro-de-categoria" name="categoria">
-            <option value="">Todas</option>
-            <option value="electronica">Electrónica</option>
-            <option value="hogar">Hogar</option>
-            <option value="ropa">Ropa</option>
-            <option value="deportes">Deportes</option>
-            <option value="otros">Otros</option>
-          </select>
-
-          <button type="submit">Buscar</button>
+          <!-- Categorías como "pastillas": son botones de opción (radio) con el
+               mismo name="categoria" que tenía el select, así la dirección sigue
+               siendo index.html?categoria=hogar. js/catalogo.js busca en cuanto
+               eliges una (sin JavaScript, funciona con el botón "Buscar"). -->
+          <fieldset class="pastillas-de-categoria">
+            <legend class="solo-para-lectores-de-pantalla">Categoría</legend>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="" checked><span>Todas</span></label>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="electronica"><span>Electrónica</span></label>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="hogar"><span>Hogar</span></label>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="ropa"><span>Ropa</span></label>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="deportes"><span>Deportes</span></label>
+            <label class="pastilla-de-categoria"><input type="radio" name="categoria" value="otros"><span>Otros</span></label>
+          </fieldset>
         </form>
 
         <!-- Qué se está buscando: "3 resultados para «bici» en Deportes · Quitar filtros" -->

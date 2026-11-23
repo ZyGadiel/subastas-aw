@@ -11,7 +11,11 @@
 const contenedorDeSubastas = document.getElementById('lista-de-subastas');
 const mensajeDelCatalogo = document.getElementById('mensaje-del-catalogo');
 const campoDelTextoABuscar = document.getElementById('texto-a-buscar');
-const selectorDeCategoria = document.getElementById('filtro-de-categoria');
+const formularioDeBusqueda = document.getElementById('formulario-de-busqueda');
+// Las pastillas de categoría son botones de opción con name="categoria".
+// formulario.elements.categoria los agrupa: leer o escribir su .value
+// marca la pastilla que tiene ese valor.
+const pastillasDeCategoria = formularioDeBusqueda.elements.categoria;
 const resumenDeLaBusqueda = document.getElementById('resumen-de-la-busqueda');
 const textoDelResumenDeLaBusqueda = document.getElementById('texto-del-resumen-de-la-busqueda');
 
@@ -48,8 +52,17 @@ function leerFiltrosDeLaDireccion() {
 // Vuelve a escribir la búsqueda en el formulario, para que el usuario vea qué buscó
 function mostrarFiltrosEnElFormulario(filtros) {
   campoDelTextoABuscar.value = filtros.textoABuscar;
-  selectorDeCategoria.value = filtros.categoria;
+  pastillasDeCategoria.value = filtros.categoria; // '' = la pastilla "Todas"
 }
+
+// Al elegir una pastilla se busca en ese momento (sin tener que dar "Buscar").
+// requestSubmit envía el formulario igual que el botón: la dirección
+// cambia a index.html?texto_a_buscar=...&categoria=hogar
+formularioDeBusqueda.addEventListener('change', (eventoDeCambio) => {
+  if (eventoDeCambio.target.name === 'categoria') {
+    formularioDeBusqueda.requestSubmit();
+  }
+});
 
 // En la búsqueda, % significa "cualquier texto" y _ "cualquier letra".
 // CASO LÍMITE: si alguien busca "100%" o "mi_bici", esos signos deben contar
@@ -168,7 +181,7 @@ function mostrarResumenDeLaBusqueda(filtros, cantidadDeResultados) {
 // ---------------------------------------------------------------------
 function crearTarjetaDeSubasta(subasta) {
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'tarjeta-de-subasta';
+  tarjeta.className = 'tarjeta-de-subasta tarjeta-clicable'; // toda la tarjeta lleva al detalle
 
   // Foto del producto
   const fotoDelProducto = document.createElement('img');
@@ -181,49 +194,57 @@ function crearTarjetaDeSubasta(subasta) {
     fotoDelProducto.src = FOTO_POR_DEFECTO;
   };
 
-  // Título
-  const tituloDelProducto = document.createElement('h2');
-  tituloDelProducto.textContent = subasta.titulo;
+  // Sección 16 (diseño minimalista): sin etiquetas repetidas ("Precio actual:",
+  // "Categoría:"...). Cada dato se entiende por su lugar y su tamaño:
+  //   ELECTRÓNICA                 ← categoría pequeña
+  //   Audífonos inalámbricos      ← título (es el enlace)
+  //   $850.00                     ← precio grande
+  //   🕐 00:12:30 · 3 de 5 lugares
+  const cuerpoDeLaTarjeta = document.createElement('div');
+  cuerpoDeLaTarjeta.className = 'cuerpo-de-la-tarjeta';
 
   // Categoría
-  const nombreDeLaCategoria = NOMBRES_DE_LAS_CATEGORIAS[subasta.categoria] ?? subasta.categoria;
-  const parrafoDeCategoria = document.createElement('p');
-  parrafoDeCategoria.textContent = `Categoría: ${nombreDeLaCategoria}`;
+  const categoriaDeLaTarjeta = document.createElement('p');
+  categoriaDeLaTarjeta.className = 'categoria-de-la-tarjeta';
+  categoriaDeLaTarjeta.textContent = NOMBRES_DE_LAS_CATEGORIAS[subasta.categoria] ?? subasta.categoria;
 
-  // Precio actual
-  const precioActualResaltado = document.createElement('strong');
-  precioActualResaltado.textContent = formatearDinero(subasta.precio_actual);
-  const parrafoDePrecio = document.createElement('p');
-  parrafoDePrecio.append('Precio actual: ', precioActualResaltado);
+  // Título con el enlace al detalle (el id viaja en la dirección: subasta.html?id=7).
+  // TODA la tarjeta se puede clicar: el CSS estira este enlace para que la
+  // cubra (.tarjeta-de-subasta h2 a::after), pero sigue siendo UN solo enlace
+  // cuyo nombre es el título.
+  const enlaceAlDetalle = document.createElement('a');
+  enlaceAlDetalle.href = `subasta.html?id=${subasta.id}`;
+  enlaceAlDetalle.textContent = subasta.titulo;
+  const tituloDelProducto = document.createElement('h2');
+  tituloDelProducto.append(enlaceAlDetalle);
+
+  // Precio actual, grande
+  const precioDeLaTarjeta = document.createElement('p');
+  precioDeLaTarjeta.className = 'precio-de-la-tarjeta';
+  precioDeLaTarjeta.textContent = formatearDinero(subasta.precio_actual);
 
   // Tiempo restante: guardamos la fecha de fin en un atributo data-
   // para que actualizarTiemposRestantes() la encuentre cada segundo
+  // (y la pinte de rojo en el último minuto: ver js/utilidades.js)
   const tiempoRestante = document.createElement('span');
+  tiempoRestante.className = 'tiempo-de-la-tarjeta';
   tiempoRestante.dataset.fechaDeFinalizacion = subasta.fecha_de_finalizacion;
   tiempoRestante.textContent = formatearTiempoRestante(subasta.fecha_de_finalizacion);
-  const parrafoDeTiempo = document.createElement('p');
-  parrafoDeTiempo.append('Tiempo restante: ', tiempoRestante);
 
   // Lugares ocupados. Supabase regresa el conteo así: participantes: [{ count: 3 }]
   const lugaresOcupados = subasta.participantes[0]?.count ?? 0;
-  const parrafoDeLugares = document.createElement('p');
-  parrafoDeLugares.textContent = `Lugares ocupados: ${lugaresOcupados} / ${LUGARES_POR_SUBASTA}`;
-
-  // Enlace al detalle. El id viaja en la dirección: subasta.html?id=7
   const subastaLlena = lugaresOcupados >= LUGARES_POR_SUBASTA;
-  const enlaceAlDetalle = document.createElement('a');
-  enlaceAlDetalle.href = `subasta.html?id=${subasta.id}`;
-  enlaceAlDetalle.textContent = subastaLlena ? 'Ver subasta (llena)' : 'Ver subasta';
+  const lugaresDeLaTarjeta = document.createElement('span');
+  lugaresDeLaTarjeta.textContent = subastaLlena
+    ? 'Llena (puedes verla)'
+    : `${lugaresOcupados} de ${LUGARES_POR_SUBASTA} lugares`;
 
-  tarjeta.append(
-    fotoDelProducto,
-    tituloDelProducto,
-    parrafoDeCategoria,
-    parrafoDePrecio,
-    parrafoDeTiempo,
-    parrafoDeLugares,
-    enlaceAlDetalle
-  );
+  const datosDeLaTarjeta = document.createElement('p');
+  datosDeLaTarjeta.className = 'datos-de-la-tarjeta';
+  datosDeLaTarjeta.append(tiempoRestante, lugaresDeLaTarjeta);
+
+  cuerpoDeLaTarjeta.append(categoriaDeLaTarjeta, tituloDelProducto, precioDeLaTarjeta, datosDeLaTarjeta);
+  tarjeta.append(fotoDelProducto, cuerpoDeLaTarjeta);
   return tarjeta;
 }
 
@@ -331,6 +352,13 @@ function crearRenglonDeSubastaTerminada(subasta) {
 const portadaDeBienvenida = document.getElementById('portada-de-bienvenida');
 
 function mostrarPortadaSegunElUsuario(perfil) {
+  // CASO LÍMITE: justo después de publicar un cambio, el navegador puede tener
+  // guardada una copia VIEJA de index.html (sin portada) y este JavaScript
+  // nuevo. GitHub Pages deja guardar los archivos hasta 10 minutos. Sin esta
+  // revisión saldría un error en la consola; así, simplemente no se muestra.
+  if (!portadaDeBienvenida) {
+    return;
+  }
   portadaDeBienvenida.hidden = perfil !== null;
 }
 

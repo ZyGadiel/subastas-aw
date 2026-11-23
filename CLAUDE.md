@@ -7,7 +7,7 @@ Claude Code lee este archivo solo al abrir el proyecto. Aquí está lo que la IA
 - **Subastas AW**: proyecto final de Aplicaciones Web (UABC FIAD 2026-2, prof. Carlos Laurence Escobar Erunez). AW = Aplicaciones Web.
 - Página publicada: https://zygadiel.github.io/subastas-aw/ (GitHub Pages, rama `main`). Repositorio: https://github.com/ZyGadiel/subastas-aw
 - HTML, CSS y JavaScript sin frameworks + Supabase (PostgreSQL, Auth, Realtime, pg_cron). Todo está explicado en `README.md` (mapa del sistema, archivos SQL en orden, estructura del código y tabla de casos límite).
-- Por qué se hizo cada cosa: `DECISIONES.md` (lo más nuevo arriba). Qué le pedí a la IA: `BITACORA_IA.md` (en orden, Sección 0 a 15).
+- Por qué se hizo cada cosa: `DECISIONES.md` (lo más nuevo arriba). Qué le pedí a la IA: `BITACORA_IA.md` (en orden, Sección 0 a 16).
 - Entregado en Classroom el 21 nov 2026.
 
 ## La presentación (miércoles 25 nov, soy el #19)
