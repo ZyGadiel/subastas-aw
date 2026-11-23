@@ -5,6 +5,7 @@
 //  3. Crea una tarjeta por cada una.
 //  4. Cada segundo actualiza el tiempo restante de todas las tarjetas.
 //  5. Muestra la mini lista de las últimas subastas terminadas (Sección 14).
+//  6. Muestra la portada de bienvenida solo a los visitantes (Sección 15).
 // =====================================================================
 
 const contenedorDeSubastas = document.getElementById('lista-de-subastas');
@@ -322,8 +323,21 @@ function crearRenglonDeSubastaTerminada(subasta) {
 }
 
 
+// ---------------------------------------------------------------------
+// 6. PORTADA DE BIENVENIDA (Sección 15): la ve solo quien NO ha iniciado
+//    sesión. Quien ya tiene cuenta ya sabe cómo funciona: para él estorbaría.
+//    perfil = null → visitante.
+// ---------------------------------------------------------------------
+const portadaDeBienvenida = document.getElementById('portada-de-bienvenida');
+
+function mostrarPortadaSegunElUsuario(perfil) {
+  portadaDeBienvenida.hidden = perfil !== null;
+}
+
+
 // Al abrir la página: leer los filtros, cargar las subastas y arrancar el reloj
 // (actualizarTiemposRestantes está en js/utilidades.js)
+promesaDelPerfilDelUsuarioActual.then(mostrarPortadaSegunElUsuario);
 const filtrosDeLaBusqueda = leerFiltrosDeLaDireccion();
 mostrarFiltrosEnElFormulario(filtrosDeLaBusqueda);
 cargarSubastasActivas(filtrosDeLaBusqueda);

@@ -96,6 +96,13 @@
             <h2>Participar</h2>
             <p id="estado-de-tu-participacion"></p>
 
+            <!-- Sección 15: para VISITANTES sin sesión. js/subasta.js les pone
+                 ?volver= para que, al entrar, regresen a ESTA subasta. -->
+            <div id="opciones-para-visitantes" class="botones-para-visitantes" hidden>
+              <a id="enlace-para-iniciar-sesion" class="enlace-con-aspecto-de-boton" href="iniciar-sesion.html">Iniciar sesión</a>
+              <a id="enlace-para-crear-cuenta" class="enlace-con-aspecto-de-boton enlace-secundario" href="registro.html">Crear cuenta</a>
+            </div>
+
             <button type="button" id="boton-entrar-a-la-subasta" hidden>Entrar a la subasta</button>
 
             <form id="formulario-de-puja" hidden>

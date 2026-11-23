@@ -30,6 +30,9 @@ const textoDeLosLugaresOcupados = document.getElementById('lugares-ocupados');
 
 const estadoDeTuParticipacion = document.getElementById('estado-de-tu-participacion');
 const botonEntrarALaSubasta = document.getElementById('boton-entrar-a-la-subasta');
+const opcionesParaVisitantes = document.getElementById('opciones-para-visitantes');
+const enlaceParaIniciarSesion = document.getElementById('enlace-para-iniciar-sesion');
+const enlaceParaCrearCuenta = document.getElementById('enlace-para-crear-cuenta');
 const formularioDePuja = document.getElementById('formulario-de-puja');
 const campoDelMontoDeLaPuja = document.getElementById('monto-de-la-puja');
 const textoDelMontoMinimo = document.getElementById('monto-minimo');
@@ -237,6 +240,7 @@ function mostrarEstadoDeLaSubasta() {
 function mostrarOpcionesDeParticipacion() {
   botonEntrarALaSubasta.hidden = true;
   formularioDePuja.hidden = true;
+  opcionesParaVisitantes.hidden = true;
 
   if (subastaTerminada()) {
     // CASO LÍMITE: el tiempo ya pasó pero la base de datos aún no la cierra
@@ -247,7 +251,13 @@ function mostrarOpcionesDeParticipacion() {
     return;
   }
   if (!perfilDelUsuario) {
-    mostrarMensaje(estadoDeTuParticipacion, 'Inicia sesión con una cuenta de comprador para participar.', 'aviso');
+    // Sección 15: en lugar de solo un aviso, dos botones que llevan a iniciar
+    // sesión o crear cuenta y, al terminar, REGRESAN a esta misma subasta.
+    mostrarMensaje(estadoDeTuParticipacion, 'Para participar necesitas una cuenta de comprador.', 'aviso');
+    const estaSubasta = obtenerPaginaActual(); // "subasta.html?id=11"
+    enlaceParaIniciarSesion.href = crearDireccionConRegreso('iniciar-sesion.html', estaSubasta);
+    enlaceParaCrearCuenta.href = crearDireccionConRegreso('registro.html', estaSubasta);
+    opcionesParaVisitantes.hidden = false;
     return;
   }
   if (perfilDelUsuario.id === subastaActual.id_del_vendedor) {

@@ -100,6 +100,7 @@ sequenceDiagram
 | Borrar un usuario que ya pujó | La base de datos no lo permite; por eso se suspende | Llaves foráneas |
 | Sin internet o se cae la conexión en vivo | Mensaje de error; al volver, se recarga la subasta | `traducirErrorDeLaBaseDeDatos` y Realtime |
 | Foto rota | Se pone una imagen por defecto | `onerror` |
+| Enlace con `?volver=https://pagina-falsa.com` | Al iniciar sesión se ignora y va al catálogo; solo regresa a páginas de este sitio | `esPaginaPropiaParaVolver` |
 
 ## Tecnologías
 
@@ -137,7 +138,7 @@ El esquema completo (tablas, reglas y permisos) está en [`supabase/schema.sql`]
 |---|---|
 | `js/tema.js` | Modo claro u oscuro: botón 🌙 / ☀️ y la elección guardada (se carga en el `<head>` de todas las páginas) |
 | `js/conexion-a-supabase.js` | Crea la conexión `baseDeDatos` (se carga en todas las páginas) |
-| `js/utilidades.js` | Formato de dinero y tiempo, mensajes para el usuario, traducción de errores y botón para ver la contraseña |
+| `js/utilidades.js` | Formato de dinero y tiempo, mensajes para el usuario, traducción de errores, botón para ver la contraseña y regreso a la misma página al iniciar sesión (`?volver=`) |
 | `js/sesion.js` | Sabe quién inició sesión, ajusta el menú y cierra sesión |
 | `js/catalogo.js` | Lista de subastas activas, búsqueda, filtro por categoría y mini lista de las últimas subastas terminadas (`index.html`) |
 | `js/registro.js` | Crear cuenta (`registro.html`) |

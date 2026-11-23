@@ -6,6 +6,13 @@ const formularioDeInicioDeSesion = document.getElementById('formulario-de-inicio
 const mensajeDeInicioDeSesion = document.getElementById('mensaje-de-inicio-de-sesion');
 const botonEntrar = formularioDeInicioDeSesion.querySelector('button[type="submit"]');
 
+// Sección 15: a dónde regresar al entrar (viene en ?volver=; si no, el catálogo).
+// La función revisa que sea una página de este sitio (js/utilidades.js).
+const paginaParaVolver = obtenerPaginaParaVolver();
+const textoDelRegreso = paginaParaVolver === PAGINA_PARA_VOLVER_POR_DEFECTO
+  ? 'Te llevamos al catálogo...'
+  : 'Te regresamos a donde estabas...';
+
 
 async function iniciarSesion(eventoDeEnvio) {
   eventoDeEnvio.preventDefault();
@@ -40,19 +47,23 @@ async function iniciarSesion(eventoDeEnvio) {
     return;
   }
 
-  mostrarMensaje(mensajeDeInicioDeSesion, '¡Listo! Te llevamos al catálogo...', 'exito');
+  mostrarMensaje(mensajeDeInicioDeSesion, `¡Listo! ${textoDelRegreso}`, 'exito');
   setTimeout(() => {
-    window.location.href = 'index.html';
+    window.location.href = paginaParaVolver;
   }, 800);
 }
 
 
-// Si alguien que YA inició sesión abre esta página, lo mandamos al catálogo
+// Si alguien que YA inició sesión abre esta página, lo mandamos a donde iba
 promesaDelPerfilDelUsuarioActual.then((perfil) => {
   if (perfil) {
-    window.location.href = 'index.html';
+    window.location.href = paginaParaVolver;
   }
 });
+
+// "¿No tienes cuenta? Regístrate" conserva el ?volver=
+document.getElementById('enlace-al-registro').href =
+  crearDireccionConRegreso('registro.html', paginaParaVolver);
 
 formularioDeInicioDeSesion.addEventListener('submit', iniciarSesion);
 

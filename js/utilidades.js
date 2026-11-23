@@ -115,6 +115,64 @@ function activarBotonVerContrasena(campoDeLaContrasena, botonVerContrasena) {
   });
 }
 
+// ---------------------------------------------------------------------
+// REGRESAR A LA MISMA PÁGINA DESPUÉS DE INICIAR SESIÓN (Sección 15)
+// Ejemplo: un visitante está viendo la subasta 11 y da clic en "Iniciar sesión".
+//   Va a:            iniciar-sesion.html?volver=subasta.html%3Fid%3D11
+//   Al entrar, va a: subasta.html?id=11   (y no al catálogo)
+// ---------------------------------------------------------------------
+const PAGINA_PARA_VOLVER_POR_DEFECTO = 'index.html';
+
+// CASO LÍMITE: alguien comparte un enlace con ?volver=https://pagina-falsa.com
+// para que, después de iniciar sesión, la persona termine en OTRA página que
+// imita a la nuestra (se llama "redirección abierta"). Solo aceptamos páginas
+// de ESTE sitio:   nombre-de-la-pagina.html   y, si acaso, sus datos ?id=11&...
+// El patrón no deja pasar "/" ni ":", así que "https://..." y "javascript:..." no pasan.
+const PATRON_DE_PAGINA_PROPIA = /^[a-z-]+\.html(\?[A-Za-z0-9_=&%.+-]*)?$/;
+
+function esPaginaPropiaParaVolver(pagina) {
+  // CASO LÍMITE: volver a iniciar sesión o al registro haría un círculo sin fin
+  return (
+    PATRON_DE_PAGINA_PROPIA.test(pagina) &&
+    !pagina.startsWith('iniciar-sesion.html') &&
+    !pagina.startsWith('registro.html')
+  );
+}
+
+// Lee el ?volver= de la dirección actual. Si no viene o no es válido → el catálogo.
+function obtenerPaginaParaVolver() {
+  const paginaPedida = new URLSearchParams(window.location.search).get('volver') ?? '';
+  return esPaginaPropiaParaVolver(paginaPedida) ? paginaPedida : PAGINA_PARA_VOLVER_POR_DEFECTO;
+}
+
+// La página donde está el usuario ahora, por ejemplo "subasta.html?id=11".
+// (En GitHub Pages la dirección es /subastas-aw/subasta.html: nos quedamos
+// con lo que va después de la última "/".)
+function obtenerPaginaActual() {
+  const nombreDeLaPagina = window.location.pathname.split('/').pop() || PAGINA_PARA_VOLVER_POR_DEFECTO;
+  return nombreDeLaPagina + window.location.search;
+}
+
+// ¿A dónde debe regresar quien da clic en "Iniciar sesión" desde ESTA página?
+// Normalmente aquí mismo. Pero si ya estamos en iniciar sesión o en el
+// registro, se pasa el ?volver= que ya traíamos (así no se pierde al
+// cambiar de una a la otra).
+function obtenerPaginaParaRegresarDespuesDeEntrar() {
+  const paginaActual = obtenerPaginaActual();
+  return esPaginaPropiaParaVolver(paginaActual) ? paginaActual : obtenerPaginaParaVolver();
+}
+
+// ('iniciar-sesion.html', 'subasta.html?id=11') → 'iniciar-sesion.html?volver=subasta.html%3Fid%3D11'
+// encodeURIComponent "escapa" el ? y el = de la página para que no se
+// confundan con los de la dirección de afuera.
+function crearDireccionConRegreso(paginaDeDestino, paginaParaVolver) {
+  if (paginaParaVolver === PAGINA_PARA_VOLVER_POR_DEFECTO) {
+    return paginaDeDestino; // regresar al catálogo ya es lo normal: no hace falta ?volver=
+  }
+  return `${paginaDeDestino}?volver=${encodeURIComponent(paginaParaVolver)}`;
+}
+
+
 // Muestra un mensaje en un elemento de la página.
 // tipoDeMensaje: 'error', 'exito' o 'aviso'
 // (los colores están en la sección 7 de css/estilos.css: .mensaje-de-error, etc.)

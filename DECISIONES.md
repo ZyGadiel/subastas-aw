@@ -4,6 +4,21 @@ Las decisiones importantes del proyecto y por qué las tomé.
 
 ---
 
+## 22 nov 2026 — Sin pantalla obligatoria de inicio de sesión: portada y regreso
+
+**Decisión:** cualquiera puede ver el catálogo y las subastas sin cuenta. A los visitantes se les muestra una portada que explica cómo funciona en 3 pasos, y la cuenta se pide solo cuando quieren participar. Después de iniciar sesión o registrarse, regresan a la página donde estaban (`?volver=`).
+
+**Por qué no una pantalla de inicio de sesión antes de todo:**
+- En una página de ventas la gente quiere ver qué hay antes de registrarse; si lo primero es "Inicia sesión", muchos se van. Las tiendas grandes dejan ver todo y piden cuenta al comprar.
+- El proyecto ya estaba pensado así: las políticas RLS dejan leer las subastas a `anon` y quien no tiene lugar puede ver la subasta.
+- La seguridad está en la base de datos (políticas y funciones). Ocultar el catálogo no protege nada más.
+
+**Por qué regresar a la misma página:** antes, quien iniciaba sesión desde una subasta terminaba en el catálogo y tenía que volver a buscarla.
+
+**Seguridad del `?volver=`:** solo se aceptan páginas de este sitio (`nombre.html?datos`). Así nadie puede compartir un enlace que, después de iniciar sesión, mande a una página falsa (redirección abierta).
+
+---
+
 ## 22 nov 2026 — Mini lista de las últimas subastas terminadas
 
 **Decisión:** el catálogo muestra a la izquierda las 5 subastas que terminaron más recientemente: si se vendieron y en cuánto, o si terminaron sin pujas. No dice quién ganó.

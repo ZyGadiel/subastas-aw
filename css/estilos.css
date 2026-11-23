@@ -34,7 +34,15 @@
   --color-del-boton-rojo-oscuro: #991b1b;
   --color-de-fondo-de-la-puja-mas-alta: #f0fdf4;  /* verde muy claro */
 
-  --radio-de-las-esquinas: 10px;             /* cajas y tarjetas */
+  /* Portada de bienvenida (Sección 15): degradado de morado azulado a violeta */
+  --color-de-la-portada-al-inicio: #4f46e5;
+  --color-de-la-portada-al-final: #7c3aed;
+  --color-del-texto-de-la-portada: #ffffff;
+  --color-de-las-cajas-de-la-portada: rgba(255, 255, 255, 0.14);  /* blanco transparente */
+  --color-del-boton-claro-de-la-portada: #ffffff;
+  --color-del-texto-del-boton-claro-de-la-portada: #3730a3;
+
+  --radio-de-las-esquinas: 10px;            /* cajas y tarjetas */
   --radio-de-las-esquinas-pequenas: 6px;     /* botones y campos */
   --sombra-de-las-cajas: 0 1px 3px rgba(0, 0, 0, 0.08);
   --ancho-maximo-del-contenido: 1100px;
@@ -68,6 +76,14 @@
   --color-del-boton-rojo-oscuro: #dc2626;
   --color-de-fondo-de-la-puja-mas-alta: #14532d;
   --sombra-de-las-cajas: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+  /* Portada: el mismo degradado, más oscuro para no deslumbrar de noche */
+  --color-de-la-portada-al-inicio: #3730a3;
+  --color-de-la-portada-al-final: #5b21b6;
+  --color-del-texto-de-la-portada: #ffffff;
+  --color-de-las-cajas-de-la-portada: rgba(255, 255, 255, 0.10);
+  --color-del-boton-claro-de-la-portada: #ffffff;
+  --color-del-texto-del-boton-claro-de-la-portada: #3730a3;
 }
 
 
@@ -311,6 +327,120 @@ button:disabled {
 /* ---------------------------------------------------------------------
    5. CATÁLOGO (index.html)
    --------------------------------------------------------------------- */
+
+/* PORTADA DE BIENVENIDA (Sección 15): solo la ven los visitantes */
+#portada-de-bienvenida {
+  margin-bottom: 2rem;
+  padding: 2rem 1.25rem;
+  border-radius: var(--radio-de-las-esquinas);
+  color: var(--color-del-texto-de-la-portada);
+  /* linear-gradient = degradado: de un color a otro en diagonal (135 grados) */
+  background-image: linear-gradient(135deg, var(--color-de-la-portada-al-inicio), var(--color-de-la-portada-al-final));
+  box-shadow: var(--sombra-de-las-cajas);
+}
+
+.etiqueta-de-la-portada {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background-color: var(--color-de-las-cajas-de-la-portada);
+}
+
+#titulo-de-la-portada {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.texto-de-la-portada {
+  margin: 0 0 1.5rem;
+  max-width: 34rem; /* renglones cortos: se leen más fácil */
+  font-size: 1.05rem;
+  opacity: 0.95;
+}
+
+.botones-de-la-portada {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+/* Enlaces que se ven como botones (llevan a otra página, por eso son <a>) */
+.boton-claro-de-la-portada,
+.boton-transparente-de-la-portada {
+  padding: 0.7rem 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+}
+
+/* El principal: blanco, para que resalte sobre el degradado */
+.boton-claro-de-la-portada {
+  color: var(--color-del-texto-del-boton-claro-de-la-portada);
+  background-color: var(--color-del-boton-claro-de-la-portada);
+}
+
+/* El secundario: solo con borde */
+.boton-transparente-de-la-portada {
+  color: var(--color-del-texto-de-la-portada);
+  border: 2px solid var(--color-del-texto-de-la-portada);
+}
+
+.boton-claro-de-la-portada:hover,
+.boton-transparente-de-la-portada:hover {
+  text-decoration: underline;
+}
+
+/* Los 3 pasos: en celular uno debajo de otro (en pantallas grandes, en fila: sección 8) */
+.pasos-de-la-portada {
+  list-style: none; /* quitamos el número automático: dibujamos el nuestro */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* En celular, cada paso es compacto: el número a la izquierda y el texto a
+   la derecha (grid de 2 columnas). Así la portada no empuja tanto las subastas. */
+.pasos-de-la-portada li {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+  background-color: var(--color-de-las-cajas-de-la-portada);
+}
+
+.pasos-de-la-portada li span:last-child {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* El número dentro de un círculo */
+.numero-del-paso {
+  grid-row: span 2; /* ocupa los 2 renglones: el del título y el de la explicación */
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 50%;
+  color: var(--color-del-texto-del-boton-claro-de-la-portada);
+  background-color: var(--color-del-boton-claro-de-la-portada);
+}
+
+/* Al bajar con "Ver subastas", el título no queda pegado al borde de la ventana */
+#titulo-del-catalogo {
+  scroll-margin-top: 1rem;
+}
 
 /* Barra de búsqueda: en celular cada campo ocupa toda la fila */
 #formulario-de-busqueda {
@@ -566,6 +696,38 @@ button:disabled {
   }
 }
 
+/* Sección 15: "Iniciar sesión" y "Crear cuenta" para visitantes en la caja Participar.
+   Son enlaces (<a>) porque llevan a otra página, pero se ven como botones. */
+.botones-para-visitantes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.enlace-con-aspecto-de-boton {
+  padding: 0.65rem 1.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+  color: var(--color-del-texto-de-los-botones);
+  background-color: var(--color-principal);
+}
+
+.enlace-con-aspecto-de-boton:hover {
+  background-color: var(--color-principal-oscuro);
+}
+
+/* El secundario: con borde y sin relleno, como el botón "Mostrar" de la contraseña */
+.enlace-con-aspecto-de-boton.enlace-secundario {
+  color: var(--color-de-los-enlaces);
+  background-color: var(--color-de-superficie);
+  border: 1px solid var(--color-de-los-bordes);
+}
+
+.enlace-con-aspecto-de-boton.enlace-secundario:hover {
+  background-color: var(--color-de-fondo);
+}
+
 /* El formulario de puja ya está dentro de una caja: le quitamos su propio marco */
 #formulario-de-puja {
   border: none;
@@ -786,6 +948,31 @@ th {
   /* En pantalla grande, la búsqueda va en una sola fila */
   #formulario-de-busqueda label {
     width: auto;
+  }
+
+  /* Portada: más aire y los 3 pasos en una fila */
+  #portada-de-bienvenida {
+    padding: 2.5rem 2rem;
+  }
+
+  #titulo-de-la-portada {
+    font-size: 2.5rem;
+  }
+
+  .pasos-de-la-portada {
+    flex-direction: row;
+  }
+
+  /* En fila hay menos ancho: el número va arriba y el texto abajo */
+  .pasos-de-la-portada li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* texto a la izquierda (el "center" de celular aquí lo centraría) */
+    padding: 0.9rem 1rem;
+  }
+
+  .numero-del-paso {
+    margin-bottom: 0.4rem;
   }
 
   /* Tablet: 2 tarjetas por fila. Al 100 % le restamos el espacio que hay entre ellas */

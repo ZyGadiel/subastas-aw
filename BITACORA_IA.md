@@ -324,3 +324,25 @@ Se probó en el navegador con los datos reales (5 subastas, vendidas y sin pujas
 **Qué acepté:** implementacion enlistada de subastas finalizadas
 
 **Qué rechacé o cambié:** 
+
+---
+
+## 22 nov 2026 — Sección 15: Portada de bienvenida y regreso a la misma página
+
+**Qué le pedí:** al pasarle la página a un amigo, no entendió qué hacer. Pregunté si convenía una pantalla obligatoria de inicio de sesión antes de todo, porque quiero que la página sea intuitiva y bonita.
+
+**Qué me propuso:**
+No poner una pantalla obligatoria: en una página de ventas la gente quiere ver antes de registrarse, el proyecto ya está diseñado para que los visitantes vean las subastas (RLS para `anon`) y la seguridad ya está en la base de datos. En su lugar:
+**Portada de bienvenida** en `index.html`, solo para visitantes sin sesión (`mostrarPortadaSegunElUsuario` en `js/catalogo.js`): un degradado con el título "Puja, gana y llévatelo", los botones "Crear cuenta gratis" y "Ver subastas", y los 3 pasos (crear cuenta → entrar a una subasta → pujar). Empieza oculta para que quien ya tiene sesión no la vea aparecer y desaparecer. Los colores son variables nuevas en los dos temas.
+**Regresar a la misma página al iniciar sesión:** funciones en `js/utilidades.js` (`obtenerPaginaParaVolver`, `crearDireccionConRegreso`…). Los enlaces del menú, el de "Regístrate / Inicia sesión" y los nuevos botones de la subasta llevan `?volver=`; `js/iniciar-sesion.js` y `js/registro.js` regresan ahí en lugar de al catálogo.
+**Botones para visitantes en la subasta:** en lugar del aviso "Inicia sesión…", dos botones "Iniciar sesión" y "Crear cuenta" que regresan a esa misma subasta.
+Caso límite (redirección abierta): un enlace con `?volver=https://pagina-falsa.com` podría mandar a la persona a otra página después de iniciar sesión. Solo se aceptan páginas de este sitio (`nombre.html?datos`); tampoco se acepta volver a iniciar sesión o al registro (sería un círculo).
+Se probó en el navegador: la portada en computadora y celular, en claro y oscuro, y oculta con sesión; 12 direcciones de `?volver=` (acepta las del sitio, rechaza `https://`, `//`, `javascript:`, `../` y el círculo); los botones de la subasta, y que el `?volver=` se conserve al pasar de iniciar sesión al registro. Sin errores en la consola. No se probó iniciar sesión de verdad (no uso tus contraseñas): eso lo pruebas tú.
+
+**Errores de la IA que se corrigieron:**
+- En celular, la primera versión de la portada era muy alta (los 3 pasos ocupaban casi toda la pantalla y empujaban las subastas). Se compactó: en celular, cada paso en un renglón con el número a la izquierda.
+- Al compactarla, en computadora el texto de los pasos quedó centrado; se regresó a la izquierda.
+
+**Qué acepté:** los cambios sugeridos
+
+**Qué rechacé o cambié:** modificar y mejorar el diseno de la pagina.

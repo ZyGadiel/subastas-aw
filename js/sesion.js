@@ -65,6 +65,14 @@ function actualizarMenuSegunElUsuario(perfil) {
     // pero el saludo le avisa por qué ya no puede publicar ni pujar.
     const avisoDeSuspension = perfil.suspendido ? ' (cuenta suspendida)' : '';
     document.getElementById('saludo-al-usuario').textContent = `Hola, ${perfil.nombre}${avisoDeSuspension}`;
+  } else {
+    // Sección 15: "Iniciar sesión" y "Registrarse" recuerdan en qué página
+    // estabas, para regresarte ahí al entrar (funciones en js/utilidades.js)
+    const paginaParaRegresar = obtenerPaginaParaRegresarDespuesDeEntrar();
+    document.querySelector('#opcion-iniciar-sesion a').href =
+      crearDireccionConRegreso('iniciar-sesion.html', paginaParaRegresar);
+    document.querySelector('#opcion-registrarse a').href =
+      crearDireccionConRegreso('registro.html', paginaParaRegresar);
   }
 }
 

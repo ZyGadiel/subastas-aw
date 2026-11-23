@@ -39,7 +39,45 @@
   </header>
 
   <main>
-    <h1>Subastas activas</h1>
+    <!-- PORTADA DE BIENVENIDA (Sección 15): solo para VISITANTES (sin sesión).
+         Explica en 3 pasos cómo funciona la página. Empieza oculta (hidden) y
+         js/catalogo.js la muestra si nadie ha iniciado sesión; así quien ya
+         tiene cuenta no la ve aparecer y desaparecer. -->
+    <section id="portada-de-bienvenida" aria-labelledby="titulo-de-la-portada" hidden>
+      <p class="etiqueta-de-la-portada">🔨 Subastas en vivo</p>
+      <h2 id="titulo-de-la-portada">Puja, gana y llévatelo</h2>
+      <p class="texto-de-la-portada">
+        Subastas cortas con solo 5 participantes. Cuando el tiempo llega a cero,
+        la oferta más alta se lleva el producto.
+      </p>
+
+      <div class="botones-de-la-portada">
+        <a href="registro.html" class="boton-claro-de-la-portada">Crear cuenta gratis</a>
+        <a href="#titulo-del-catalogo" class="boton-transparente-de-la-portada">Ver subastas</a>
+      </div>
+
+      <!-- ol = lista NUMERADA: el orden de los pasos importa -->
+      <ol class="pasos-de-la-portada">
+        <li>
+          <span class="numero-del-paso" aria-hidden="true">1</span>
+          <strong>Crea tu cuenta</strong>
+          <span>Elige si quieres comprar o vender.</span>
+        </li>
+        <li>
+          <span class="numero-del-paso" aria-hidden="true">2</span>
+          <strong>Entra a una subasta</strong>
+          <span>Solo hay 5 lugares, por orden de llegada.</span>
+        </li>
+        <li>
+          <span class="numero-del-paso" aria-hidden="true">3</span>
+          <strong>Puja antes de que acabe</strong>
+          <span>Supera la oferta más alta y espera a que el tiempo termine.</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- id: el botón "Ver subastas" de la portada baja hasta aquí -->
+    <h1 id="titulo-del-catalogo">Subastas activas</h1>
 
     <!-- Dos columnas en computadora (Sección 14): la mini lista de las últimas
          subastas terminadas a la IZQUIERDA y el catálogo a la derecha.
