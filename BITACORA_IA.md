@@ -323,7 +323,25 @@ Se probó en el navegador con los datos reales (5 subastas, vendidas y sin pujas
 
 **Qué acepté:** implementacion enlistada de subastas finalizadas
 
-**Qué rechacé o cambié:** 
+**Qué rechacé o cambié:** nada de momento
+
+---
+
+## 22 nov 2026 — Sección 14.1: "En vivo" en subastas terminadas
+
+**Qué le pedí (error que encontré al probar la Sección 14):** al entrar desde la mini lista a una subasta terminada, todas seguían diciendo "En vivo" con el punto latiendo.
+
+**Qué me propuso:**
+Causa: desde la Sección 7, `js/subasta.js` mostraba la etiqueta "En vivo" solo según la **conexión** en tiempo real (`SUBSCRIBED`), sin revisar si la subasta seguía activa. Además, la página se conectaba aunque la subasta ya hubiera terminado; la conexión funcionaba y por eso decía "En vivo".
+Corrección: una función `actualizarIndicadorEnVivo` que pide **dos** condiciones: conexión activa **y** subasta en curso. Se llama al conectarse, en cada carga de la subasta y en el segundo en que se acaba el tiempo con la página abierta.
+Si la subasta ya está `finalizada` al abrir la página, ya no se abre la conexión en tiempo real (nunca va a cambiar). Si solo se le acabó el tiempo pero sigue `activa`, sí se escucha, para recibir el aviso cuando el servidor la cierra y elige al ganador.
+Se probó en el navegador con la subasta terminada "Ferrari lego": no dice "En vivo" y no abre la conexión. Con datos cambiados solo en la memoria de la página: activa y conectada → "En vivo"; sin conexión, tiempo acabado o finalizada → oculto. Sin errores en la consola.
+
+*(Nota: esta entrada se perdió antes de su commit, al guardar este archivo desde el editor mientras la IA también lo cambiaba. Se restauró el 22 nov con el mismo texto. El código de la corrección sí se subió con la Sección 14.)*
+
+**Qué acepté:** los cambios sugeridos
+
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
@@ -408,5 +426,23 @@ Antes, cuando una subasta no tenía foto (o la foto no cargaba) se mostraba una 
 Se probó en el navegador: sin foto → recuadro; foto rota (dominio que no existe) → se cambió sola por el recuadro; foto buena → cargó; un título `<img src=x onerror=alert(1)>` se mostró como texto. Las 4 tarjetas miden lo mismo de alto. También en el detalle (la foto real de "Ferrari lego" y una simulada sin foto) y en Mis subastas, en modo claro y oscuro.
 
 **Qué acepté:** el cambio de imagen sin implementacion
+
+**Qué rechacé o cambié:** nada de momento
+
+---
+
+## 22 nov 2026 — Sección 19: Detalle de la subasta como tablero
+
+**Qué le pedí:** seguir el rediseño con el detalle de la subasta.
+
+**Qué me propuso:**
+**Estado de la subasta como tablero** (`subasta.html` y `css/estilos.css`): antes eran 5 renglones de texto ("Precio inicial: …", "Precio actual: …"). Ahora el precio actual va enorme arriba, con su nombre pequeño encima, y los otros 4 datos (tiempo, lugares, precio inicial e incremento) en cuadritos de 2 columnas con el gris suave de la página, como las estadísticas del administrador. Se usa una lista `<dl>` (nombre → valor). **Los `id` no cambiaron**, así que `js/subasta.js` los sigue llenando igual.
+**Precio en el color del texto, no en verde:** igual que en las tarjetas; el verde queda para las buenas noticias ("Vas ganando", "Vendida").
+**Producto:** la categoría pasó de "Categoría: Otros" a una etiqueta pequeña arriba del título (la misma clase que en las tarjetas), y la descripción en gris.
+**Tiempo en rojo en el último minuto**, igual que en las tarjetas: una función nueva, `mostrarTiempoRestante` en `js/subasta.js`, que usan el tablero y el reloj (así no se repite el código). Los lugares ahora dicen "2 de 5".
+Colores: ninguno nuevo.
+Se probó en el navegador con "Ferrari lego": computadora y celular, modo claro y oscuro, sin salirse de la pantalla. Con datos cambiados solo en la memoria de la página (subasta activa con 45 segundos): el tiempo se pone rojo y aparece "En vivo".
+
+**Qué acepté:** el cambio sugerido de la subasta
 
 **Qué rechacé o cambié:** nada de momento

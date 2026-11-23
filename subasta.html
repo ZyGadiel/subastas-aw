@@ -56,8 +56,10 @@
             <!-- Sección 18: js/subasta.js pone aquí la foto, o el recuadro
                  "Sin foto" si no tiene o no carga (crearFotoDelProducto) -->
             <div id="lugar-de-la-foto"></div>
+            <!-- Sección 19: la categoría pequeña ARRIBA del título, igual que en
+                 las tarjetas del catálogo (misma clase) -->
+            <p id="categoria-del-producto" class="categoria-de-la-tarjeta"></p>
             <h1 id="titulo-del-producto"></h1>
-            <p>Categoría: <span id="categoria-del-producto"></span></p>
             <p id="descripcion-del-producto"></p>
           </article>
 
@@ -85,11 +87,32 @@
               <!-- Se muestra cuando la conexión en tiempo real está activa -->
               <span id="indicador-en-vivo" class="indicador-en-vivo" hidden>En vivo</span>
             </h2>
-            <p>Precio inicial: <span id="precio-inicial"></span></p>
-            <p>Precio actual: <strong id="precio-actual"></strong></p>
-            <p>Incremento mínimo: <span id="incremento-minimo"></span></p>
-            <p>Tiempo restante: <time id="tiempo-restante"></time></p>
-            <p>Lugares ocupados: <span id="lugares-ocupados"></span></p>
+            <!-- Sección 19 (tablero): el precio actual grande arriba y los demás
+                 datos en cuadritos. Los id no cambiaron: js/subasta.js los sigue
+                 llenando igual. -->
+            <p class="nombre-del-precio-actual">Precio actual</p>
+            <p class="precio-actual-del-tablero"><strong id="precio-actual"></strong></p>
+
+            <!-- dl = lista de "nombre → valor" (dt = nombre, dd = valor).
+                 Cada pareja va en un div para poder dibujarla como cuadrito. -->
+            <dl class="datos-del-tablero">
+              <div class="dato-del-tablero">
+                <dt>Tiempo restante</dt>
+                <dd><time id="tiempo-restante"></time></dd>
+              </div>
+              <div class="dato-del-tablero">
+                <dt>Lugares ocupados</dt>
+                <dd id="lugares-ocupados"></dd>
+              </div>
+              <div class="dato-del-tablero">
+                <dt>Precio inicial</dt>
+                <dd id="precio-inicial"></dd>
+              </div>
+              <div class="dato-del-tablero">
+                <dt>Incremento mínimo</dt>
+                <dd id="incremento-minimo"></dd>
+              </div>
+            </dl>
           </section>
 
           <!-- PARTICIPAR: primero se entra a la subasta (ocupar uno de los 5 lugares), luego se puja.

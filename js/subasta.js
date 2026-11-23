@@ -231,8 +231,19 @@ function mostrarEstadoDeLaSubasta() {
   textoDelPrecioInicial.textContent = formatearDinero(subastaActual.precio_inicial);
   textoDelPrecioActual.textContent = formatearDinero(subastaActual.precio_actual);
   textoDelIncrementoMinimo.textContent = formatearDinero(subastaActual.incremento_minimo);
-  textoDeLosLugaresOcupados.textContent = `${participantesDeLaSubasta.length} / ${LUGARES_POR_SUBASTA}`;
+  textoDeLosLugaresOcupados.textContent = `${participantesDeLaSubasta.length} de ${LUGARES_POR_SUBASTA}`;
+  mostrarTiempoRestante();
+}
+
+// El tiempo restante del tablero. Sección 19: en el ÚLTIMO MINUTO se pinta
+// de rojo, igual que en las tarjetas (clase tiempo-por-acabar y
+// MILISEGUNDOS_DEL_ULTIMO_MINUTO, en js/utilidades.js).
+function mostrarTiempoRestante() {
   textoDelTiempoRestante.textContent = formatearTiempoRestante(subastaActual.fecha_de_finalizacion);
+
+  const milisegundosRestantes = new Date(subastaActual.fecha_de_finalizacion) - new Date();
+  const quedaMenosDeUnMinuto = milisegundosRestantes > 0 && milisegundosRestantes <= MILISEGUNDOS_DEL_ULTIMO_MINUTO;
+  textoDelTiempoRestante.classList.toggle('tiempo-por-acabar', quedaMenosDeUnMinuto);
 }
 
 // Decide qué ve cada quien en la caja "Participar".
@@ -630,7 +641,7 @@ function actualizarIndicadorEnVivo() {
 // 7. Reloj: cada segundo actualiza el tiempo restante
 // ---------------------------------------------------------------------
 function actualizarReloj() {
-  textoDelTiempoRestante.textContent = formatearTiempoRestante(subastaActual.fecha_de_finalizacion);
+  mostrarTiempoRestante();
 
   // CASO LÍMITE: el tiempo se acaba con la página abierta → se oculta el
   // formulario en ese mismo segundo, sin esperar a que el usuario recargue.

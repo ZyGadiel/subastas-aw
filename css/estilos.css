@@ -928,9 +928,69 @@ button:disabled {
   margin-bottom: 1rem;
 }
 
-#estado-de-la-subasta strong {
-  font-size: 1.5rem;
-  color: var(--color-de-exito);
+/* Sección 19: la categoría pegada al título, y la descripción en gris */
+#categoria-del-producto {
+  color: var(--color-del-texto-secundario);
+}
+
+#titulo-del-producto {
+  margin: 0.2rem 0 0.5rem;
+}
+
+#descripcion-del-producto {
+  margin: 0;
+  color: var(--color-del-texto-secundario);
+}
+
+/* ESTADO DE LA SUBASTA COMO TABLERO (Sección 19) */
+#estado-de-la-subasta h2 {
+  margin-top: 0;
+}
+
+/* "Precio actual": el nombre pequeño arriba del número */
+.nombre-del-precio-actual {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-del-texto-secundario);
+}
+
+/* El precio actual: lo más grande de la página. En el color del texto,
+   como en las tarjetas (el verde queda para "Vas ganando" y "Vendida"). */
+.precio-actual-del-tablero {
+  margin: 0.1rem 0 0;
+  line-height: 1.1;
+}
+
+.precio-actual-del-tablero strong {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-del-texto);
+}
+
+/* Los otros 4 datos en cuadritos de 2 columnas (también en celular) */
+.datos-del-tablero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 columnas iguales que no se desbordan */
+  gap: 0.6rem;
+  margin: 1.1rem 0 0;
+}
+
+.dato-del-tablero {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radio-de-las-esquinas-pequenas);
+  background-color: var(--color-de-fondo); /* el gris suave de la página */
+}
+
+.dato-del-tablero dt {
+  font-size: 0.8rem;
+  color: var(--color-del-texto-secundario);
+}
+
+.dato-del-tablero dd {
+  margin: 0.1rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-del-texto);
 }
 
 /* Caja del resultado: borde verde a la izquierda para que resalte */
