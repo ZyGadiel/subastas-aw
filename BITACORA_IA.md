@@ -127,9 +127,8 @@ Desactivar la confirmación por correo en Supabase para la demo.
 
 **Error de la IA que se corrigió:** la primera versión del trigger ponía siempre el vendedor con `auth.uid()`. Desde el SQL Editor no hay sesión, así que `datos-prueba.sql` habría fallado con un vendedor vacío. Se corrigió para que solo lo haga cuando hay un usuario con sesión.
 
-**Qué acepté:** _
-
-**Qué rechacé o cambié:** _
+**Qué acepté:** los cambios sugeridos
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
@@ -168,9 +167,9 @@ Lista "Posiciones": 1º, 2º... según la puja más alta de cada participante; a
 
 **Error de la IA que se corrigió:** primero puso las posiciones en la columna derecha, pero el espacio en blanco estaba debajo del producto (columna izquierda). Se movieron ahí al revisar la captura de pantalla.
 
-**Qué acepté:** _
+**Qué acepté:** la implementacion de los botones
 
-**Qué rechacé o cambié:** _
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
@@ -185,9 +184,9 @@ La misma regla en JavaScript (`esCorreoValido` y `PATRON_DE_CORREO_VALIDO` en `j
 La expresión regular pide: algo antes de la @, un dominio sin puntos seguidos y al final un punto con al menos 2 letras (`.com`, `.mx`, `.edu.mx`).
 Se probó con 8 correos (`ejemplo@ejemplo`, `a@b..com`, `a@b.c`, con espacios, sin @, `.c0m`, y dos válidos); el navegador y JavaScript dieron el mismo resultado.
 
-**Qué acepté:** _
+**Qué acepté:** los cambios sugeridos
 
-**Qué rechacé o cambié:** _
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
@@ -220,9 +219,9 @@ Caso límite: una puja del último segundo que todavía se está guardando. La f
 En `subasta.html`, una caja "Resultado" con un mensaje distinto para el ganador ("¡Ganaste!"), el vendedor (a quién se vendió, la comisión del 3 % y lo que recibe) y los demás; y un 🏆 en la lista de posiciones.
 Caso límite: si el reloj de la computadora va adelantado y el servidor aún no la cierra, la página dice "Calculando el ganador..." y vuelve a intentar cada 5 segundos.
 
-**Qué acepté:** _
+**Qué acepté:** las funciones de las subastas
 
-**Qué rechacé o cambié:** _
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
@@ -239,9 +238,9 @@ Casos límite: sin sesión, administrador, todavía sin subastas, subasta elimin
 `actualizarTiemposRestantes` se movió a `js/utilidades.js` porque ahora la usan dos páginas.
 Se probó con todas las cuentas que tienen subastas: los resultados coincidieron con la base de datos.
 
-**Qué acepté:** _
+**Qué acepté:** las funciones de los usuarios vendedores compradores
 
-**Qué rechacé o cambié:** _
+**Qué rechacé o cambié:** nada de momento
 
 ---
 
